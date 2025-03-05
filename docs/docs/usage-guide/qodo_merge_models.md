@@ -1,12 +1,12 @@
 
-The default models used by Qodo Merge is Claude-3.7-sonnet.
+The default models used by Qodo Merge (March 2025) is Claude Sonnet 3.7.
 
 ### Selecting a Specific Model
 
 Users can configure Qodo Merge to use a specific model by editing the [configuration](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/) file.
 The models supported by Qodo Merge are:
 
-- `claude-3-7-sonnet`
+- `claude-3-7-sonnet` (default)
 - `o3-mini`
 - `gpt-4o`
 - `deepseek/r1`
