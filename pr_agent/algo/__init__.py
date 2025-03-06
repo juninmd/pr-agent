@@ -86,6 +86,9 @@ MAX_TOKENS = {
     "watsonx/ibm/granite-13b-chat-v2": 8191,
     "watsonx/ibm/granite-34b-code-instruct": 8191,
     "watsonx/mistralai/mistral-large": 32768,
+    "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B": 128000,
+    "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Llama-70B": 128000,
+    "deepinfra/deepseek-ai/DeepSeek-R1": 128000,
 }
 
 USER_MESSAGE_ONLY_MODELS = [
