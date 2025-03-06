@@ -193,6 +193,19 @@ key = ...
 
 (you can obtain a deepseek-chat key from [here](https://platform.deepseek.com))
 
+
+### DeepInfra
+
+To use DeepSeek model with DeepInfra, for example, set:
+```
+[config] # in configuration.toml
+model = "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Llama-70B"
+fallback_models = ["deepinfra/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"]
+[deepinfra] # in .secrets.toml
+key = ... # your DeepInfra api key
+```
+(you can obtain a DeepInfra key from [here](https://deepinfra.com/dash/api_keys))
+
 ### Custom models
 
 If the relevant model doesn't appear [here](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py), you can still use it as a custom model:
