@@ -394,7 +394,7 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 500 line
       </tr>
       <tr>
         <td><b>persistent_comment</b></td>
-        <td>If set to true, the improve comment will be persistent, meaning that every new improve request will edit the previous one. Default is false.</td>
+        <td>If set to true, the improve comment will be persistent, meaning that every new improve request will edit the previous one. Default is true.</td>
       </tr>
       <tr>
         <td><b>suggestions_score_threshold</b></td>
