@@ -7,7 +7,6 @@ Examples of invoking the different tools via the CLI:
 - **Describe**:     `python -m pr_agent.cli --pr_url=<pr_url>  describe`
 - **Improve**:      `python -m pr_agent.cli --pr_url=<pr_url>  improve`
 - **Ask**:          `python -m pr_agent.cli --pr_url=<pr_url>  ask "Write me a poem about this PR"`
-- **Reflect**:      `python -m pr_agent.cli --pr_url=<pr_url>  reflect`
 - **Update Changelog**:      `python -m pr_agent.cli --pr_url=<pr_url>  update_changelog`
 
 `<pr_url>` is the url of the relevant PR (for example: [#50](https://github.com/Codium-ai/pr-agent/pull/50)).
@@ -62,7 +61,6 @@ Commands for invoking the different tools via comments:
 - **Describe**:     `/describe`
 - **Improve**:      `/improve`  (or `/improve_code` for bitbucket, since `/improve` is sometimes reserved)
 - **Ask**:          `/ask "..."`
-- **Reflect**:      `/reflect`
 - **Update Changelog**:      `/update_changelog`
 
 
