@@ -50,21 +50,10 @@ def get_pr_diff(git_provider: GitProvider, token_handler: TokenHandler,
         PATCH_EXTRA_LINES_AFTER = cap_and_log_extra_lines(PATCH_EXTRA_LINES_AFTER, "after")
 
     try:
-        diff_files_original = git_provider.get_diff_files()
+        diff_files = git_provider.get_diff_files()
     except RateLimitExceededException as e:
         get_logger().error(f"Rate limit exceeded for git provider API. original message {e}")
         raise
-
-    diff_files = filter_ignored(diff_files_original)
-    if diff_files != diff_files_original:
-        try:
-            get_logger().info(f"Filtered out {len(diff_files_original) - len(diff_files)} files")
-            new_names = set([a.filename for a in diff_files])
-            orig_names = set([a.filename for a in diff_files_original])
-            get_logger().info(f"Filtered out files: {orig_names - new_names}")
-        except Exception as e:
-            pass
-
 
     # get pr languages
     pr_languages = sort_files_by_main_languages(git_provider.get_languages(), diff_files)
@@ -155,20 +144,10 @@ def get_pr_diff(git_provider: GitProvider, token_handler: TokenHandler,
 def get_pr_diff_multiple_patchs(git_provider: GitProvider, token_handler: TokenHandler, model: str,
                 add_line_numbers_to_hunks: bool = False, disable_extra_lines: bool = False):
     try:
-        diff_files_original = git_provider.get_diff_files()
+        diff_files = git_provider.get_diff_files()
     except RateLimitExceededException as e:
         get_logger().error(f"Rate limit exceeded for git provider API. original message {e}")
         raise
-
-    diff_files = filter_ignored(diff_files_original)
-    if diff_files != diff_files_original:
-        try:
-            get_logger().info(f"Filtered out {len(diff_files_original) - len(diff_files)} files")
-            new_names = set([a.filename for a in diff_files])
-            orig_names = set([a.filename for a in diff_files_original])
-            get_logger().info(f"Filtered out files: {orig_names - new_names}")
-        except Exception as e:
-            pass
 
     # get pr languages
     pr_languages = sort_files_by_main_languages(git_provider.get_languages(), diff_files)
@@ -409,8 +388,6 @@ def get_pr_multi_diffs(git_provider: GitProvider,
     except RateLimitExceededException as e:
         get_logger().error(f"Rate limit exceeded for git provider API. original message {e}")
         raise
-
-    diff_files = filter_ignored(diff_files)
 
     # Sort files by main language
     pr_languages = sort_files_by_main_languages(git_provider.get_languages(), diff_files)
