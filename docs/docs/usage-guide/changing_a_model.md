@@ -226,5 +226,5 @@ With the OpenAI models that support reasoning effort (eg: o3-mini), you can spec
 
 [config]
 enable_claude_extended_thinking = false # Set to true to enable extended thinking feature
-extended_thinking_budget_tokens = 32000
-extended_thinking_max_output_tokens = 64000
+extended_thinking_budget_tokens = 2048
+extended_thinking_max_output_tokens = 2048
