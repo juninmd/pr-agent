@@ -247,8 +247,8 @@ class LiteLLMAIHandler(BaseAiHandler):
 
             # https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking
             if (model in self.claude_extended_thinking_models) and get_settings().config.get("enable_claude_extended_thinking", False):
-                extended_thinking_budget_tokens = get_settings().config.get("extended_thinking_budget_tokens", 32000)
-                extended_thinking_max_output_tokens = get_settings().config.get("extended_thinking_max_output_tokens", 64000)
+                extended_thinking_budget_tokens = get_settings().config.get("extended_thinking_budget_tokens", 2048)
+                extended_thinking_max_output_tokens = get_settings().config.get("extended_thinking_max_output_tokens", 2048)
 
                 # Validate extended thinking parameters
                 if not isinstance(extended_thinking_budget_tokens, int) or extended_thinking_budget_tokens <= 0:
