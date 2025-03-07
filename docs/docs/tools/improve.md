@@ -443,14 +443,10 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 500 line
       </tr>
     </table>
 
-## A note on code suggestions quality
+## Understanding AI Code Suggestions
 
-- AI models for code are getting better and better, but they are not flawless. Not all the suggestions will be perfect, and a user should not accept all of them automatically. Critical reading and judgment are required. Mistakes of the AI are rare but can happen, and it is usually quite easy for a human to spot them.
-- The suggestions aim to enable the PR author to self-reflect on and improve their pull requests, while also alerting on any critical bugs that may have been identified. It's perfectly acceptable to implement only the suggestions you find valuable for your specific context.
-- The hierarchical structure of the suggestions is designed to help the user to _quickly_ understand them, and to decide which ones are relevant and which are not:
-
-    - Only if the `Category` header is relevant, the user should move to the summarized suggestion description
-    - Only if the summarized suggestion description is relevant, the user should click on the collapsible, to read the full suggestion description with a code preview example.
-
-- In addition, we recommend to use the [`extra_instructions`](https://qodo-merge-docs.qodo.ai/tools/improve/#extra-instructions-and-best-practices) field to guide the model to suggestions that are more relevant to the specific needs of the project.
-- The interactive [PR chat](https://qodo-merge-docs.qodo.ai/chrome-extension/) also provides an easy way to get more tailored suggestions and feedback from the AI model.
+- **AI Limitations:** AI models for code are getting better and better, but they are not flawless. Not all the suggestions will be perfect, and a user should not accept all of them automatically. Critical reading and judgment are required. Mistakes of the AI are rare but can happen, and it is usually quite easy for a human to spot them.
+- **Flow:** The suggestions aim to enable the PR author to _self-reflect_ on and improve their pull requests, while also alerting on any _critical bugs_ that may have been identified. It's perfectly acceptable to implement only the suggestions you find valuable for your specific context.
+- **Hierarchy:** Presenting the suggestions in a structured hierarchical table enables the user to _quickly_ understand them, and to decide which ones are relevant and which are not.
+- **Customization:** In addition, we recommend to use the [`extra_instructions`](https://qodo-merge-docs.qodo.ai/tools/improve/#extra-instructions-and-best-practices) and [`best practices`](https://qodo-merge-docs.qodo.ai/tools/improve/#best-practices) fields to guide the model to suggestions that are more relevant to the specific needs of the project.
+- **Interactive usage:** The interactive [PR chat](https://qodo-merge-docs.qodo.ai/chrome-extension/) also provides an easy way to get more tailored suggestions and feedback from the AI model.
