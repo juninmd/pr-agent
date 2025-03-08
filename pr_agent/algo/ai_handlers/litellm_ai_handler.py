@@ -120,6 +120,42 @@ class LiteLLMAIHandler(BaseAiHandler):
             response_log['main_pr_language'] = 'unknown'
         return response_log
 
+    def _configure_claude_extended_thinking(self, model: str, kwargs: dict) -> dict:
+        """
+        Configure Claude extended thinking parameters if applicable.
+
+        Args:
+            model (str): The AI model being used
+            kwargs (dict): The keyword arguments for the model call
+
+        Returns:
+            dict: Updated kwargs with extended thinking configuration
+        """
+        extended_thinking_budget_tokens = get_settings().config.get("extended_thinking_budget_tokens", 2048)
+        extended_thinking_max_output_tokens = get_settings().config.get("extended_thinking_max_output_tokens", 2048)
+
+        # Validate extended thinking parameters
+        if not isinstance(extended_thinking_budget_tokens, int) or extended_thinking_budget_tokens <= 0:
+            raise ValueError(f"extended_thinking_budget_tokens must be a positive integer, got {extended_thinking_budget_tokens}")
+        if not isinstance(extended_thinking_max_output_tokens, int) or extended_thinking_max_output_tokens <= 0:
+            raise ValueError(f"extended_thinking_max_output_tokens must be a positive integer, got {extended_thinking_max_output_tokens}")
+        if extended_thinking_max_output_tokens < extended_thinking_budget_tokens:
+            raise ValueError(f"extended_thinking_max_output_tokens ({extended_thinking_max_output_tokens}) must be greater than or equal to extended_thinking_budget_tokens ({extended_thinking_budget_tokens})")
+
+        kwargs["thinking"] = {
+            "type": "enabled",
+            "budget_tokens": extended_thinking_budget_tokens
+        }
+        get_logger().info(f"Adding max output tokens {extended_thinking_max_output_tokens} to model {model}, extended thinking budget tokens: {extended_thinking_budget_tokens}")
+        kwargs["max_tokens"] = extended_thinking_max_output_tokens
+
+        # temperature may only be set to 1 when thinking is enabled
+        if get_settings().config.verbosity_level >= 2:
+            get_logger().info("Temperature may only be set to 1 when thinking is enabled with claude models.")
+        kwargs["temperature"] = 1
+
+        return kwargs
+
     def add_litellm_callbacks(selfs, kwargs) -> dict:
         captured_extra = []
 
@@ -247,28 +283,7 @@ class LiteLLMAIHandler(BaseAiHandler):
 
             # https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking
             if (model in self.claude_extended_thinking_models) and get_settings().config.get("enable_claude_extended_thinking", False):
-                extended_thinking_budget_tokens = get_settings().config.get("extended_thinking_budget_tokens", 2048)
-                extended_thinking_max_output_tokens = get_settings().config.get("extended_thinking_max_output_tokens", 2048)
-
-                # Validate extended thinking parameters
-                if not isinstance(extended_thinking_budget_tokens, int) or extended_thinking_budget_tokens <= 0:
-                    raise ValueError(f"extended_thinking_budget_tokens must be a positive integer, got {extended_thinking_budget_tokens}")
-                if not isinstance(extended_thinking_max_output_tokens, int) or extended_thinking_max_output_tokens <= 0:
-                    raise ValueError(f"extended_thinking_max_output_tokens must be a positive integer, got {extended_thinking_max_output_tokens}")
-                if extended_thinking_max_output_tokens < extended_thinking_budget_tokens:
-                    raise ValueError(f"extended_thinking_max_output_tokens ({extended_thinking_max_output_tokens}) must be greater than or equal to extended_thinking_budget_tokens ({extended_thinking_budget_tokens})")
-
-                kwargs["thinking"] = {
-                    "type": "enabled",
-                    "budget_tokens": extended_thinking_budget_tokens
-                }
-                get_logger().info(f"Adding max output tokens {extended_thinking_max_output_tokens} to model {model}, extended thinking budget tokens: {extended_thinking_budget_tokens}")
-                kwargs["max_tokens"] = extended_thinking_max_output_tokens
-
-                # temperature may only be set to 1 when thinking is enabled
-                if get_settings().config.verbosity_level >= 2:
-                    get_logger().info("Temperature may only be set to 1 when thinking is enabled with claude models.")
-                kwargs["temperature"] = 1
+                kwargs = self._configure_claude_extended_thinking(model, kwargs)
 
             if get_settings().litellm.get("enable_callbacks", False):
                 kwargs = self.add_litellm_callbacks(kwargs)
