@@ -146,7 +146,8 @@ class LiteLLMAIHandler(BaseAiHandler):
             "type": "enabled",
             "budget_tokens": extended_thinking_budget_tokens
         }
-        get_logger().info(f"Adding max output tokens {extended_thinking_max_output_tokens} to model {model}, extended thinking budget tokens: {extended_thinking_budget_tokens}")
+        if get_settings().config.verbosity_level >= 2:
+            get_logger().info(f"Adding max output tokens {extended_thinking_max_output_tokens} to model {model}, extended thinking budget tokens: {extended_thinking_budget_tokens}")
         kwargs["max_tokens"] = extended_thinking_max_output_tokens
 
         # temperature may only be set to 1 when thinking is enabled
