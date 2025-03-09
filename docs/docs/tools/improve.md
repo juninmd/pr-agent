@@ -318,12 +318,12 @@ code_suggestions_self_review_text = "... (your text here) ..."
 
 Under specific conditions, Qodo Merge can auto-approve a PR when a specific comment is invoked, or when the PR meets certain criteria.
 
-To ensure safety, the auto-approval feature is disabled by default.
-To enable auto-approval, you need to actively set, in a pre-defined _configuration file_, by enabling either one the following configs:
+**To ensure safety, the auto-approval feature is disabled by default.**
+To enable auto-approval features, you need to actively set one or both of the following options in a pre-defined _configuration file_:
 ```toml
 [config]
-enable_manual_approval = true
-enable_auto_approval = true
+enable_manual_approval = true # For approval via comments
+enable_auto_approval = true   # For criteria-based auto-approval
 ```
 
 !!! note "Notes"
@@ -331,6 +331,7 @@ enable_auto_approval = true
     - Enabling auto-approval must be a deliberate decision by the repository owner.
 
 1\. **Auto-approval by commenting**
+
 To enable auto-approval by commenting, set in the configuration file:
 
 ```toml
