@@ -333,7 +333,6 @@ enable_auto_approval = true   # For criteria-based auto-approval
 1\. **Auto-approval by commenting**
 
 To enable auto-approval by commenting, set in the configuration file:
-
 ```toml
 [config]
 enable_manual_approval = true
