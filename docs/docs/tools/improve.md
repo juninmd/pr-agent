@@ -318,15 +318,25 @@ code_suggestions_self_review_text = "... (your text here) ..."
 
 Under specific conditions, Qodo Merge can auto-approve a PR when a specific comment is invoked, or when the PR meets certain criteria.
 
-To ensure safety, the auto-approval feature is disabled by default. To enable auto-approval, you need to actively set, in a pre-defined _configuration file_, the following:
+To ensure safety, the auto-approval feature is disabled by default.
+To enable auto-approval, you need to actively set, in a pre-defined _configuration file_, by enabling either one the following configs:
 ```toml
 [config]
+enable_manual_approval = true
 enable_auto_approval = true
 ```
-Note that this specific flag cannot be set with a command line argument, only in the configuration file, committed to the repository.
-This ensures that enabling auto-approval is a deliberate decision by the repository owner.
 
-**(1) Auto-approval by commenting**
+!!! note "Notes"
+    - Note that this specific flag cannot be set with a command line argument, only in the configuration file, committed to the repository.
+    - Enabling auto-approval must be a deliberate decision by the repository owner.
+
+1\. **Auto-approval by commenting**
+To enable auto-approval by commenting, set in the configuration file:
+
+```toml
+[config]
+enable_manual_approval = true
+```
 
 After enabling, by commenting on a PR:
 ```
@@ -334,13 +344,20 @@ After enabling, by commenting on a PR:
 ```
 Qodo Merge will automatically approve the PR, and add a comment with the approval.
 
-**(2) Auto-approval when the PR meets certain criteria**
+2\. **Auto-approval when the PR meets certain criteria**
+
+To enable auto-approval based on specific criteria, first, you need to enable the top-level flag:
+```toml
+[config]
+enable_auto_approval = true
+```
 
 There are two criteria that can be set for auto-approval:
 
 - **Review effort score**
 ```toml
 [config]
+enable_auto_approval = true
 auto_approve_for_low_review_effort = X # X is a number between 1 to 5
 ```
 When the [review effort score](https://www.qodo.ai/images/pr_agent/review3.png) is lower or equal to X, the PR will be auto-approved.
@@ -349,6 +366,7 @@ ___
 - **No code suggestions**
 ```toml
 [config]
+enable_auto_approval = true
 auto_approve_for_no_suggestions = true
 ```
 When no [code suggestion](https://www.qodo.ai/images/pr_agent/code_suggestions_as_comment_closed.png) were found for the PR, the PR will be auto-approved.
