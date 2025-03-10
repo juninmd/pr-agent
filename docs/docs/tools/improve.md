@@ -322,7 +322,7 @@ Under specific conditions, Qodo Merge can auto-approve a PR when a specific comm
 To enable auto-approval features, you need to actively set one or both of the following options in a pre-defined _configuration file_:
 ```toml
 [config]
-enable_manual_approval = true # For approval via comments
+enable_comment_approval = true # For approval via comments
 enable_auto_approval = true   # For criteria-based auto-approval
 ```
 
@@ -335,7 +335,7 @@ enable_auto_approval = true   # For criteria-based auto-approval
 To enable auto-approval by commenting, set in the configuration file:
 ```toml
 [config]
-enable_manual_approval = true
+enable_comment_approval = true
 ```
 
 After enabling, by commenting on a PR:
