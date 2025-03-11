@@ -268,7 +268,7 @@ dual_publishing_score_threshold = x
 Where x represents the minimum score threshold (>=) for suggestions to be presented as commitable PR comments in addition to the table. Default is -1 (disabled).
 
 ### Self-review
-> `💎 feature`
+> `💎 feature` Platforms supported: GitHub, GitLab
 
 If you set in a configuration file:
 ```toml
