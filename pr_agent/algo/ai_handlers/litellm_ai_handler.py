@@ -136,7 +136,7 @@ class LiteLLMAIHandler(BaseAiHandler):
             dict: Updated kwargs with extended thinking configuration
         """
         extended_thinking_budget_tokens = get_settings().config.get("extended_thinking_budget_tokens", 2048)
-        extended_thinking_max_output_tokens = get_settings().config.get("extended_thinking_max_output_tokens", 2048)
+        extended_thinking_max_output_tokens = get_settings().config.get("extended_thinking_max_output_tokens", 4096)
 
         # Validate extended thinking parameters
         if not isinstance(extended_thinking_budget_tokens, int) or extended_thinking_budget_tokens <= 0:
