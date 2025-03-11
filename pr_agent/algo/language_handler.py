@@ -45,8 +45,7 @@ def sort_files_by_main_languages(languages: Dict, files: list):
         else:
             main_extensions.append([])
 
-    # filter out files bad extensions
-    files_filtered = filter_bad_extensions(files)
+
     # sort files by their extension, put the files that are in the main extension first
     # and the rest files after, map languages_sorted to their respective files
     files_sorted = []
@@ -54,7 +53,7 @@ def sort_files_by_main_languages(languages: Dict, files: list):
 
     # if no languages detected, put all files in the "Other" category
     if not languages:
-        files_sorted = [({"language": "Other", "files": list(files_filtered)})]
+        files_sorted = [({"language": "Other", "files": list(files)})]
         return files_sorted
 
     main_extensions_flat = []
@@ -63,7 +62,7 @@ def sort_files_by_main_languages(languages: Dict, files: list):
 
     for extensions, lang in zip(main_extensions, languages_sorted_list):  # noqa: B905
         tmp = []
-        for file in files_filtered:
+        for file in files:
             extension_str = f".{file.filename.split('.')[-1]}"
             if extension_str in extensions:
                 tmp.append(file)
