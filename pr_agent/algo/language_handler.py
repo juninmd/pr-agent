@@ -19,6 +19,12 @@ def is_valid_file(filename:str, bad_extensions=None) -> bool:
         bad_extensions = get_settings().bad_extensions.default
         if get_settings().config.use_extra_bad_extensions:
             bad_extensions += get_settings().bad_extensions.extra
+
+    auto_generated_files = ['package-lock.json', 'yarn.lock', 'composer.lock', 'Gemfile.lock', 'poetry.lock']
+    for forbidden_file in auto_generated_files:
+        if filename.endswith(forbidden_file):
+            return False
+
     return filename.split('.')[-1] not in bad_extensions
 
 
