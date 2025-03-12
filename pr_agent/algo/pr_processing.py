@@ -7,7 +7,8 @@ from github import RateLimitExceededException
 
 from pr_agent.algo.file_filter import filter_ignored
 from pr_agent.algo.git_patch_processing import (
-    convert_to_hunks_with_lines_numbers, extend_patch, handle_patch_deletions)
+    extend_patch, handle_patch_deletions,
+    decouple_and_convert_to_hunks_with_lines_numbers)
 from pr_agent.algo.language_handler import sort_files_by_main_languages
 from pr_agent.algo.token_handler import TokenHandler
 from pr_agent.algo.types import EDIT_TYPE, FilePatchInfo
@@ -188,9 +189,10 @@ def pr_generate_extended_diff(pr_languages: list,
                 continue
 
             if add_line_numbers_to_hunks:
-                full_extended_patch = convert_to_hunks_with_lines_numbers(extended_patch, file)
+                full_extended_patch = decouple_and_convert_to_hunks_with_lines_numbers(extended_patch, file)
             else:
-                full_extended_patch = f"\n\n## File: '{file.filename.strip()}'\n{extended_patch.rstrip()}\n"
+                extended_patch = extended_patch.replace('\n@@ ', '\n\n@@ ') # add extra line before each hunk
+                full_extended_patch = f"\n\n## File: '{file.filename.strip()}'\n\n{extended_patch.strip()}\n"
 
             # add AI-summary metadata to the patch
             if file.ai_file_summary and get_settings().get("config.enable_ai_metadata", False):
@@ -233,7 +235,7 @@ def pr_generate_compressed_diff(top_langs: list, token_handler: TokenHandler, mo
             continue
 
         if convert_hunks_to_line_numbers:
-            patch = convert_to_hunks_with_lines_numbers(patch, file)
+            patch = decouple_and_convert_to_hunks_with_lines_numbers(patch, file)
 
         ## add AI-summary metadata to the patch (disabled, since we are in the compressed diff)
         # if file.ai_file_summary and get_settings().config.get('config.is_auto_command', False):
@@ -437,7 +439,7 @@ def get_pr_multi_diffs(git_provider: GitProvider,
 
         # Add line numbers and metadata to the patch
         if add_line_numbers:
-            patch = convert_to_hunks_with_lines_numbers(patch, file)
+            patch = decouple_and_convert_to_hunks_with_lines_numbers(patch, file)
         else:
             patch = f"\n\n## File: '{file.filename.strip()}'\n\n{patch.strip()}\n"
 
@@ -488,7 +490,7 @@ def get_pr_multi_diffs(git_provider: GitProvider,
     # Add the last chunk
     if patches:
         final_diff = "\n".join(patches)
-        final_diff_list.append(final_diff)
+        final_diff_list.append(final_diff.strip())
 
     return final_diff_list
 
