@@ -93,3 +93,4 @@ Repositories across your entire Bitbucket organization will inherit the configur
 
 !!! note "Note"
 If both organization-level and project-level global settings are defined, the project-level settings will take precedence over the organization-level configuration. Additionally, parameters from a repository’s local .pr_agent.toml file will always override both global settings.
+
