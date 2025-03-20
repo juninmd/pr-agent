@@ -233,7 +233,7 @@ def get_log_context(body, event, action, build_number):
                        "request_id": uuid.uuid4().hex, "build_number": build_number, "app_name": app_name,
                         "repo": repo, "git_org": git_org, "installation_id": installation_id}
     except Exception as e:
-        get_logger().error(f"Error parsing request body: {e}")
+        get_logger().error(f"Failed to get log context: {e}")
         log_context = {}
     return log_context, sender, sender_id, sender_type
 
