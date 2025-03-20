@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 # enum EDIT_TYPE (ADDED, DELETED, MODIFIED, RENAMED)
-from typing import Optional
+from typing import Optional, Tuple
 
 from pr_agent.algo.types import FilePatchInfo
 from pr_agent.algo.utils import Range, process_description
@@ -13,6 +13,19 @@ class GitProvider(ABC):
     @abstractmethod
     def is_supported(self, capability: str) -> bool:
         pass
+
+    #Given a url (issues or PR/MR) - get the .git repo url to which they belong. Needs to be implemented by the provider.
+    def get_git_repo_url(self, issues_or_pr_url: str) -> str:
+        get_logger().warning("Not implemented! Returning empty url")
+        return ""
+
+    # Given a git repo url, return prefix and suffix of the provider in order to view a given file belonging to that repo. Needs to be implemented by the provider.
+    # For example: For a git: https://git_provider.com/MY_PROJECT/MY_REPO.git then it should return ('https://git_provider.com/projects/MY_PROJECT/repos/MY_REPO', '?=<SOME HEADER>')
+    # so that to properly view the file: docs/readme.md -> <PREFIX>/docs/readme.md<SUFFIX> -> https://git_provider.com/projects/MY_PROJECT/repos/MY_REPO/docs/readme.md?=<SOME HEADER>)
+    def get_canonical_url_parts(self, repo_git_url:str, desired_branch:str) -> Tuple[str, str]:
+        get_logger().warning("Not implemented! Returning empty prefix and suffix")
+        return ("", "")
+
 
     @abstractmethod
     def get_files(self) -> list:

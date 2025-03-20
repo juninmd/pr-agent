@@ -67,6 +67,33 @@ class BitbucketProvider(GitProvider):
         except Exception:
             return ""
 
+    def get_git_repo_url(self, pr_url: str=None) -> str: #bitbucket does not support issue url, so ignore param
+        try:
+            parsed_url = urlparse(self.pr_url)
+            return f"{parsed_url.scheme}://{parsed_url.netloc}/{self.workspace_slug}/{self.repo_slug}.git"
+        except Exception as e:
+            get_logger().exception(f"url is not a valid merge requests url: {self.pr_url}")
+            return ""
+
+    def get_canonical_url_parts(self, repo_git_url:str=None, desired_branch:str=None) -> Tuple[str, str]:
+        scheme_and_netloc = None
+        if repo_git_url:
+            parsed_git_url = urlparse(repo_git_url)
+            scheme_and_netloc = parsed_git_url.scheme + "://" + parsed_git_url.netloc
+            repo_path = parsed_git_url.path.split('.git')[0][1:] #/<workspace>/<repo>.git -> <workspace>/<repo>
+            if repo_path.count('/') != 1:
+                get_logger().error(f"repo_git_url is not a valid git repo url: {repo_git_url}")
+                return ("", "")
+            workspace_name, project_name = repo_path.split('/')
+        else:
+            parsed_pr_url = urlparse(self.pr_url)
+            scheme_and_netloc = parsed_pr_url.scheme + "://" + parsed_pr_url.netloc
+            workspace_name, project_name = (self.workspace_slug, self.repo_slug)
+        prefix = f"{scheme_and_netloc}/{workspace_name}/{project_name}/src/{desired_branch}"
+        suffix = "" #None
+        return (prefix, suffix)
+
+
     def publish_code_suggestions(self, code_suggestions: list) -> bool:
         """
         Publishes code suggestions as comments on the PR.

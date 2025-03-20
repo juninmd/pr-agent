@@ -35,7 +35,6 @@ class PRHelpMessage:
         self.ai_handler = ai_handler()
         self.question_str = self.parse_args(args)
         self.return_as_string = return_as_string
-        self.num_retrieved_snippets = get_settings().get('pr_help.num_retrieved_snippets', 5)
         if self.question_str:
             self.vars = {
                 "question": self.question_str,

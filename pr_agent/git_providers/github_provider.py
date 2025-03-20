@@ -63,6 +63,53 @@ class GithubProvider(GitProvider):
     def is_supported(self, capability: str) -> bool:
         return True
 
+    def _get_owner_and_repo_path(self, given_url: str) -> str:
+        try:
+            repo_path = None
+            if 'issues' in given_url:
+                repo_path, _ = self._parse_issue_url(given_url)
+            elif 'pull' in given_url:
+                repo_path, _ = self._parse_pr_url(given_url)
+            elif given_url.endswith('.git'):
+                parsed_url = urlparse(given_url)
+                repo_path = (parsed_url.path.split('.git')[0])[1:] # /<owner>/<repo>.git -> <owner>/<repo>
+            if not repo_path:
+                get_logger().error(f"url is neither an issues url nor a pr url nor a valid git url: {given_url}. Returning empty result.")
+                return ""
+            return repo_path
+        except Exception as e:
+            get_logger().exception(f"unable to parse url: {given_url}. Returning empty result.")
+            return ""
+
+    def get_git_repo_url(self, issues_or_pr_url: str) -> str:
+        repo_path = self._get_owner_and_repo_path(issues_or_pr_url)
+        return f"{issues_or_pr_url.split(repo_path)[0]}{repo_path}.git"
+
+    def get_canonical_url_parts(self, repo_git_url:str, desired_branch:str) -> Tuple[str, str]:
+        owner = None
+        repo = None
+        scheme_and_netloc = None
+
+        if repo_git_url: #If user provided an external git url, which may be different than what this provider was initialized with, we cannot use self.repo
+            repo_path = self._get_owner_and_repo_path(repo_git_url)
+            parsed_git_url = urlparse(repo_git_url)
+            scheme_and_netloc = parsed_git_url.scheme + "://" + parsed_git_url.netloc
+            if repo_path.count('/') == 1: #Has to have the form <owner>/<repo>
+                owner, repo = repo_path.split('/')
+            else:
+                get_logger().error(f"Invalid repo_path: {repo_path} from repo_git_url: {repo_git_url}")
+                return ("", "")
+        if (not owner or not repo) and self.repo: #"else" - User did not provide an external git url, use self.repo object:
+            owner, repo = self.repo.split('/')
+            scheme_and_netloc = self.base_url_html
+        if not any([scheme_and_netloc, owner, repo]): #"else": Not invoked from a PR context,but no provided git url for context
+            get_logger().error(f"Unable to get canonical url parts since missing context (PR or explicit git url)")
+            return ("", "")
+
+        prefix = f"{scheme_and_netloc}/{owner}/{repo}/blob/{desired_branch}"
+        suffix = ""  # github does not add a suffix
+        return (prefix, suffix)
+
     def get_pr_url(self) -> str:
         return self.pr.html_url
 

@@ -138,6 +138,31 @@ class BitbucketServerProvider(GitProvider):
             return False
         return True
 
+    def get_git_repo_url(self, pr_url: str=None) -> str: #bitbucket server does not support issue url, so ignore param
+        try:
+            parsed_url = urlparse(self.pr_url)
+            return f"{parsed_url.scheme}://{parsed_url.netloc}/scm/{self.workspace_slug.lower()}/{self.repo_slug.lower()}.git"
+        except Exception as e:
+            get_logger().exception(f"url is not a valid merge requests url: {self.pr_url}")
+            return ""
+
+    def get_canonical_url_parts(self, repo_git_url:str=None, desired_branch:str=None) -> Tuple[str, str]:
+        workspace_name = None
+        project_name = None
+        if not repo_git_url:
+            workspace_name = self.workspace_slug
+            project_name = self.repo_slug
+        else:
+            repo_path = repo_git_url.split('.git')[0].split('scm/')[-1]
+            if repo_path.count('/') == 1:  # Has to have the form <workspace>/<repo>
+                workspace_name, project_name = repo_path.split('/')
+        if not workspace_name or not project_name:
+            get_logger().error(f"workspace_name or project_name not found in context, either git url: {repo_git_url} or uninitialized workspace/project.")
+            return ("", "")
+        prefix = f"{self.bitbucket_server_url}/projects/{workspace_name}/repos/{project_name}/browse"
+        suffix = f"?at=refs%2Fheads%2F{desired_branch}"
+        return (prefix, suffix)
+
     def set_pr(self, pr_url: str):
         self.workspace_slug, self.repo_slug, self.pr_num = self._parse_pr_url(pr_url)
         self.pr = self._get_pr()
