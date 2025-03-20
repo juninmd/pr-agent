@@ -41,11 +41,6 @@ class LiteLLMAIHandler(BaseAiHandler):
             os.environ["AWS_ACCESS_KEY_ID"] = get_settings().aws.AWS_ACCESS_KEY_ID
             os.environ["AWS_SECRET_ACCESS_KEY"] = get_settings().aws.AWS_SECRET_ACCESS_KEY
             os.environ["AWS_REGION_NAME"] = get_settings().aws.AWS_REGION_NAME
-        if get_settings().get("litellm.use_client"):
-            litellm_token = get_settings().get("litellm.LITELLM_TOKEN")
-            assert litellm_token, "LITELLM_TOKEN is required"
-            os.environ["LITELLM_TOKEN"] = litellm_token
-            litellm.use_client = True
         if get_settings().get("LITELLM.DROP_PARAMS", None):
             litellm.drop_params = get_settings().litellm.drop_params
         if get_settings().get("LITELLM.SUCCESS_CALLBACK", None):
