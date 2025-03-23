@@ -16,6 +16,7 @@ from pr_agent.algo.utils import clip_tokens, get_max_tokens, load_yaml, ModelTyp
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import get_git_provider_with_context
 from pr_agent.log import get_logger
+from pr_agent.servers.help import HelpMessage
 
 
 #Common code that can be called from similar tools:
@@ -221,6 +222,8 @@ class PRHelpDocs(object):
             get_logger().debug(f"No explicit repo url provided, deducing it from type: {self.git_provider.__class__.__name__} "
                               f"context url: {self.ctx_url}")
             self.repo_url = self.git_provider.get_git_repo_url(self.ctx_url)
+            if not self.repo_url:
+                raise Exception(f"Unable to deduce repo url from type: {self.git_provider.__class__.__name__} url: {self.ctx_url}")
             get_logger().debug(f"deduced repo url: {self.repo_url}")
             self.repo_desired_branch = None #Inferred from the repo provider.
 
@@ -334,6 +337,12 @@ class PRHelpDocs(object):
             if not answer_str or int(response_yaml.get('question_is_relevant', '1')) == 0:
                 get_logger().info(f"No answer found")
                 return ""
+
+            if self.git_provider.is_supported("gfm_markdown") and get_settings().pr_help_docs.enable_help_text:
+                answer_str += "<hr>\n\n<details> <summary><strong>💡 Tool usage guide:</strong></summary><hr> \n\n"
+                answer_str += HelpMessage.get_help_docs_usage_guide()
+                answer_str += "\n</details>\n"
+
             if get_settings().config.publish_output:
                 self.git_provider.publish_comment(answer_str)
             else:
