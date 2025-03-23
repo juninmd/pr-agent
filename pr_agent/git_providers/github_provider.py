@@ -85,6 +85,9 @@ class GithubProvider(GitProvider):
         repo_path = self._get_owner_and_repo_path(issues_or_pr_url)
         return f"{issues_or_pr_url.split(repo_path)[0]}{repo_path}.git"
 
+    # Given a git repo url, return prefix and suffix of the provider in order to view a given file belonging to that repo.
+    # Example: https://github.com/qodo-ai/pr-agent.git and branch: v0.8 -> prefix: "https://github.com/qodo-ai/pr-agent/blob/v0.8", suffix: ""
+    # In case git url is not provided, provider will use PR context (which includes branch) to determine the prefix and suffix.
     def get_canonical_url_parts(self, repo_git_url:str, desired_branch:str) -> Tuple[str, str]:
         owner = None
         repo = None
@@ -102,6 +105,7 @@ class GithubProvider(GitProvider):
         if (not owner or not repo) and self.repo: #"else" - User did not provide an external git url, use self.repo object:
             owner, repo = self.repo.split('/')
             scheme_and_netloc = self.base_url_html
+            desired_branch = self.get_pr_branch()
         if not any([scheme_and_netloc, owner, repo]): #"else": Not invoked from a PR context,but no provided git url for context
             get_logger().error(f"Unable to get canonical url parts since missing context (PR or explicit git url)")
             return ("", "")
@@ -750,9 +754,8 @@ class GithubProvider(GitProvider):
         return repo_name, issue_number
 
     def _get_github_client(self):
-        deployment_type = get_settings().get("GITHUB.DEPLOYMENT_TYPE", "user")
-
-        if deployment_type == 'app':
+        self.deployment_type = get_settings().get("GITHUB.DEPLOYMENT_TYPE", "user")
+        if self.deployment_type == 'app':
             try:
                 private_key = get_settings().github.private_key
                 app_id = get_settings().github.app_id
@@ -762,16 +765,19 @@ class GithubProvider(GitProvider):
                 raise ValueError("GitHub app installation ID is required when using GitHub app deployment")
             auth = AppAuthentication(app_id=app_id, private_key=private_key,
                                      installation_id=self.installation_id)
-            return Github(app_auth=auth, base_url=self.base_url)
-
-        if deployment_type == 'user':
+            self.auth = auth
+        elif self.deployment_type == 'user':
             try:
                 token = get_settings().github.user_token
             except AttributeError as e:
                 raise ValueError(
                     "GitHub token is required when using user deployment. See: "
                     "https://github.com/Codium-ai/pr-agent#method-2-run-from-source") from e
-            return Github(auth=Auth.Token(token), base_url=self.base_url)
+            self.auth = Auth.Token(token)
+        if self.auth:
+            return Github(auth=self.auth, base_url=self.base_url)
+        else:
+            raise ValueError("Could not authenticate to GitHub")
 
     def _get_repo(self):
         if hasattr(self, 'repo_obj') and \
@@ -1111,3 +1117,37 @@ class GithubProvider(GitProvider):
                 get_logger().error(f"Failed to process patch for committable comment, error: {e}")
         return code_suggestions_copy
 
+    #Clone related
+    def _prepare_clone_url_with_token(self, repo_url_to_clone: str) -> str | None:
+        scheme = "https://"
+
+        #For example, to clone:
+        #https://github.com/Codium-ai/pr-agent-pro.git
+        #Need to embed inside the github token:
+        #https://<token>@github.com/Codium-ai/pr-agent-pro.git
+
+        github_token = self.auth.token
+        github_base_url = self.base_url_html
+        if not all([github_token, github_base_url]):
+            get_logger().error("Either missing auth token or missing base url")
+            return None
+        if scheme not in github_base_url:
+            get_logger().error(f"Base url: {github_base_url} is missing prefix: {scheme}")
+            return None
+        github_com = github_base_url.split(scheme)[1]  # e.g. 'github.com' or github.<org>.com
+        if not github_com:
+            get_logger().error(f"Base url: {github_base_url} has an empty base url")
+            return None
+        if github_com not in repo_url_to_clone:
+            get_logger().error(f"url to clone: {repo_url_to_clone} does not contain {github_com}")
+            return None
+        repo_full_name = repo_url_to_clone.split(github_com)[-1]
+        if not repo_full_name:
+            get_logger().error(f"url to clone: {repo_url_to_clone} is malformed")
+            return None
+
+        clone_url = scheme
+        if self.deployment_type == 'app':
+            clone_url += "git:"
+        clone_url += f"{github_token}@{github_com}{repo_full_name}"
+        return clone_url

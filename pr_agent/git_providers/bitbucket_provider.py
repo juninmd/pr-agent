@@ -75,6 +75,9 @@ class BitbucketProvider(GitProvider):
             get_logger().exception(f"url is not a valid merge requests url: {self.pr_url}")
             return ""
 
+    # Given a git repo url, return prefix and suffix of the provider in order to view a given file belonging to that repo.
+    # Example: git clone git clone https://bitbucket.org/codiumai/pr-agent.git and branch: main -> prefix: "https://bitbucket.org/codiumai/pr-agent/src/main", suffix: ""
+    # In case git url is not provided, provider will use PR context (which includes branch) to determine the prefix and suffix.
     def get_canonical_url_parts(self, repo_git_url:str=None, desired_branch:str=None) -> Tuple[str, str]:
         scheme_and_netloc = None
         if repo_git_url:
@@ -86,6 +89,7 @@ class BitbucketProvider(GitProvider):
                 return ("", "")
             workspace_name, project_name = repo_path.split('/')
         else:
+            desired_branch = self.get_pr_branch()
             parsed_pr_url = urlparse(self.pr_url)
             scheme_and_netloc = parsed_pr_url.scheme + "://" + parsed_pr_url.netloc
             workspace_name, project_name = (self.workspace_slug, self.repo_slug)
@@ -586,3 +590,21 @@ class BitbucketProvider(GitProvider):
     # bitbucket does not support labels
     def get_pr_labels(self, update=False):
         pass
+    #Clone related
+    def _prepare_clone_url_with_token(self, repo_url_to_clone: str) -> str | None:
+        if "bitbucket.org" not in repo_url_to_clone:
+            get_logger().error("Repo URL is not a valid bitbucket URL.")
+            return None
+        bearer_token = self.bearer_token
+        if not bearer_token:
+            get_logger().error("No bearer token provided. Returning None")
+            return None
+
+        #For example: For repo: https://bitbucket.org/codiumai/pr-agent-tests.git
+        #clone url will be: https://x-token-auth:<token>@bitbucket.org/codiumai/pr-agent-tests.git
+        (scheme, base_url) = repo_url_to_clone.split("bitbucket.org")
+        if not all([scheme, base_url]):
+            get_logger().error(f"repo_url_to_clone: {repo_url_to_clone} is not a valid bitbucket URL.")
+            return None
+        clone_url = f"{scheme}x-token-auth:{bearer_token}@bitbucket.org{base_url}"
+        return clone_url

@@ -397,3 +397,6 @@ class GerritProvider(GitProvider):
 
     def get_pr_branch(self):
         return self.repo.head
+
+    def _prepare_clone_url_with_token(self, repo_url_to_clone: str) -> str | None:
+        raise Exception("Not implemented!")

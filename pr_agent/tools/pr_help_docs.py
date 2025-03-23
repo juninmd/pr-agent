@@ -36,7 +36,7 @@ def modify_answer_section(ai_response: str) -> str | None:
     #### Relevant Sources...
     """
     model_answer_and_relevant_sections_in_response \
-        = _extract_model_answer_and_relevant_sources(ai_response)
+        = extract_model_answer_and_relevant_sources(ai_response)
     if model_answer_and_relevant_sections_in_response is not None:
         cleaned_question_with_answer = "### :bulb: Auto-generated documentation-based answer:\n"
         cleaned_question_with_answer += model_answer_and_relevant_sections_in_response
@@ -44,7 +44,7 @@ def modify_answer_section(ai_response: str) -> str | None:
     get_logger().warning(f"Either no answer section found, or that section is malformed: {ai_response}")
     return None
 
-def _extract_model_answer_and_relevant_sources(ai_response: str) -> str | None:
+def extract_model_answer_and_relevant_sources(ai_response: str) -> str | None:
     # It is assumed that the input contains several sections with leading "### ",
     # where the answer is the last one of them having the format: "### Answer:\n"), since the model returns the answer
     # AFTER the user question. By splitting using the string: "### Answer:\n" and grabbing the last part,
@@ -70,7 +70,6 @@ def _extract_model_answer_and_relevant_sources(ai_response: str) -> str | None:
                 if len(model_answer_section_in_response) > 0 else None
     get_logger().warning(f"Either no answer section found, or that section is malformed: {ai_response}")
     return None
-
 
 def get_maximal_text_input_length_for_token_count_estimation():
     model = get_settings().config.model
@@ -204,7 +203,8 @@ class PRHelpDocs(object):
         self.question = args[0] if args else None
         self.return_as_string = return_as_string
         self.repo_url_given_explicitly = True
-        self.repo_url = get_settings()['PR_HELP_DOCS.REPO_URL']
+        self.repo_url = get_settings().get('PR_HELP_DOCS.REPO_URL', '')
+        self.repo_desired_branch = get_settings().get('PR_HELP_DOCS.REPO_DEFAULT_BRANCH', 'main') #Ignored if self.repo_url is empty
         self.include_root_readme_file = not(get_settings()['PR_HELP_DOCS.EXCLUDE_ROOT_README'])
         self.supported_doc_exts = get_settings()['PR_HELP_DOCS.SUPPORTED_DOC_EXTS']
         self.docs_path = get_settings()['PR_HELP_DOCS.DOCS_PATH']
@@ -222,12 +222,7 @@ class PRHelpDocs(object):
                               f"context url: {self.ctx_url}")
             self.repo_url = self.git_provider.get_git_repo_url(self.ctx_url)
             get_logger().debug(f"deduced repo url: {self.repo_url}")
-        try: #Try to get the same branch in case triggered from a PR:
-            self.repo_desired_branch = self.git_provider.get_pr_branch()
-        except: #Otherwise (such as in issues)
-            self.repo_desired_branch = get_settings()['PR_HELP_DOCS.REPO_DEFAULT_BRANCH']
-        finally:
-            get_logger().debug(f"repo_desired_branch: {self.repo_desired_branch}")
+            self.repo_desired_branch = None #Inferred from the repo provider.
 
         self.ai_handler = ai_handler()
         self.vars = {

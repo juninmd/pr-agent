@@ -495,3 +495,6 @@ class CodeCommitProvider(GitProvider):
             lang: round(count / total_files * 100) for lang, count in lang_count.items()
         }
         return lang_percentage
+
+    def _prepare_clone_url_with_token(self, repo_url_to_clone: str) -> str | None:
+        raise Exception("Not implemented!")

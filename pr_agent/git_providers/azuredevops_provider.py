@@ -623,3 +623,6 @@ class AzureDevopsProvider(GitProvider):
 
     def get_line_link(self, relevant_file: str, relevant_line_start: int, relevant_line_end: int = None) -> str:
         return self.pr_url+f"?_a=files&path={relevant_file}"
+
+    def _prepare_clone_url_with_token(self, repo_url_to_clone: str) -> str | None:
+        raise Exception("Not implemented!")
