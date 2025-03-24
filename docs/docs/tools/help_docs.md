@@ -8,11 +8,11 @@ It can be invoked manually by commenting on any PR:
 
 ## Example usage
 
-![TODO help_docs on the documentation of this repository](https://codium.ai/images/pr_agent/help_docs_comment.png){width=512}
+![help_docs on the documentation of this repository](https://codium.ai/images/pr_agent/help_docs_comment.png){width=512}
 
-![TODO help_docs on the documentation of another repository](https://codium.ai/images/pr_agent/help_docs_comment_implicit_git.png){width=512}
+![help_docs on the documentation of another repository](https://codium.ai/images/pr_agent/help_docs_comment_explicit_git.png){width=512}
 
-![TODO help_docs](https://codium.ai/images/pr_agent/help_docs_result.png){width=512}
+![help_docs response](https://codium.ai/images/pr_agent/help_docs_response.png){width=512}
 
 ## Configuration options
 
