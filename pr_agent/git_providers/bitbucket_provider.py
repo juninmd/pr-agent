@@ -30,12 +30,15 @@ class BitbucketProvider(GitProvider):
     ):
         s = requests.Session()
         try:
-            bearer = context.get("bitbucket_bearer_token", None)
+            self.bearer_token = bearer = context.get("bitbucket_bearer_token", None)
+            if not bearer and get_settings().get("BITBUCKET.BEARER_TOKEN", None):
+                self.bearer_token = bearer = get_settings().get("BITBUCKET.BEARER_TOKEN", None)
             s.headers["Authorization"] = f"Bearer {bearer}"
         except Exception:
+            self.bearer_token = get_settings().get("BITBUCKET.BEARER_TOKEN", None)
             s.headers[
                 "Authorization"
-            ] = f'Bearer {get_settings().get("BITBUCKET.BEARER_TOKEN", None)}'
+            ] = f'Bearer {self.bearer_token}'
         s.headers["Content-Type"] = "application/json"
         self.headers = s.headers
         self.bitbucket_client = Cloud(session=s)
@@ -488,7 +491,7 @@ class BitbucketProvider(GitProvider):
         return True
 
     @staticmethod
-    def _parse_pr_url(pr_url: str) -> Tuple[str, int]:
+    def _parse_pr_url(pr_url: str) -> Tuple[str, int, int]:
         parsed_url = urlparse(pr_url)
 
         if "bitbucket.org" not in parsed_url.netloc:

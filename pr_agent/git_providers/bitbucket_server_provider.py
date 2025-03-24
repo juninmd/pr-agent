@@ -36,7 +36,7 @@ class BitbucketServerProvider(GitProvider):
         self.incremental = incremental
         self.diff_files = None
         self.bitbucket_pull_request_api_url = pr_url
-
+        self.bearer_token = get_settings().get("BITBUCKET_SERVER.BEARER_TOKEN", None)
         self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url)
         self.bitbucket_client = bitbucket_client or Bitbucket(url=self.bitbucket_server_url,
                                                               token=get_settings().get("BITBUCKET_SERVER.BEARER_TOKEN",
@@ -67,7 +67,7 @@ class BitbucketServerProvider(GitProvider):
             desired_branch = self.get_pr_branch()
             workspace_name = self.workspace_slug
             project_name = self.repo_slug
-        else:
+        elif '.git' in repo_git_url and 'scm/' in repo_git_url:
             repo_path = repo_git_url.split('.git')[0].split('scm/')[-1]
             if repo_path.count('/') == 1:  # Has to have the form <workspace>/<repo>
                 workspace_name, project_name = repo_path.split('/')
