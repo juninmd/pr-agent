@@ -758,6 +758,7 @@ class GithubProvider(GitProvider):
 
     def _get_github_client(self):
         self.deployment_type = get_settings().get("GITHUB.DEPLOYMENT_TYPE", "user")
+        self.auth = None
         if self.deployment_type == 'app':
             try:
                 private_key = get_settings().github.private_key
