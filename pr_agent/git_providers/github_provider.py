@@ -83,6 +83,9 @@ class GithubProvider(GitProvider):
 
     def get_git_repo_url(self, issues_or_pr_url: str) -> str:
         repo_path = self._get_owner_and_repo_path(issues_or_pr_url)
+        if not repo_path or repo_path not in issues_or_pr_url:
+            get_logger().error(f"Unable to retrieve owner/path from url: {issues_or_pr_url}")
+            return ""
         return f"{issues_or_pr_url.split(repo_path)[0]}{repo_path}.git"
 
     # Given a git repo url, return prefix and suffix of the provider in order to view a given file belonging to that repo.

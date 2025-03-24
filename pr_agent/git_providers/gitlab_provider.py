@@ -71,10 +71,11 @@ class GitLabProvider(GitProvider):
 
     def get_git_repo_url(self, issues_or_pr_url: str) -> str:
         provider_url = issues_or_pr_url
-        repo_path = self._get_project_path_from_pr_or_issue_url(issues_or_pr_url)
-        if not repo_path:
+        repo_path = self._get_project_path_from_pr_or_issue_url(provider_url)
+        if not repo_path or repo_path not in issues_or_pr_url:
+            get_logger().error(f"Unable to retrieve project path from url: {issues_or_pr_url}")
             return ""
-        return f"{provider_url.split(repo_path)[0]}{repo_path}.git"
+        return f"{issues_or_pr_url.split(repo_path)[0]}{repo_path}.git"
 
     # Given a git repo url, return prefix and suffix of the provider in order to view a given file belonging to that repo.
     # Example: https://gitlab.com/codiumai/pr-agent.git and branch: t1 -> prefix: "https://gitlab.com/codiumai/pr-agent/-/blob/t1", suffix: "?ref_type=heads"
