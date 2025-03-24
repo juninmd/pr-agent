@@ -46,9 +46,10 @@ class GitProvider(ABC):
                 shutil.rmtree(self.path, ignore_errors=True)
 
     @abstractmethod
-    #Method to allow implementors to manipulate the repo url to clone (such as embedding tokens in the url string).
+    #Method to allow implementors to manipulate the repo url to clone (such as embedding tokens in the url string). Needs to be implemented by the provider.
     def _prepare_clone_url_with_token(self, repo_url_to_clone: str) -> str | None:
-        pass
+        get_logger().warning("Not implemented! Returning None")
+        return None
 
     # Does a shallow clone, using a forked process to support a timeout guard.
     # In case operation has failed, it is expected to throw an exception as this method does not return a value.
