@@ -21,7 +21,7 @@ By indexing your company's code and using Retrieval-Augmented Generation (RAG), 
 ### Configuration options
 
 In order to enable the RAG feature, add the following lines to your configuration file:
-```
+``` toml
 [rag_arguments]
 enable_rag=true 
 ```
