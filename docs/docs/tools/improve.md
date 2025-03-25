@@ -122,10 +122,10 @@ Use triple quotes to write multi-line instructions. Use bullet points or numbers
 
 > `💎 feature. Platforms supported: GitHub, GitLab, Bitbucket`
 
-Another option to give additional guidance to the AI model is by creating a `best_practices.md` file, either in your repository's root directory or as a [**wiki page**](https://github.com/Codium-ai/pr-agent/wiki) (we recommend the wiki page, as editing and maintaining it over time is easier).
+Another option to give additional guidance to the AI model is by creating a `best_practices.md` file in your repository's root directory.
 This page can contain a list of best practices, coding standards, and guidelines that are specific to your repo/organization.
 
-The AI model will use this wiki page as a reference, and in case the PR code violates any of the guidelines, it will create additional suggestions, with a dedicated label: `Organization
+The AI model will use this `best_practices.md` file as a reference, and in case the PR code violates any of the guidelines, it will create additional suggestions, with a dedicated label: `Organization
 best practice`.
 
 Example for a python `best_practices.md` content:
@@ -149,16 +149,16 @@ Tips for writing an effective `best_practices.md` file:
     - Long files tend to contain generic guidelines already known to AI
 
 #### Local and global best practices
-By default, Qodo Merge will look for a local `best_practices.md` wiki file in the root of the relevant local repo.
+By default, Qodo Merge will look for a local `best_practices.md` in the root of the relevant local repo.
 
-If you want to enable also a global `best_practices.md` wiki file, set first in the global configuration file:
+If you want to enable also a global `best_practices.md` file, set first in the global configuration file:
 
 ```toml
 [best_practices]
 enable_global_best_practices = true
 ```
 
-Then, create a `best_practices.md` wiki file in the root of [global](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#global-configuration-file) configuration repository,  `pr-agent-settings`.
+Then, create a `best_practices.md` file in the root of [global](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#global-configuration-file) configuration repository,  `pr-agent-settings`.
 
 #### Best practices for multiple languages
 For a git organization working with multiple programming languages, you can maintain a centralized global `best_practices.md` file containing language-specific guidelines. 
