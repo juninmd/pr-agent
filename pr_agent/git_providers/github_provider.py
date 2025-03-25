@@ -82,11 +82,11 @@ class GithubProvider(GitProvider):
             return ""
 
     def get_git_repo_url(self, issues_or_pr_url: str) -> str:
-        repo_path = self._get_owner_and_repo_path(issues_or_pr_url)
+        repo_path = self._get_owner_and_repo_path(issues_or_pr_url) #Return: <OWNER>/<REPO>
         if not repo_path or repo_path not in issues_or_pr_url:
             get_logger().error(f"Unable to retrieve owner/path from url: {issues_or_pr_url}")
             return ""
-        return f"{issues_or_pr_url.split(repo_path)[0]}{repo_path}.git"
+        return f"{self.base_url_html}/{repo_path}.git" #https://github.com / <OWNER>/<REPO>.git
 
     # Given a git repo url, return prefix and suffix of the provider in order to view a given file belonging to that repo.
     # Example: https://github.com/qodo-ai/pr-agent.git and branch: v0.8 -> prefix: "https://github.com/qodo-ai/pr-agent/blob/v0.8", suffix: ""
@@ -109,7 +109,7 @@ class GithubProvider(GitProvider):
             owner, repo = self.repo.split('/')
             scheme_and_netloc = self.base_url_html
             desired_branch = self.get_pr_branch()
-        if not any([scheme_and_netloc, owner, repo]): #"else": Not invoked from a PR context,but no provided git url for context
+        if not all([scheme_and_netloc, owner, repo]): #"else": Not invoked from a PR context,but no provided git url for context
             get_logger().error(f"Unable to get canonical url parts since missing context (PR or explicit git url)")
             return ("", "")
 
