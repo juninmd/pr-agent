@@ -1,5 +1,5 @@
 
-The default models used by Qodo Merge (March 2025) is Claude Sonnet 3.7.
+The default model used by Qodo Merge (March 2025) is Claude Sonnet 3.7.
 
 ### Selecting a Specific Model
 
