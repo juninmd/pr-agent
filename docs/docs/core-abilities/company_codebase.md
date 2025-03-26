@@ -34,8 +34,8 @@ enable_rag=true
         <td>If set to true, codebase enrichment using RAG will be enabled. Default is false.</td>
       </tr>
       <tr>
-      <td><b>rag_repo_list</b></td>
-      <td>A list of repositories that will be used by the semantic search for RAG. Use `['all']` to consider the entire codebase or a select list or repositories, for example: ['my-org/my-repo', ...]. Default: the repository from which the PR was opened.</td>
+        <td><b>rag_repo_list</b></td>
+        <td>A list of repositories that will be used by the semantic search for RAG. Use `['all']` to consider the entire codebase or a select list or repositories, for example: ['my-org/my-repo', ...]. Default: the repository from which the PR was opened.</td>
       </tr>
     </table>
 
