@@ -64,7 +64,7 @@ async def get_body(request):
     try:
         body = await request.json()
     except Exception as e:
-        get_logger().error("Error parsing request body", e)
+        get_logger().error("Error parsing request body", artifact={'error': e})
         raise HTTPException(status_code=400, detail="Error parsing request body") from e
     webhook_secret = getattr(get_settings().github, 'webhook_secret', None)
     if webhook_secret:
@@ -107,7 +107,7 @@ async def handle_comments_on_pr(body: Dict[str, Any],
                 comment_body = handle_line_comments(body, comment_body)
                 disable_eyes = True
         except Exception as e:
-            get_logger().error(f"Failed to handle line comments: {e}")
+            get_logger().error("Failed to get log context", artifact={'error': e})
     else:
         return {}
     log_context["api_url"] = api_url
@@ -233,7 +233,7 @@ def get_log_context(body, event, action, build_number):
                        "request_id": uuid.uuid4().hex, "build_number": build_number, "app_name": app_name,
                         "repo": repo, "git_org": git_org, "installation_id": installation_id}
     except Exception as e:
-        get_logger().error(f"Failed to get log context: {e}")
+        get_logger().error(f"Failed to get log context", artifact={'error': e})
         log_context = {}
     return log_context, sender, sender_id, sender_type
 
