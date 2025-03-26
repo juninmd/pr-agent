@@ -41,6 +41,7 @@ enable_rag=true
 
 
 References from the codebase will be shown in a collapsible bookmark, allowing you to easily access relevant code snippets:
+
 ![References](https://codium.ai/images/pr_agent/company_codebase_references.png){width=640}
 
 ## Limitations
