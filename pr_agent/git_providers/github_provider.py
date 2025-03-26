@@ -43,6 +43,7 @@ class GithubProvider(GitProvider):
         self.repo = None
         self.pr_num = None
         self.pr = None
+        self.issue_main = None
         self.github_user_id = None
         self.diff_files = None
         self.git_files = None
