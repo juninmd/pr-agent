@@ -118,16 +118,19 @@ class GithubProvider(GitProvider):
         repo = None
         scheme_and_netloc = None
 
-        if repo_git_url: #If user provided an external git url, which may be different than what this provider was initialized with, we cannot use self.repo
-            repo_path = self._get_owner_and_repo_path(repo_git_url)
-            parsed_git_url = urlparse(repo_git_url)
+        if repo_git_url or self.issue_main: #Either user provided an external git url, which may be different than what this provider was initialized with, or an issue:
+            desired_branch = desired_branch if repo_git_url else self.issue_main.repository.default_branch
+            html_url = repo_git_url if repo_git_url else self.issue_main.html_url
+            parsed_git_url = urlparse(html_url)
             scheme_and_netloc = parsed_git_url.scheme + "://" + parsed_git_url.netloc
+            repo_path = self._get_owner_and_repo_path(html_url)
             if repo_path.count('/') == 1: #Has to have the form <owner>/<repo>
                 owner, repo = repo_path.split('/')
             else:
-                get_logger().error(f"Invalid repo_path: {repo_path} from repo_git_url: {repo_git_url}")
+                get_logger().error(f"Invalid repo_path: {repo_path} from url: {html_url}")
                 return ("", "")
-        if (not owner or not repo) and self.repo: #"else" - User did not provide an external git url, use self.repo object:
+
+        if (not owner or not repo) and self.repo: #"else" - User did not provide an external git url, or not an issue, use self.repo object
             owner, repo = self.repo.split('/')
             scheme_and_netloc = self.base_url_html
             desired_branch = self.get_pr_branch()
