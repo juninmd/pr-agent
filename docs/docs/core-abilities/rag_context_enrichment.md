@@ -41,7 +41,7 @@ enable_rag=true
 
 References from the repository will be shown in a collapsible bookmark, allowing you to easily access relevant code snippets:
 
-![References](https://codium.ai/images/pr_agent/code_context_enrichment_references.png){width=640}
+![References](https://codium.ai/images/pr_agent/rag_context_enrichment_references.png){width=640}
 
 ## Limitations
 
