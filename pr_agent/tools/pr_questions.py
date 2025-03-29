@@ -116,13 +116,14 @@ class PRQuestions:
                 model=model, temperature=get_settings().config.temperature, system=system_prompt, user=user_prompt)
         return response
 
-    def gitlab_protctions(self, model_answer: str) -> str:
+    def gitlab_protections(self, model_answer: str) -> str:
         github_quick_actions_MR = ["/approve", "/close", "/merge", "/reopen", "/unapprove", "/title", "/assign",
                                 "/copy_metadata", "/target_branch"]
         if any(action in model_answer for action in github_quick_actions_MR):
             str_err = "Model answer contains GitHub quick actions, which are not supported in GitLab"
             get_logger().error(str_err)
             return str_err
+        return model_answer
 
     def _prepare_pr_answer(self) -> str:
         model_answer = self.prediction.strip()
@@ -130,7 +131,7 @@ class PRQuestions:
         model_answer_sanitized = model_answer.replace("\n/", "\n /")
         model_answer_sanitized = model_answer_sanitized.replace("\r/", "\r /")
         if isinstance(self.git_provider, GitLabProvider):
-            model_answer_sanitized = self.gitlab_protctions(model_answer_sanitized)
+            model_answer_sanitized = self.gitlab_protections(model_answer_sanitized)
         if model_answer_sanitized.startswith("/"):
             model_answer_sanitized = " " + model_answer_sanitized
         if model_answer_sanitized != model_answer:
