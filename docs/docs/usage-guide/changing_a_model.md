@@ -1,7 +1,7 @@
 ## Changing a model in PR-Agent
 
 See [here](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py) for a list of available models.
-To use a different model than the default (GPT-4), you need to edit in the [configuration file](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/configuration.toml#L2) the fields:
+To use a different model than the default (o3-mini), you need to edit in the [configuration file](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/configuration.toml#L2) the fields:
 ```
 [config]
 model = "..."
@@ -9,7 +9,10 @@ fallback_models = ["..."]
 ```
 
 For models and environments not from OpenAI, you might need to provide additional keys and other parameters.
-You can give parameters via a configuration file (see below for instructions), or from environment variables. See [litellm documentation](https://litellm.vercel.app/docs/proxy/quick_start#supported-llms) for the environment variables relevant per model.
+You can give parameters via a configuration file, or from environment variables. 
+
+!!! note "Model-specific environment variables"
+    See [litellm documentation](https://litellm.vercel.app/docs/proxy/quick_start#supported-llms) for the environment variables needed per model, as they may vary and change over time. Our documentation per-model may not always be up-to-date with the latest changes.
 
 ### Azure
 
@@ -158,25 +161,24 @@ And also set the api key in the .secrets.toml file:
 KEY = "..."
 ```
 
+See [litellm](https://docs.litellm.ai/docs/providers/anthropic#usage) documentation for more information about the environment variables required for Anthropic.
+
 ### Amazon Bedrock
 
 To use Amazon Bedrock and its foundational models, add the below configuration:
 
 ```
 [config] # in configuration.toml
-model="bedrock/anthropic.claude-3-sonnet-20240229-v1:0"
-fallback_models=["bedrock/anthropic.claude-v2:1"]
+model="bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0"
+fallback_models=["bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0"]
+
+[aws]
+AWS_ACCESS_KEY_ID="..."
+AWS_SECRET_ACCESS_KEY="..."
+AWS_REGION_NAME="..."
 ```
 
-Note that you have to add access to foundational models before using them. Please refer to [this document](https://docs.aws.amazon.com/bedrock/latest/userguide/setting-up.html) for more details.
-
-If you are using the claude-3 model, please configure the following settings as there are parameters incompatible with claude-3.
-```
-[litellm]
-drop_params = true
-```
-
-AWS session is automatically authenticated from your environment, but you can also explicitly set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_REGION_NAME` environment variables. Please refer to [this document](https://litellm.vercel.app/docs/providers/bedrock) for more details.
+See [litellm](https://docs.litellm.ai/docs/providers/bedrock#usage) documentation for more information about the environment variables required for Amazon Bedrock.
 
 ### DeepSeek
 
