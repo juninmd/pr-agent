@@ -29,7 +29,7 @@ __old hunk__
 @@ ... @@ def func2():
 __new hunk__
  unchanged code line4
-+new code line5 removed
++new code line5 added
  unchanged code line6
 
 ## File: 'src/file2.py'
