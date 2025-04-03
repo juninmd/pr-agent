@@ -92,7 +92,7 @@ class BitbucketProvider(GitProvider):
                 return ("", "")
             workspace_name, project_name = repo_path.split('/')
         else:
-            desired_branch = self.get_pr_branch()
+            desired_branch = self.get_repo_default_branch()
             parsed_pr_url = urlparse(self.pr_url)
             scheme_and_netloc = parsed_pr_url.scheme + "://" + parsed_pr_url.netloc
             workspace_name, project_name = (self.workspace_slug, self.repo_slug)
@@ -469,6 +469,16 @@ class BitbucketProvider(GitProvider):
 
     def get_pr_branch(self):
         return self.pr.source_branch
+
+    # This function attempts to get the default branch of the repository. As a fallback, uses the PR destination branch.
+    # Note: Must be running from a PR context.
+    def get_repo_default_branch(self):
+        try:
+            url_repo = f"https://api.bitbucket.org/2.0/repositories/{self.workspace_slug}/{self.repo_slug}/"
+            response_repo = requests.request("GET", url_repo, headers=self.headers).json()
+            return response_repo['mainbranch']['name']
+        except:
+            return self.pr.destination_branch
 
     def get_pr_owner_id(self) -> str | None:
         return self.workspace_slug
