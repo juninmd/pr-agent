@@ -26,6 +26,9 @@ In such cases, Qodo Merge will omit the 'apply' checkbox and instead display:
 
 `[To ensure code accuracy, apply this suggestion manually]`
 
+All suggestions that pass these validations undergo a final stage of **self-reflection**, where the AI model evaluates, scores, and re-ranks its own suggestions, eliminating any that are irrelevant or incorrect.
+Read more about this process in the [self-reflection](https://qodo-merge-docs.qodo.ai/core-abilities/self_reflection/) page.
+
 ## Conclusion
 
 The validation methods described above enhance the reliability of code suggestions and help PR authors determine which suggestions are safer to apply in the Git environment.
