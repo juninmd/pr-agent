@@ -13,7 +13,7 @@ By default, suggestions appear as a comment in a table format:
 ## Validation of Code Suggestions
 
 Each suggestion in the table can be "applied", converting it to a committable Git code change that can be committed directly to the PR.
-This approach allows fix issues without returning to your IDE for manual edits — significantly faster and more convenient.
+This approach allows to fix issues without returning to your IDE for manual edits — significantly faster and more convenient.
 
 However, committing a suggestion in a Git environment carries more risk than in a local IDE, as you don't have the opportunity to fully run and test the code before committing.
 
