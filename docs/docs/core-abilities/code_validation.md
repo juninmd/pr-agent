@@ -1,5 +1,3 @@
-[//]: # (## Code Validation 💎)
-
 ## Introduction
 The Git environment usually represents the final stage before code enters production. Hence, Detecting bugs and issues during the review process is critical.
 
