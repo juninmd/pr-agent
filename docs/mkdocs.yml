@@ -47,10 +47,11 @@ nav:
       - Dynamic context: 'core-abilities/dynamic_context.md'
       - Self-reflection: 'core-abilities/self_reflection.md'
       - Impact evaluation: 'core-abilities/impact_evaluation.md'
-      - Interactivity: 'core-abilities/interactivity.md'
-      - Compression strategy: 'core-abilities/compression_strategy.md'
       - RAG Context Enrichment: 'core-abilities/rag_context_enrichment.md'
       - Static code analysis: 'core-abilities/static_code_analysis.md'
+      - Compression strategy: 'core-abilities/compression_strategy.md'
+      - Code validation: 'core-abilities/code_validation.md'
+      - Interactivity: 'core-abilities/interactivity.md'
       - Code Fine-tuning Benchmark: 'finetuning_benchmark/index.md'
   - Chrome Extension:
       - Qodo Merge Chrome Extension: 'chrome-extension/index.md'
