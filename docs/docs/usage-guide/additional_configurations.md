@@ -139,6 +139,17 @@ user="""
 ```
 Note that the new prompt will need to generate an output compatible with the relevant [post-process function](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/tools/pr_description.py#L137).
 
+## Log Level
+
+Qodo Merge allows you to control the verbosity of logging by using the `log_level` configuration parameter. This is particularly useful for troubleshooting and debugging issues with your PR workflows.
+
+```
+[config]
+log_level = "DEBUG"  # Options: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+```
+
+The default log level is "DEBUG", which provides detailed output of all operations. If you prefer less verbose logs, you can set higher log levels like "INFO" or "WARNING".
+
 ## Integrating with Logging Observability Platforms
 
 Various logging observability tools can be used out-of-the box when using the default LiteLLM AI Handler. Simply configure the LiteLLM callback settings in `configuration.toml` and set environment variables according to the LiteLLM [documentation](https://docs.litellm.ai/docs/).
