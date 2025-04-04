@@ -13,6 +13,7 @@ You can give parameters via a configuration file, or from environment variables.
 
 !!! note "Model-specific environment variables"
     See [litellm documentation](https://litellm.vercel.app/docs/proxy/quick_start#supported-llms) for the environment variables needed per model, as they may vary and change over time. Our documentation per-model may not always be up-to-date with the latest changes.
+    Failing to set the needed keys of a specific model will usually result in litellm not identifying the model type, and failing to utilize it.
 
 ### Azure
 
