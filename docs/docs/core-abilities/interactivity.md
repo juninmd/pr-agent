@@ -5,14 +5,16 @@
 ## Overview
 
 Qodo Merge transforms static code reviews into interactive experiences by enabling direct actions from pull request (PR) comments.
-Developers can immediately trigger actions and apply changes with simple checkbox clicks. This focused workflow maintains context while dramatically reducing the time between PR creation and final merge.
+Developers can immediately trigger actions and apply changes with simple checkbox clicks. 
+
+This focused workflow maintains context while dramatically reducing the time between PR creation and final merge.
 The approach eliminates manual steps, provides clear visual indicators, and creates immediate feedback loops all within the same interface.
 
 ## Key Interactive Features
 
-### 1\. Interactive `/Improve` Tool
+### 1\. Interactive `/improve` Tool
 
-The `/improve` command delivers a comprehensive interactive experience:
+The [`/improve`](https://qodo-merge-docs.qodo.ai/tools/improve/) command delivers a comprehensive interactive experience:
 
 - _**Apply this suggestion**_: Clicking this checkbox instantly converts a suggestion into a committable code change
 
@@ -23,9 +25,9 @@ The `/improve` command delivers a comprehensive interactive experience:
 - _**Author self-review**_: Interactive acknowledgment that developers have opened and reviewed collapsed suggestions
 
 
-###  2\. Interactive `/Analyze` Tool
+###  2\. Interactive `/analyze` Tool
 
-The `/analyze` command provides component-level analysis with interactive options for each identified code component:
+The [`/analyze`](https://qodo-merge-docs.qodo.ai/tools/analyze/) command provides component-level analysis with interactive options for each identified code component:
 
 - Interactive checkboxes to generate tests, documentation, and code suggestions for specific components
 
@@ -34,8 +36,8 @@ The `/analyze` command provides component-level analysis with interactive option
 - Component-specific actions that trigger only for the selected elements, providing focused assistance
 
 
-###  3\. Interactive `/Help` Tool
+###  3\. Interactive `/help` Tool
 
-The `/help` command not only lists available tools and their descriptions but also enables immediate tool invocation through interactive checkboxes. 
+The [`/help`](https://qodo-merge-docs.qodo.ai/tools/help/) command not only lists available tools and their descriptions but also enables immediate tool invocation through interactive checkboxes. 
 When a user checks a tool's checkbox, Qodo Merge instantly triggers that tool without requiring additional commands. 
 This transforms the standard help menu into an interactive launch pad for all Qodo Merge capabilities, eliminating context switching by keeping developers within their PR workflow.
