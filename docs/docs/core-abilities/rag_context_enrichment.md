@@ -2,6 +2,10 @@
 
 `Supported Git Platforms: GitHub`
 
+!!! info "Prerequisites"
+    - RAG is available only for Qodo enterprise plan users, with single tenant or on-premises setup.
+    - Database setup and codebase indexing must be completed before proceeding. [Contact support](https://www.qodo.ai/contact/) for more information.
+
 ## Overview
 
 ### What is RAG Context Enrichment?
@@ -13,9 +17,6 @@ A feature that enhances AI analysis by retrieving and referencing relevant code 
 Using Retrieval-Augmented Generation (RAG), it searches your configured repositories for contextually relevant code segments, enriching pull request (PR) insights and accelerating review accuracy.
 
 ## Getting started
-
-!!! info "Prerequisites"
-    - Database setup and codebase indexing must be completed before proceeding. [Contact support](https://www.qodo.ai/contact/) for assistance.
 
 ### Configuration options
 
