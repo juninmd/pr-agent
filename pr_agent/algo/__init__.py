@@ -76,6 +76,8 @@ MAX_TOKENS = {
     "bedrock/us.anthropic.claude-3-5-sonnet-20241022-v2:0": 100000,
     "bedrock/us.anthropic.claude-3-7-sonnet-20250219-v1:0": 200000,
     'claude-3-5-sonnet': 100000,
+    'groq/meta-llama/llama-4-scout-17b-16e-instruct': 131072,
+    'groq/meta-llama/llama-4-maverick-17b-128e-instruct': 131072,
     'groq/llama3-8b-8192': 8192,
     'groq/llama3-70b-8192': 8192,
     'groq/llama-3.1-8b-instant': 8192,
