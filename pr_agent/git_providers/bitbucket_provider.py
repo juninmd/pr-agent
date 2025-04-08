@@ -29,17 +29,26 @@ class BitbucketProvider(GitProvider):
         self, pr_url: Optional[str] = None, incremental: Optional[bool] = False
     ):
         s = requests.Session()
-        try:
-            self.bearer_token = bearer = context.get("bitbucket_bearer_token", None)
-            if not bearer and get_settings().get("BITBUCKET.BEARER_TOKEN", None):
-                self.bearer_token = bearer = get_settings().get("BITBUCKET.BEARER_TOKEN", None)
-            s.headers["Authorization"] = f"Bearer {bearer}"
-        except Exception:
-            self.bearer_token = get_settings().get("BITBUCKET.BEARER_TOKEN", None)
-            s.headers[
-                "Authorization"
-            ] = f'Bearer {self.bearer_token}'
         s.headers["Content-Type"] = "application/json"
+
+        try:
+            auth_type = context.get("bitbucket_auth_type", None) or get_settings().get("BITBUCKET.AUTH_TYPE", "bearer")
+
+            if auth_type == "basic":
+                self.basic_token = context.get("bitbucket_basic_token", None) or get_settings().get("BITBUCKET.BASIC_TOKEN", None)
+                if not self.basic_token:
+                    raise ValueError("Basic auth requires a token")
+                s.headers["Authorization"] = f"Basic {self.basic_token}"
+            else:  # default to bearer
+                self.bearer_token = context.get("bitbucket_bearer_token", None) or get_settings().get("BITBUCKET.BEARER_TOKEN", None)
+                if not self.bearer_token:
+                    raise ValueError("Bearer token is required for bearer auth")
+                s.headers["Authorization"] = f"Bearer {self.bearer_token}"
+
+        except Exception as e:
+            get_logger().exception(f"Failed to initialize Bitbucket authentication: {e}")
+            raise
+
         self.headers = s.headers
         self.bitbucket_client = Cloud(session=s)
         self.max_comment_length = 31000
@@ -608,16 +617,20 @@ class BitbucketProvider(GitProvider):
         if "bitbucket.org" not in repo_url_to_clone:
             get_logger().error("Repo URL is not a valid bitbucket URL.")
             return None
-        bearer_token = self.bearer_token
-        if not bearer_token:
-            get_logger().error("No bearer token provided. Returning None")
-            return None
 
-        #For example: For repo: https://bitbucket.org/codiumai/pr-agent-tests.git
-        #clone url will be: https://x-token-auth:<token>@bitbucket.org/codiumai/pr-agent-tests.git
         (scheme, base_url) = repo_url_to_clone.split("bitbucket.org")
         if not all([scheme, base_url]):
             get_logger().error(f"repo_url_to_clone: {repo_url_to_clone} is not a valid bitbucket URL.")
             return None
-        clone_url = f"{scheme}x-token-auth:{bearer_token}@bitbucket.org{base_url}"
+
+        if hasattr(self, 'basic_token'):
+            # Basic auth with token
+            clone_url = f"{scheme}x-token-auth:{self.basic_token}@bitbucket.org{base_url}"
+        elif hasattr(self, 'bearer_token'):
+            # Bearer token
+            clone_url = f"{scheme}x-token-auth:{self.bearer_token}@bitbucket.org{base_url}"
+        else:
+            get_logger().error("No valid authentication method provided. Returning None")
+            return None
+
         return clone_url
