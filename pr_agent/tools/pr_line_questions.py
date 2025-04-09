@@ -131,8 +131,8 @@ class PR_LineQuestions:
                             continue
                         
                         # except for current question
-                        if current_question_id and str(comment.id) == str(current_question_id):
-                            continue
+                        # except for current question
+                        if current_question_id and comment.id == current_question_id:
                         
                         # remove the AI command (/ask etc) from the beginning of the comment (optional)
                         clean_body = body
