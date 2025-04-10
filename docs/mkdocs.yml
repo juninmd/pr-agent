@@ -56,6 +56,7 @@ nav:
       - Qodo Merge Chrome Extension: 'chrome-extension/index.md'
       - Features: 'chrome-extension/features.md'
       - Data Privacy: 'chrome-extension/data_privacy.md'
+      - Options: 'chrome-extension/options.md'
   - FAQ:
       - FAQ: 'faq/index.md'
   - AI Docs Search: 'ai_search/index.md'
