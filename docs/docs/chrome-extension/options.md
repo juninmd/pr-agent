@@ -25,6 +25,7 @@ Alternatively, you can access the options page directly using this URL:
 For single-tenant customers, you can configure the extension to communicate directly with your company's Qodo Merge server instance.
 
 To set this up:
+
 - Enter your organization's Qodo Merge API endpoint in the "API Base Host" field
 - This endpoint should be provided by your Qodo DevOps Team
 
@@ -33,6 +34,7 @@ To set this up:
 #### Interface Options
 
 You can customize the extension's interface by:
+
 - Toggling the "Show Qodo Merge Toolbar" option
 - When disabled, the toolbar will not appear in your Github comment bar
 
