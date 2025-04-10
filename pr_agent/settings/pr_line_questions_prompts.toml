@@ -49,9 +49,8 @@ Previous discussion on this code:
 ======
 {{ conversation_history|trim }}
 ======
-Consider both the previous review comments from authors and reviewers, as well as any previous questions and answers about this code. The "Previous Question" and "Previous AI Answer" show earlier interactions about the same code. Use this context to provide a more informed and consistent answer.
+Use this prior discussion context to provide a consistent and informed answer.
 {%- endif %}
-
 
 A question about the selected lines:
 ======

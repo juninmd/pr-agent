@@ -16,7 +16,7 @@ from pr_agent.git_providers import get_git_provider
 from pr_agent.git_providers.git_provider import get_main_pr_language
 from pr_agent.log import get_logger
 from pr_agent.servers.help import HelpMessage
-
+from pr_agent.git_providers.github_provider import GithubProvider
 
 class PR_LineQuestions:
     def __init__(self, pr_url: str, args=None, ai_handler: partial[BaseAiHandler,] = LiteLLMAIHandler):
@@ -43,9 +43,6 @@ class PR_LineQuestions:
                                           get_settings().pr_line_questions_prompt.user)
         self.patches_diff = None
         self.prediction = None
-        
-        # get settings for use conversation history
-        self.use_conversation_history = get_settings().pr_questions.use_conversation_history
 
     def parse_args(self, args):
         if args and len(args) > 0:
@@ -62,7 +59,7 @@ class PR_LineQuestions:
 
         # set conversation history if enabled
         # currently only supports GitHub provider
-        if self.use_conversation_history and isinstance(self.git_provider, GithubProvider):
+        if get_settings().pr_questions.use_conversation_history and isinstance(self.git_provider, GithubProvider):
             self._load_conversation_history()
 
         self.patch_with_lines = ""
@@ -104,70 +101,41 @@ class PR_LineQuestions:
         
     def _load_conversation_history(self):
         """generate conversation history from the code review thread"""
+        # set conversation history to empty string
+        self.vars["conversation_history"] = ""
+        
+        comment_id = get_settings().get('comment_id', '')
+        file_path = get_settings().get('file_name', '')
+        line_number = get_settings().get('line_end', '')
+        
+        # early return if any required parameter is missing
+        if not all([comment_id, file_path, line_number]):
+            return
+        
         try:
-            comment_id = get_settings().get('comment_id', '')
-            file_path = get_settings().get('file_name', '')
-            line_number = get_settings().get('line_end', '')
+            # retrieve thread comments
+            thread_comments = self.git_provider.get_review_thread_comments(comment_id)
             
-            # return if any required parameter is missing
-            if not all([comment_id, file_path, line_number]):
-                return
-
-            # initialize conversation history
+            # generate conversation history
             conversation_history = []
+            for comment in thread_comments:
+                body = getattr(comment, 'body', '')
+
+                # skip empty comments, current comment(will be added as a question at prompt)
+                if not body or not body.strip() or comment_id == comment.id:
+                    continue
+                
+                user = comment.user
+                author = user.login if hasattr(user, 'login') else 'Unknown'
+                conversation_history.append(f"{author}: {body}")
             
-            if hasattr(self.git_provider, 'get_review_thread_comments') and comment_id:
-                try:
-                    # get review thread comments
-                    thread_comments = self.git_provider.get_review_thread_comments(comment_id)
-                    
-                    # current question id (this question is excluded from the context)
-                    current_question_id = comment_id
-                    
-                    # generate conversation history from the comments
-                    for comment in thread_comments:
-                        # skip empty comments
-                        body = getattr(comment, 'body', '')
-                        if not body or not body.strip():
-                            continue
-                        
-                        # except for current question
-                        # except for current question
-                        if current_question_id and comment.id == current_question_id:
-                        
-                        # remove the AI command (/ask etc) from the beginning of the comment (optional)
-                        clean_body = body
-                        if clean_body.startswith('/'):
-                            clean_body = clean_body.split('\n', 1)[-1] if '\n' in clean_body else ''
-                            
-                        if not clean_body.strip():
-                            continue
-                            
-                        # author info
-                        user = comment.user
-                        author = user.login if hasattr(user, 'login') else 'Unknown'
-                        
-                        # confirm if the author is the current user (AI vs user)
-                        is_ai = 'bot' in author.lower() or '[bot]' in author.lower()
-                        role = 'AI' if is_ai else 'User'
-                        
-                        # append to the conversation history
-                        conversation_history.append(f"{role} ({author}): {clean_body}")
-                    
-                    # transform the conversation history to a string
-                    if conversation_history:
-                        self.vars["conversation_history"] = "\n\n".join(conversation_history)
-                        get_logger().info(f"Loaded {len(conversation_history)} comments from the code review thread")
-                    else:
-                        self.vars["conversation_history"] = ""
-                        
-                except Exception as e:
-                    get_logger().warning(f"Failed to get review thread comments: {e}")
-                    self.vars["conversation_history"] = ""
+            # transform and save conversation history
+            if conversation_history:
+                self.vars["conversation_history"] = "\n\n".join(conversation_history)
+                get_logger().info(f"Loaded {len(conversation_history)} comments from the code review thread")
         
         except Exception as e:
-            get_logger().error(f"Error loading conversation history: {e}")
-            self.vars["conversation_history"] = ""
+            get_logger().error(f"Error processing conversation history, error: {e}")
 
     async def _get_prediction(self, model: str):
         variables = copy.deepcopy(self.vars)
