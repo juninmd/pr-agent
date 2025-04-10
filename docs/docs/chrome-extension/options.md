@@ -34,6 +34,6 @@ To set this up:
 
 You can customize the extension's interface by:
 - Toggling the "Show Qodo Merge Toolbar" option
-- When disabled, the toolbar will not appear in your browser
+- When disabled, the toolbar will not appear in your Github comment bar
 
 Remember to click "Save Settings" after making any changes.
