@@ -61,7 +61,8 @@ class PR_LineQuestions:
         #     self.git_provider.publish_comment("Preparing answer...", is_temporary=True)
 
         # set conversation history if enabled
-        if self.use_conversation_history:
+        # currently only supports GitHub provider
+        if self.use_conversation_history and isinstance(self.git_provider, GithubProvider):
             self._load_conversation_history()
 
         self.patch_with_lines = ""
