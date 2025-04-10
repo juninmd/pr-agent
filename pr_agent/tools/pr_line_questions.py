@@ -109,8 +109,8 @@ class PR_LineQuestions:
             file_path = get_settings().get('file_name', '')
             line_number = get_settings().get('line_end', '')
             
-            # return if no comment id or file path and line number
-            if not (comment_id or (file_path and line_number)):
+            # return if any required parameter is missing
+            if not all([comment_id, file_path, line_number]):
                 return
 
             # initialize conversation history
