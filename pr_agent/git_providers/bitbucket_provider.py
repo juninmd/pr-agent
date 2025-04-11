@@ -625,14 +625,15 @@ class BitbucketProvider(GitProvider):
             get_logger().error(f"repo_url_to_clone: {repo_url_to_clone} is not a valid bitbucket URL.")
             return None
 
-        if hasattr(self, 'basic_token'):
+        if self.auth_type == "basic":
             # Basic auth with token
             clone_url = f"{scheme}x-token-auth:{self.basic_token}@bitbucket.org{base_url}"
-        elif hasattr(self, 'bearer_token'):
+        elif self.auth_type == "bearer":
             # Bearer token
             clone_url = f"{scheme}x-token-auth:{self.bearer_token}@bitbucket.org{base_url}"
         else:
-            get_logger().error("No valid authentication method provided. Returning None")
+            # This case should ideally not be reached if __init__ validates auth_type
+            get_logger().error(f"Unsupported or uninitialized auth_type: {getattr(self, 'auth_type', 'N/A')}. Returning None")
             return None
 
         return clone_url
