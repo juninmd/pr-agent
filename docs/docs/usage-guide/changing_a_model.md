@@ -113,6 +113,20 @@ key = ... # your Groq api key
 ```
 (you can obtain a Groq key from [here](https://console.groq.com/keys))
 
+### xAI
+
+To use xAI's models with PR-Agent, set:
+```
+[config] # in configuration.toml
+model = "xai/grok-2-latest"
+fallback_models = ["xai/grok-2-latest"] # or any other model as fallback
+
+[xai] # in .secrets.toml
+key = "..." # your xAI API key
+```
+
+You can obtain an xAI API key from [xAI's console](https://console.x.ai/) by creating an account and navigating to the developer settings page.
+
 ### Vertex AI
 
 To use Google's Vertex AI platform and its associated models (chat-bison/codechat-bison) set:
