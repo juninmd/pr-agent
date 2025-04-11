@@ -32,18 +32,20 @@ class BitbucketProvider(GitProvider):
         s.headers["Content-Type"] = "application/json"
 
         try:
-            auth_type = context.get("bitbucket_auth_type", None) or get_settings().get("BITBUCKET.AUTH_TYPE", "bearer")
+            self.auth_type = context.get("bitbucket_auth_type", None) or get_settings().get("BITBUCKET.AUTH_TYPE", "bearer")
 
-            if auth_type == "basic":
+            if self.auth_type == "basic":
                 self.basic_token = context.get("bitbucket_basic_token", None) or get_settings().get("BITBUCKET.BASIC_TOKEN", None)
                 if not self.basic_token:
                     raise ValueError("Basic auth requires a token")
                 s.headers["Authorization"] = f"Basic {self.basic_token}"
-            else:  # default to bearer
+            elif self.auth_type == "bearer":
                 self.bearer_token = context.get("bitbucket_bearer_token", None) or get_settings().get("BITBUCKET.BEARER_TOKEN", None)
                 if not self.bearer_token:
                     raise ValueError("Bearer token is required for bearer auth")
                 s.headers["Authorization"] = f"Bearer {self.bearer_token}"
+            else:
+                 raise ValueError(f"Unsupported auth_type: {self.auth_type}")
 
         except Exception as e:
             get_logger().exception(f"Failed to initialize Bitbucket authentication: {e}")
