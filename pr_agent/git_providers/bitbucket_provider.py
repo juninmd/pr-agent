@@ -50,7 +50,7 @@ class BitbucketProvider(GitProvider):
                     self.bearer_token = None
 
                 if not self.bearer_token:
-                    get_token("bearer_token", "Bearer")
+                    self.bearer_token = get_token("bearer_token", "Bearer")
                 s.headers["Authorization"] = f"Bearer {self.bearer_token}"
             else:
                  raise ValueError(f"Unsupported auth_type: {self.auth_type}")
