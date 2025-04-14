@@ -52,6 +52,15 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 
 ## News and Updates
 
+## Apr 14, 2025
+
+GPT-4.1 is out. And its quite good on coding tasks...
+
+https://openai.com/index/gpt-4-1/
+
+<img width="635" alt="image" src="https://github.com/user-attachments/assets/a8f4c648-a058-4bdc-9825-2a4bb71a23e5" />
+
+
 ## March 28, 2025
 A new version, v0.28, was released. See release notes [here](https://github.com/qodo-ai/pr-agent/releases/tag/v0.28).
 
