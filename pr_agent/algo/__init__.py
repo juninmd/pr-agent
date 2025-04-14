@@ -22,6 +22,12 @@ MAX_TOKENS = {
     'gpt-4o-2024-11-20': 128000,  # 128K, but may be limited by config.max_model_tokens
     'gpt-4.5-preview': 128000,  # 128K, but may be limited by config.max_model_tokens
     'gpt-4.5-preview-2025-02-27': 128000,  # 128K, but may be limited by config.max_model_tokens
+    'gpt-4.1': 1047576,
+    'gpt-4.1-2025-04-14': 1047576,
+    'gpt-4.1-mini': 1047576,
+    'gpt-4.1-mini-2025-04-14': 1047576,
+    'gpt-4.1-nano': 1047576,
+    'gpt-4.1-nano-2025-04-14': 1047576,
     'o1-mini': 128000,  # 128K, but may be limited by config.max_model_tokens
     'o1-mini-2024-09-12': 128000,  # 128K, but may be limited by config.max_model_tokens
     'o1-preview': 128000,  # 128K, but may be limited by config.max_model_tokens
