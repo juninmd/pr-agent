@@ -179,13 +179,13 @@ jira_api_token = "YOUR_API_TOKEN"
 #### Validating PAT token via Python script
 
 If you are facing issues retrieving tickets in Qodo Merge with PAT token, you can validate the flow using a Python script. 
-This following steps will help you check if the token is working correctly, and if you can access the Jira ticket details.
+This following steps will help you check if the token is working correctly, and if you can access the Jira ticket details:
 
-1) run `pip install jira==3.8.0`
+1. run `pip install jira==3.8.0`
 
-2) run the following script (after replacing the placeholders with your actual values):
+2. run the following Python script (after replacing the placeholders with your actual values):
 
-??? example "Python script to validate PAT token"
+??? example "Script to validate PAT token"
 
     ```python
     from jira import JIRA
