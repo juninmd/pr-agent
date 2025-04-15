@@ -2,7 +2,7 @@
 Qodo Merge utilizes a variety of core abilities to provide a comprehensive and efficient code review experience. These abilities include:
 
 - [Auto best practices](https://qodo-merge-docs.qodo.ai/core-abilities/auto_best_practices/)
-- [Code fine-tuning benchmark](https://qodo-merge-docs.qodo.ai/finetuning_benchmark/)
+- [Pull request benchmark](https://qodo-merge-docs.qodo.ai/finetuning_benchmark/)
 - [Code validation](https://qodo-merge-docs.qodo.ai/core-abilities/code_validation/)
 - [Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/compression_strategy/)
 - [Dynamic context](https://qodo-merge-docs.qodo.ai/core-abilities/dynamic_context/)

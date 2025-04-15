@@ -42,7 +42,7 @@ nav:
   - Core Abilities:
       - 'core-abilities/index.md'
       - Auto best practices: 'core-abilities/auto_best_practices.md'
-      - Code fine-tuning benchmark: 'finetuning_benchmark/index.md'
+      - Pull request benchmark: 'finetuning_benchmark/index.md'
       - Code validation: 'core-abilities/code_validation.md'
       - Compression strategy: 'core-abilities/compression_strategy.md'
       - Dynamic context: 'core-abilities/dynamic_context.md'
