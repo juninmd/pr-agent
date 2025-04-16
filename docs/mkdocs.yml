@@ -82,7 +82,6 @@ theme:
     - content.tabs.link
     - content.code.annotation
     - content.code.copy
-    - content.tabs.link
   language: en
   custom_dir: overrides
 
