@@ -1,5 +1,4 @@
 import os
-from azure.identity import ClientSecretCredential
 import litellm
 import openai
 import requests
@@ -100,7 +99,6 @@ class LiteLLMAIHandler(BaseAiHandler):
 
         # Check for Azure AD configuration
         if get_settings().get("AZURE_AD.CLIENT_ID", None):
-            from azure.identity import ClientSecretCredential
             self.azure = True
             # Generate access token using Azure AD credentials from settings
             access_token = self._get_azure_ad_token()
@@ -130,6 +128,7 @@ class LiteLLMAIHandler(BaseAiHandler):
         Returns:
             str: The access token
         """
+        from azure.identity import ClientSecretCredential
         try:
             credential = ClientSecretCredential(
                 tenant_id=get_settings().azure_ad.tenant_id,
