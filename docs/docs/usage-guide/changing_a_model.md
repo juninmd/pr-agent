@@ -37,6 +37,17 @@ model="" # the OpenAI model you've deployed on Azure (e.g. gpt-4o)
 fallback_models=["..."]
 ```
 
+To use Azure AD (Entra id) based authentication set in your `.secrets.toml` (working from CLI), or in the GitHub `Settings > Secrets and variables` (working from GitHub App or GitHub Action):
+
+```toml
+[azure_ad]
+client_id = ""  # Your Azure AD application client ID
+client_secret = ""  # Your Azure AD application client secret
+tenant_id = ""  # Your Azure AD tenant ID
+api_base = ""  # Your Azure OpenAI service base URL (e.g., https://openai.xyz.com/)
+```
+
+
 Passing custom headers to the underlying LLM Model API can be done by setting extra_headers parameter to litellm.
 
 ```toml
