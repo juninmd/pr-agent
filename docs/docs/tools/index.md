@@ -19,5 +19,5 @@ Here is a list of Qodo Merge tools, each with a dedicated page that explains how
 | **💎 [Improve Component (`/improve_component component_name`](./improve_component.md))** | Generates code suggestions for a specific code component that changed in the PR                                                            |
 | **💎 [CI Feedback (`/checks ci_job`](./ci_feedback.md))**                                | Automatically generates feedback and analysis for a failed CI job                                                                          |
 | **💎 [Implement (`/implement`](./implement.md))**                                        | Generates implementation code from review suggestions                                                                                      |
-| **💎 [Scan Reop Discussions (`/scan_repo_discussions`](./implement.md))**                | Generates `best_practices.md` file based on previous discussions in the repository |
+| **💎 [Scan Repo Discussions (`/scan_repo_discussions`](./scan_repo_discussions.md))**    | Generates `best_practices.md` file based on previous discussions in the repository |
 Note that the tools marked with 💎 are available only for Qodo Merge users.
