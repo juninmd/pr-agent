@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - id: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - id: dockerx
         name: Setup Docker Buildx
@@ -40,7 +40,6 @@ jobs:
           docker run --name test_container codiumai/pr-agent:test  pytest  tests/unittest --cov=pr_agent --cov-report term --cov-report xml:coverage.xml
           docker cp test_container:/app/coverage.xml coverage.xml
           docker rm test_container
-
 
       - name: Validate coverage report
         run: |
