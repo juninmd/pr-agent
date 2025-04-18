@@ -3,7 +3,7 @@
 ## Overview
 
 The `scan_repo_discussions` tool analyzes code discussions (meaning review comments over code lines) from merged pull requests over the past 12 months.
-It processes these discussions alongside other PR metadata to identify recurring patterns in team feedback and code reviews, generating a comprehensive [`best_practices.md`](https://github.com/qodo-ai/pr-agent/blob/qodo-merge-best-practices_2025-04-16_1018/best_practices.md) document that distills key insights and recommendations.
+It processes these discussions alongside other PR metadata to identify recurring patterns related to best practices in team feedback and code reviews, generating a comprehensive [`best_practices.md`](https://github.com/qodo-ai/pr-agent/blob/qodo-merge-best-practices_2025-04-16_1018/best_practices.md) document that distills key insights and recommendations.
 
 This file captures repository-specific patterns derived from your team's actual workflow and discussions, rather than more generic best practices.
 It will be utilized by Qodo Merge to provide tailored suggestions for improving code quality in future pull requests.
