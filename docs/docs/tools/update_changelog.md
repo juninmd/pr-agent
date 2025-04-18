@@ -1,6 +1,8 @@
 ## Overview
+
 The `update_changelog` tool automatically updates the CHANGELOG.md file with the PR changes.
 It can be invoked manually by commenting on any PR:
+
 ```
 /update_changelog
 ```

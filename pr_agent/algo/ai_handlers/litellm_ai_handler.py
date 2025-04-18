@@ -97,6 +97,14 @@ class LiteLLMAIHandler(BaseAiHandler):
         if get_settings().get("DEEPINFRA.KEY", None):
             os.environ['DEEPINFRA_API_KEY'] = get_settings().get("DEEPINFRA.KEY")
 
+        # Support mistral models
+        if get_settings().get("MISTRAL.KEY", None):
+            os.environ["MISTRAL_API_KEY"] = get_settings().get("MISTRAL.KEY")
+        
+        # Support codestral models
+        if get_settings().get("CODESTRAL.KEY", None):
+            os.environ["CODESTRAL_API_KEY"] = get_settings().get("CODESTRAL.KEY")
+
         # Check for Azure AD configuration
         if get_settings().get("AZURE_AD.CLIENT_ID", None):
             self.azure = True

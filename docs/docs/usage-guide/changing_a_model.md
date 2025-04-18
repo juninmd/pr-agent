@@ -47,7 +47,6 @@ tenant_id = ""  # Your Azure AD tenant ID
 api_base = ""  # Your Azure OpenAI service base URL (e.g., https://openai.xyz.com/)
 ```
 
-
 Passing custom headers to the underlying LLM Model API can be done by setting extra_headers parameter to litellm.
 
 ```toml
@@ -250,6 +249,34 @@ key = ... # your DeepInfra api key
 ```
 
 (you can obtain a DeepInfra key from [here](https://deepinfra.com/dash/api_keys))
+
+### Mistral
+
+To use models like Mistral or Codestral with Mistral, for example, set:
+
+```toml
+[config] # in configuration.toml
+model = "mistral/mistral-small-latest"
+fallback_models = ["mistral/mistral-medium-latest"]
+[mistral] # in .secrets.toml
+key = "..." # your Mistral api key
+```
+
+(you can obtain a Mistral key from [here](https://console.mistral.ai/api-keys))
+
+### Codestral
+
+To use Codestral model with Codestral, for example, set:
+
+```toml
+[config] # in configuration.toml
+model = "codestral/codestral-latest"
+fallback_models = ["codestral/codestral-2405"]
+[codestral] # in .secrets.toml
+key = "..." # your Codestral api key
+```
+
+(you can obtain a Codestral key from [here](https://console.mistral.ai/codestral))
 
 ### Custom models
 
