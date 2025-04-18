@@ -112,6 +112,20 @@ MAX_TOKENS = {
     "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B": 128000,
     "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Llama-70B": 128000,
     "deepinfra/deepseek-ai/DeepSeek-R1": 128000,
+    "mistral/mistral-small-latest": 8191,
+    "mistral/mistral-medium-latest": 8191,
+    "mistral/mistral-large-2407": 128000,
+    "mistral/mistral-large-latest": 128000,
+    "mistral/open-mistral-7b": 8191,
+    "mistral/open-mixtral-8x7b": 8191,
+    "mistral/open-mixtral-8x22b": 8191,
+    "mistral/codestral-latest": 8191,
+    "mistral/open-mistral-nemo": 128000,
+    "mistral/open-mistral-nemo-2407": 128000,
+    "mistral/open-codestral-mamba": 256000,
+    "mistral/codestral-mamba-latest": 256000,
+    "codestral/codestral-latest": 8191,
+    "codestral/codestral-2405": 8191,
 }
 
 USER_MESSAGE_ONLY_MODELS = [
