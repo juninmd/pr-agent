@@ -250,6 +250,34 @@ key = ... # your DeepInfra api key
 
 (you can obtain a DeepInfra key from [here](https://deepinfra.com/dash/api_keys))
 
+### Mistral
+
+To use models like Mistral or Codestral with Mistral, for example, set:
+
+```toml
+[config] # in configuration.toml
+model = "mistral/mistral-small-latest"
+fallback_models = ["mistral/mistral-medium-latest"]
+[mistral] # in .secrets.toml
+key = "..." # your Mistral api key
+```
+
+(you can obtain a Mistral key from [here](https://console.mistral.ai/api-keys))
+
+### Codestral
+
+To use Codestral model with Codestral, for example, set:
+
+```toml
+[config] # in configuration.toml
+model = "codestral/codestral-latest"
+fallback_models = ["codestral/codestral-2405"]
+[codestral] # in .secrets.toml
+key = "..." # your Codestral api key
+```
+
+(you can obtain a Codestral key from [here](https://console.mistral.ai/codestral))
+
 ### Custom models
 
 If the relevant model doesn't appear [here](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py), you can still use it as a custom model:
