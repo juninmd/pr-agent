@@ -47,7 +47,6 @@ tenant_id = ""  # Your Azure AD tenant ID
 api_base = ""  # Your Azure OpenAI service base URL (e.g., https://openai.xyz.com/)
 ```
 
-
 Passing custom headers to the underlying LLM Model API can be done by setting extra_headers parameter to litellm.
 
 ```toml

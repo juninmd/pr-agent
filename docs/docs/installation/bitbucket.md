@@ -57,7 +57,7 @@ python cli.py --pr_url https://git.onpreminstanceofbitbucket.com/projects/PROJEC
 
 To run PR-Agent as webhook, build the docker image:
 
-```
+```bash
 docker build . -t codiumai/pr-agent:bitbucket_server_webhook --target bitbucket_server_webhook -f docker/Dockerfile
 docker push codiumai/pr-agent:bitbucket_server_webhook  # Push to your Docker repository
 ```

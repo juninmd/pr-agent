@@ -97,5 +97,6 @@ why: |
 Another application of the Pull Request Benchmark is comparing leading closed-source models to determine which performs better at analyzing pull request code.
 
 The evaluation methodology resembles the approach used for evaluating fine-tuned models:
+
 - We ran each model across 200 diverse pull requests, asking them to generate code suggestions using Qodo Merge's `improve` tool
 - A third top model served as judge to determine which response better fulfilled the prompt and would likely be perceived as superior by human users

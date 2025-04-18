@@ -12,21 +12,22 @@ The models supported by Qodo Merge are:
 - `deepseek/r1`
 
 To restrict Qodo Merge to using only `o3-mini`, add this setting:
+
 ```
 [config]
 model="o3-mini"
 ```
 
 To restrict Qodo Merge to using only `GPT-4.1`, add this setting:
+
 ```
 [config]
 model="gpt-4.1"
 ```
 
 To restrict Qodo Merge to using only `deepseek-r1` us-hosted, add this setting:
+
 ```
 [config]
 model="deepseek/r1"
 ```
-
-
