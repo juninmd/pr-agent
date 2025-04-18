@@ -16,11 +16,12 @@ pipelines:
 ```
 
 2. Add the following secure variables to your repository under Repository settings > Pipelines > Repository variables.
-   CONFIG__GIT_PROVIDER: `bitbucket`
-   OPENAI__KEY: `<your key>`
-   BITBUCKET__AUTH_TYPE: `basic` or `bearer` (default is `bearer`)
-   BITBUCKET__BEARER_TOKEN: `<your token>` (required when auth_type is bearer)
-   BITBUCKET__BASIC_TOKEN: `<your token>` (required when auth_type is basic)
+
+   - CONFIG__GIT_PROVIDER: `bitbucket`
+   - OPENAI__KEY: `<your key>`
+   - BITBUCKET__AUTH_TYPE: `basic` or `bearer` (default is `bearer`)
+   - BITBUCKET__BEARER_TOKEN: `<your token>` (required when auth_type is bearer)
+   - BITBUCKET__BASIC_TOKEN: `<your token>` (required when auth_type is basic)
 
 You can get a Bitbucket token for your repository by following Repository Settings -> Security -> Access Tokens.
 For basic auth, you can generate a base64 encoded token from your username:password combination.
