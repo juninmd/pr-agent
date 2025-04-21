@@ -49,7 +49,12 @@ Previous discussion on this code:
 ======
 {{ conversation_history|trim }}
 ======
-Use this prior discussion context to provide a consistent and informed answer.
+
+Consider this conversation history (format: "Username: Message"). When responding:
+- Maintain consistency with previous technical explanations
+- Address unresolved issues from earlier discussions
+- Build upon existing knowledge without contradictions
+- Incorporate relevant context while focusing on the current question
 {%- endif %}
 
 A question about the selected lines:

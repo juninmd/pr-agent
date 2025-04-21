@@ -60,7 +60,8 @@ class PR_LineQuestions:
         # set conversation history if enabled
         # currently only supports GitHub provider
         if get_settings().pr_questions.use_conversation_history and isinstance(self.git_provider, GithubProvider):
-            self._load_conversation_history()
+            conversation_history = self._load_conversation_history()
+            self.vars["conversation_history"] = conversation_history
 
         self.patch_with_lines = ""
         ask_diff = get_settings().get('ask_diff_hunk', "")
@@ -99,18 +100,20 @@ class PR_LineQuestions:
 
         return ""
         
-    def _load_conversation_history(self):
-        """generate conversation history from the code review thread"""
-        # set conversation history to empty string
-        self.vars["conversation_history"] = ""
+    def _load_conversation_history(self) -> str:
+        """Generate conversation history from the code review thread
         
+        Returns:
+            str: The formatted conversation history
+        """
         comment_id = get_settings().get('comment_id', '')
         file_path = get_settings().get('file_name', '')
         line_number = get_settings().get('line_end', '')
         
         # early return if any required parameter is missing
         if not all([comment_id, file_path, line_number]):
-            return
+            get_logger().error("Missing required parameters for conversation history")
+            return ""
         
         try:
             # retrieve thread comments
@@ -129,13 +132,16 @@ class PR_LineQuestions:
                 author = user.login if hasattr(user, 'login') else 'Unknown'
                 conversation_history.append(f"{author}: {body}")
             
-            # transform and save conversation history
+            # transform conversation history to string
             if conversation_history:
-                self.vars["conversation_history"] = "\n\n".join(conversation_history)
                 get_logger().info(f"Loaded {len(conversation_history)} comments from the code review thread")
+                return "\n\n".join(conversation_history)
+            
+            return ""
         
         except Exception as e:
             get_logger().error(f"Error processing conversation history, error: {e}")
+            return ""
 
     async def _get_prediction(self, model: str):
         variables = copy.deepcopy(self.vars)
