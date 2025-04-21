@@ -119,8 +119,8 @@ class PR_LineQuestions:
             # retrieve thread comments
             thread_comments = self.git_provider.get_review_thread_comments(comment_id)
             
-            # generate conversation history
-            conversation_history = []
+            # filter and prepare comments
+            filtered_comments = []
             for comment in thread_comments:
                 body = getattr(comment, 'body', '')
 
@@ -130,12 +130,17 @@ class PR_LineQuestions:
                 
                 user = comment.user
                 author = user.login if hasattr(user, 'login') else 'Unknown'
-                conversation_history.append(f"{author}: {body}")
+                filtered_comments.append((author, body))
             
-            # transform conversation history to string
-            if conversation_history:
-                get_logger().info(f"Loaded {len(conversation_history)} comments from the code review thread")
-                return "\n\n".join(conversation_history)
+            # transform conversation history to string using the same pattern as get_commit_messages
+            if filtered_comments:
+                comment_count = len(filtered_comments)
+                get_logger().info(f"Loaded {comment_count} comments from the code review thread")
+                
+                # Format as numbered list, similar to get_commit_messages
+                conversation_history_str = "\n".join([f"{i + 1}. {author}: {body}" 
+                                                   for i, (author, body) in enumerate(filtered_comments)])
+                return conversation_history_str
             
             return ""
         

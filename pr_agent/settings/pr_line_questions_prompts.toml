@@ -50,7 +50,7 @@ Previous discussion on this code:
 {{ conversation_history|trim }}
 ======
 
-Consider this conversation history (format: "Username: Message"). When responding:
+Consider this conversation history (format: "N. Username: Message", where numbers indicate the comment order). When responding:
 - Maintain consistency with previous technical explanations
 - Address unresolved issues from earlier discussions
 - Build upon existing knowledge without contradictions
