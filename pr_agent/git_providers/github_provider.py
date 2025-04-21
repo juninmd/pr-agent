@@ -431,36 +431,40 @@ class GithubProvider(GitProvider):
     
     def get_review_thread_comments(self, comment_id: int) -> list[dict]:
         """
-        Retrieves all comments in the same line as the given comment.
+        Retrieves all comments in the same thread as the given comment.
         
         Args:
             comment_id: Review comment ID
                 
         Returns:
-            List of comments on the same line
+            List of comments in the same thread
         """
         try:
-            # Get the original comment to find its location
-            comment = self.pr.get_comment(comment_id)
-            if not comment:
-                return []
-                
-            # Extract file path and line number
-            file_path = comment.path
-            line_number = comment.raw_data["line"] if "line" in comment.raw_data else comment.raw_data.get("original_line")
-            
-            # Get all comments
+            # Fetch all comments with a single API call
             all_comments = list(self.pr.get_comments())
             
-            # Filter comments on the same line of the same file
+            # Find the target comment by ID
+            target_comment = next((c for c in all_comments if c.id == comment_id), None)
+            if not target_comment:
+                return []
+        
+            # First, identify if this is a reply to another comment
+            root_comment_id = target_comment.raw_data.get("in_reply_to_id", target_comment.id)
+            if root_comment_id != target_comment.id:
+                # If this is a reply, find the root comment
+                root_comment = next((c for c in all_comments if c.id == root_comment_id), None)
+                if root_comment:
+                    target_comment = root_comment
+        
+            # Build the thread - include the root comment and all replies to it
             thread_comments = [
-                c for c in all_comments 
-                if c.path == file_path and (c.raw_data.get("line") == line_number or c.raw_data.get("original_line") == line_number)
+                c for c in all_comments if 
+                c.id == target_comment.id or c.raw_data.get("in_reply_to_id") == target_comment.id
             ]
-            
+        
             # Sort chronologically
             thread_comments.sort(key=lambda c: c.created_at)
-            
+        
             return thread_comments
                 
         except Exception as e:
