@@ -3,7 +3,7 @@ See [here](https://qodo-merge-docs.qodo.ai/overview/pr_agent_pro/) for more deta
 
 ## Trial Period and Licensing
 
-### Cloud users with 'Teams' accounts
+### Cloud users with Teams accounts
 
 A complimentary two-week trial is provided to all new users (with three additional grace usages). When the trial period ends, users will stop receiving feedback from Qodo Merge.
 
@@ -12,7 +12,7 @@ After purchasing seats, the team owner can assign them to specific users through
 
 With an assigned seat, users can seamlessly deploy the application across any of their code repositories.
 
-### 'Enterprise' users
+### Enterprise users
 
 For users with 'Enterprise' accounts, please [contact](https://www.qodo.ai/contact/#pricing) us to initiate a trial period, and to discuss pricing and licensing options.
 
