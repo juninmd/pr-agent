@@ -14,7 +14,7 @@ With an assigned seat, users can seamlessly deploy the application across any of
 
 ### Enterprise Account
 
-For users who require an Enterprise account, please [contact](https://www.qodo.ai/contact/#pricing) us to initiate a trial period, and to discuss pricing and licensing options.
+For organizations who require an Enterprise account, please [contact](https://www.qodo.ai/contact/#pricing) us to initiate a trial period, and to discuss pricing and licensing options.
 
 
 ## Install Qodo Merge for GitHub
