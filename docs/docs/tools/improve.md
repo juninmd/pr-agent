@@ -265,6 +265,8 @@ In such cases, we recommend prioritizing the suggestion's detailed description, 
 
 ### Chat on code suggestions 
 
+> `💎 feature` Platforms supported: GitHub, GitLab
+
 If you set the following in your configuration file:
 
 ```toml
