@@ -216,7 +216,7 @@ Where the `ignore_pr_labels` is a list of labels that when present in the PR, th
 
 ### Ignoring PRs from specific users
 
-Qodo Merge tries to automatically identifies and ignores pull requests created by bots using:
+Qodo Merge tries to automatically identify and ignore pull requests created by bots using:
 
 - GitHub's native bot detection system
 - Name-based pattern matching
