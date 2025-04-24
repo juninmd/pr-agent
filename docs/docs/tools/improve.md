@@ -262,6 +262,19 @@ We advise users to apply critical analysis and judgment when implementing the pr
 In addition to mistakes (which may happen, but are rare), sometimes the presented code modification may serve more as an _illustrative example_ than a direct applicable solution.
 In such cases, we recommend prioritizing the suggestion's detailed description, using the diff snippet primarily as a supporting reference.
 
+
+### Chat on code suggestions 
+
+If you set the following in your configuration file:
+
+```toml
+[pr_code_suggestions]
+enable_chat_in_code_suggestions = true
+```
+
+The Qodo Merge bot will automatically listen and respond to comments within code suggestion discussions that it has initiated, without requiring explicit tool calls.
+
+
 ### Dual publishing mode
 
 Our recommended approach for presenting code suggestions is through a [table](https://qodo-merge-docs.qodo.ai/tools/improve/#overview) (`--pr_code_suggestions.commitable_code_suggestions=false`).
@@ -426,6 +439,10 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 500 line
       <tr>
         <td><b>commitable_code_suggestions</b></td>
         <td>If set to true, the tool will display the suggestions as commitable code comments. Default is false.</td>
+      </tr>
+      <tr>
+        <td><b>enable_chat_in_code_suggestions</b></td>
+        <td>If set to true, QM bot will interact with comments made on code changes it has proposed. Default is true.</td>
       </tr>
       <tr>
         <td><b>dual_publishing_score_threshold</b></td>
