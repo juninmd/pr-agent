@@ -460,7 +460,7 @@ class GithubProvider(GitProvider):
             return thread_comments
                 
         except Exception as e:
-            get_logger().warning(f"Failed to get review comments for comment {comment_id}, error: {e}")
+            get_logger().exception(f"Failed to get review comments for an inline ask command", artifact={"comment_id": comment_id, "error": e})
             return []
 
     def _publish_inline_comments_fallback_with_verification(self, comments: list[dict]):
