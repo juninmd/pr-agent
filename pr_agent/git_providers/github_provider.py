@@ -448,19 +448,13 @@ class GithubProvider(GitProvider):
             if not target_comment:
                 return []
         
-            # First, identify if this is a reply to another comment
+            # Get root comment id
             root_comment_id = target_comment.raw_data.get("in_reply_to_id", target_comment.id)
-            if root_comment_id != target_comment.id:
-                # If this is a reply, find the root comment
-                root_comment = next((c for c in all_comments if c.id == root_comment_id), None)
-                if root_comment:
-                    target_comment = root_comment
-        
             # Build the thread - include the root comment and all replies to it
             thread_comments = [
-                c for c in all_comments if 
-                c.id == target_comment.id or c.raw_data.get("in_reply_to_id") == target_comment.id
-            ]
+    c for c in all_comments if
+    c.id == root_comment_id or c.raw_data.get("in_reply_to_id") == root_comment_id
+]
         
             # Sort chronologically
             thread_comments.sort(key=lambda c: c.created_at)
