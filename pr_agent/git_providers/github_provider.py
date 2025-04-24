@@ -452,9 +452,9 @@ class GithubProvider(GitProvider):
             root_comment_id = target_comment.raw_data.get("in_reply_to_id", target_comment.id)
             # Build the thread - include the root comment and all replies to it
             thread_comments = [
-    c for c in all_comments if
-    c.id == root_comment_id or c.raw_data.get("in_reply_to_id") == root_comment_id
-]
+                c for c in all_comments if
+                c.id == root_comment_id or c.raw_data.get("in_reply_to_id") == root_comment_id
+            ]
         
         
             return thread_comments
