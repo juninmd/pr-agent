@@ -456,8 +456,6 @@ class GithubProvider(GitProvider):
     c.id == root_comment_id or c.raw_data.get("in_reply_to_id") == root_comment_id
 ]
         
-            # Sort chronologically
-            thread_comments.sort(key=lambda c: c.created_at)
         
             return thread_comments
                 
