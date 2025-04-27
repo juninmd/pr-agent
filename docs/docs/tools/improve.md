@@ -416,18 +416,18 @@ Qodo Merge uses a dynamic strategy to generate code suggestions based on the siz
 #### 1. Chunking large PRs
 
 - Qodo Merge divides large PRs into 'chunks'.
-- Each chunk contains up to `pr_code_suggestions.max_context_tokens` tokens (default: 14,000).
+- Each chunk contains up to `pr_code_suggestions.max_context_tokens` tokens (default: 24,000).
 
 #### 2. Generating suggestions
 
-- For each chunk, Qodo Merge generates up to `pr_code_suggestions.num_code_suggestions_per_chunk` suggestions (default: 3).
+- For each chunk, Qodo Merge generates up to `pr_code_suggestions.num_code_suggestions_per_chunk` suggestions (default: 4).
 
 This approach has two main benefits:
 
 - Scalability: The number of suggestions scales with the PR size, rather than being fixed.
 - Quality: By processing smaller chunks, the AI can maintain higher quality suggestions, as larger contexts tend to decrease AI performance.
 
-Note: Chunking is primarily relevant for large PRs. For most PRs (up to 500 lines of code), Qodo Merge will be able to process the entire code in a single call.
+Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 lines of code), Qodo Merge will be able to process the entire code in a single call.
 
 ## Configuration options
 
