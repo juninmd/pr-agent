@@ -130,14 +130,24 @@ def process_patch_lines(patch_str, original_file_str, patch_extra_lines_before, 
                         if file_new_lines:
                             delta_lines_new = [f' {line}' for line in file_new_lines[extended_start2 - 1:start2 - 1]]
                             if delta_lines_original != delta_lines_new:
-                                get_logger().debug(f"Extra lines before hunk are different in original and new file",
-                                                   artifact={"delta_lines_original": delta_lines_original,
-                                                             "delta_lines_new": delta_lines_new})
-                                extended_start1 = start1
-                                extended_size1 = size1
-                                extended_start2 = start2
-                                extended_size2 = size2
-                                delta_lines_original = []
+                                found_mini_match = False
+                                for i in range(len(delta_lines_original)):
+                                    if delta_lines_original[i:] == delta_lines_new[i:]:
+                                        delta_lines_original = delta_lines_original[i:]
+                                        delta_lines_new = delta_lines_new[i:]
+                                        extended_start1 += i
+                                        extended_start2 += i
+                                        found_mini_match = True
+                                        break
+                                if not found_mini_match:
+                                    extended_start1 = start1
+                                    extended_size1 = size1
+                                    extended_start2 = start2
+                                    extended_size2 = size2
+                                    delta_lines_original = []
+                                    # get_logger().debug(f"Extra lines before hunk are different in original and new file",
+                                    #                    artifact={"delta_lines_original": delta_lines_original,
+                                    #                              "delta_lines_new": delta_lines_new})
 
                         #  logic to remove section header if its in the extra delta lines (in dynamic context, this is also done)
                         if section_header and not allow_dynamic_context:
