@@ -107,7 +107,6 @@ Supported commands per platform:
 |       | [Implement](https://qodo-merge-docs.qodo.ai/tools/implement/) 💎                                        |   ✅   |   ✅   |    ✅     |              |
 |       | [Scan Repo Discussions](https://qodo-merge-docs.qodo.ai/tools/scan_repo_discussions/) 💎                |   ✅   |        |           |              |
 |       | [Auto-Approve](https://qodo-merge-docs.qodo.ai/tools/improve/?h=auto#auto-approval) 💎                  |   ✅   |   ✅   |    ✅     |              |
-|       | [Help Docs](https://qodo-merge-docs.qodo.ai/tools/improve/?h=auto#auto-approval) 💎                  |   ✅   |   ✅   |    ✅     |              |
 |       |                                                                                                         |        |        |           |              |
 | USAGE | [CLI](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#local-repo-cli)                |   ✅   |   ✅   |    ✅     |      ✅      |
 |       | [App / webhook](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#github-app)          |   ✅   |   ✅   |    ✅     |      ✅      |
@@ -125,7 +124,7 @@ Supported commands per platform:
 |       | [PR interactive actions](https://www.qodo.ai/images/pr_agent/pr-actions.mp4) 💎                         |   ✅   |   ✅   |           |              |
 |       | [Impact Evaluation](https://qodo-merge-docs.qodo.ai/core-abilities/impact_evaluation/) 💎               |   ✅   |   ✅   |           |              |
 |       | [Code Validation 💎](https://qodo-merge-docs.qodo.ai/core-abilities/code_validation/)                   |   ✅   |   ✅   |    ✅     |      ✅      |
-|       | [Auto Best Practices 💎](https://qodo-merge-docs.qodo.ai/core-abilities/auto_best_practices/)                     |   ✅   |   ✅   |    ✅     |      ✅      |
+|       | [Auto Best Practices 💎](https://qodo-merge-docs.qodo.ai/core-abilities/auto_best_practices/)                     |   ✅   |      |         |            |
 - 💎 means this feature is available only in [Qodo-Merge](https://www.qodo.ai/pricing/)
 
 [//]: # (- Support for additional git providers is described in [here]&#40;./docs/Full_environments.md&#41;)
