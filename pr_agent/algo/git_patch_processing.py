@@ -102,20 +102,20 @@ def process_patch_lines(patch_str, original_file_str, patch_extra_lines_before, 
                             lines_before_original = file_original_lines[extended_start1 - 1:start1 - 1]
                             lines_before_new = file_new_lines[extended_start2 - 1:start2 - 1]
                             found_header = False
-                            if lines_before_original == lines_before_new: # Making sure no changes from a previous hunk
-                                for i, line, in enumerate(lines_before_original):
-                                    if section_header in line:
+                            for i, line, in enumerate(lines_before_original):
+                                if section_header in line:
+                                    # Update start and size in one line each
+                                    extended_start1, extended_start2 = extended_start1 + i, extended_start2 + i
+                                    extended_size1, extended_size2 = extended_size1 - i, extended_size2 - i
+                                    lines_before_original_dynamic_context = lines_before_original[i:]
+                                    lines_before_new_dynamic_context = lines_before_new[i:]
+                                    if lines_before_original_dynamic_context == lines_before_new_dynamic_context:
+                                        # get_logger().debug(f"found dynamic context match for section header: {section_header}")
                                         found_header = True
-                                        # Update start and size in one line each
-                                        extended_start1, extended_start2 = extended_start1 + i, extended_start2 + i
-                                        extended_size1, extended_size2 = extended_size1 - i, extended_size2 - i
-                                        # get_logger().debug(f"Found section header in line {i} before the hunk")
                                         section_header = ''
-                                        break
-                            else:
-                                get_logger().debug(f"Extra lines before hunk are different in original and new file - dynamic context",
-                                                   artifact={"lines_before_original": lines_before_original,
-                                                             "lines_before_new": lines_before_new})
+                                    else:
+                                        pass  # its ok to be here. We cant apply dynamic context if the lines are different if 'old' and 'new' hunks
+                                    break
 
                             if not found_header:
                                 # get_logger().debug(f"Section header not found in the extra lines before the hunk")
