@@ -342,6 +342,8 @@ def _get_all_models(model_type: ModelType = ModelType.REGULAR) -> List[str]:
         model = get_model('model_weak')
     elif model_type == ModelType.REASONING:
         model = get_model('model_reasoning')
+    elif model_type == ModelType.REGULAR:
+        model = get_settings().config.model
     else:
         model = get_settings().config.model
     fallback_models = get_settings().config.fallback_models

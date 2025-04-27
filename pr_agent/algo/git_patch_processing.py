@@ -102,7 +102,7 @@ def process_patch_lines(patch_str, original_file_str, patch_extra_lines_before, 
                             lines_before_original = file_original_lines[extended_start1 - 1:start1 - 1]
                             lines_before_new = file_new_lines[extended_start2 - 1:start2 - 1]
                             found_header = False
-                            for i, line, in enumerate(lines_before_original):
+                            for i, line in enumerate(lines_before_original):
                                 if section_header in line:
                                     # Update start and size in one line each
                                     extended_start1, extended_start2 = extended_start1 + i, extended_start2 + i
@@ -136,7 +136,9 @@ def process_patch_lines(patch_str, original_file_str, patch_extra_lines_before, 
                                         delta_lines_original = delta_lines_original[i:]
                                         delta_lines_new = delta_lines_new[i:]
                                         extended_start1 += i
+                                        extended_size1 -= i
                                         extended_start2 += i
+                                        extended_size2 -= i
                                         found_mini_match = True
                                         break
                                 if not found_mini_match:

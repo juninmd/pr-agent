@@ -417,8 +417,9 @@ class PRCodeSuggestions:
 
         # self-reflect on suggestions (mandatory, since line numbers are generated now here)
         model_reflect_with_reasoning = get_model('model_reasoning')
-        if model_reflect_with_reasoning == get_settings().config.model and model != get_settings().config.model and model == \
-                get_settings().config.fallback_models[0]:
+        fallbacks = get_settings().config.fallback_models
+        if model_reflect_with_reasoning == get_settings().config.model and model != get_settings().config.model and fallbacks and model == \
+                fallbacks[0]:
             # we are using a fallback model (should not happen on regular conditions)
             get_logger().warning(f"Using the same model for self-reflection as the one used for suggestions")
             model_reflect_with_reasoning = model
