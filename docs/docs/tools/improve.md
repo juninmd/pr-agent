@@ -274,8 +274,8 @@ Enable interactive code discussions by adding this to your configuration file (d
 enable_chat_in_code_suggestions = true
 ```
 
-The Qodo Merge implements a multi-node agent to listen and respond to comments within code suggestion discussions that it has initiated, without requiring explicit tool calls.
-The agent intelligently analyzes your responses to determine if you want to implement a suggestion, ask a question, or request help.
+The Qodo Merge implements an orchestrator agent to listen and respond to comments within code suggestion discussions that it has initiated, without requiring explicit tool calls.
+The orchestrator intelligently analyzes your responses to determine if you want to implement a suggestion, ask a question, or request help, then delegates to the appropriate specialized tool.
 
 For example:
 
