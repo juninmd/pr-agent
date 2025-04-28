@@ -267,7 +267,9 @@ In such cases, we recommend prioritizing the suggestion's detailed description, 
 
 > `💎 feature` Platforms supported: GitHub, GitLab
 
-If you set the following in your configuration file:
+
+
+Enable interactive code discussions by adding this to your configuration file (default `True`):
 
 ```toml
 [pr_code_suggestions]
@@ -275,6 +277,11 @@ enable_chat_in_code_suggestions = true
 ```
 
 The Qodo Merge bot will automatically listen and respond to comments within code suggestion discussions that it has initiated, without requiring explicit tool calls.
+The bot intelligently analyzes your responses to determine if you want to implement the suggestion, ask questions about it, or request help with understanding it.
+
+For example:
+
+![Chat on code suggestions ](https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions.png){width=512}
 
 
 ### Dual publishing mode

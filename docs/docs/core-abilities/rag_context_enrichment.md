@@ -1,6 +1,6 @@
 # RAG Context Enrichment 💎
 
-`Supported Git Platforms: GitHub`
+`Supported Git Platforms: GitHub, Bitbucket Data Center`
 
 !!! info "Prerequisites"
     - RAG is available only for Qodo enterprise plan users, with single tenant or on-premises setup.
