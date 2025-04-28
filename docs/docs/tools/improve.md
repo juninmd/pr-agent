@@ -267,8 +267,6 @@ In such cases, we recommend prioritizing the suggestion's detailed description, 
 
 > `💎 feature` Platforms supported: GitHub, GitLab
 
-
-
 Enable interactive code discussions by adding this to your configuration file (default `True`):
 
 ```toml
