@@ -267,19 +267,35 @@ In such cases, we recommend prioritizing the suggestion's detailed description, 
 
 > `💎 feature` Platforms supported: GitHub, GitLab
 
-Enable interactive code discussions by adding this to your configuration file (default `True`):
+The Qodo Merge implements an orchestrator agent that enables interactive code discussions, listening and responding to comments without requiring explicit tool calls.
+The orchestrator intelligently analyzes your responses to determine if you want to implement a suggestion, ask a question, or request help, then delegates to the appropriate specialized tool.
+
+#### How it works
+
+Enable interactive code discussions by adding the following to your configuration file (default is `True`):
 
 ```toml
 [pr_code_suggestions]
 enable_chat_in_code_suggestions = true
 ```
 
-The Qodo Merge implements an orchestrator agent to listen and respond to comments within code suggestion discussions that it has initiated, without requiring explicit tool calls.
-The orchestrator intelligently analyzes your responses to determine if you want to implement a suggestion, ask a question, or request help, then delegates to the appropriate specialized tool.
+!!! info "Activating Dynamic Responses"
+    To obtain dynamic responses, the following steps are required:
 
-For example:
+    1. Run the `/improve` command (mostly automatic)
+    2. Tick the `/improve` recommendation checkboxes (_Apply this suggestion_) to have Qodo Merge generate a new inline code suggestion discussion
+    3. The orchestrator agent will then automatically listen and reply to comments within the discussion without requiring additional commands
 
-![Chat on code suggestions ](https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions.png){width=512}
+#### Explore the available interaction patterns:
+
+=== "Asking for Details"
+    ![Chat on code suggestions ask](https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_ask.png){width=512}
+
+=== "Implementing Suggestions"
+    ![Chat on code suggestions implement](https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_implement.png){width=512}
+
+=== "Providing Additional Help"
+    ![Chat on code suggestions help](https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_help.png){width=512}
 
 
 ### Dual publishing mode
