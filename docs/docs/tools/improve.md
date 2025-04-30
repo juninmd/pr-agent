@@ -1,6 +1,6 @@
 ## Overview
 
-The `improve` tool scans the PR code changes, and automatically generates [meaningful](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/pr_code_suggestions_prompts.toml#L41) suggestions for improving the PR code.
+The `improve` tool scans the PR code changes, and automatically generates meaningful suggestions for improving the PR code.
 The tool can be triggered automatically every time a new PR is [opened](../usage-guide/automations_and_usage.md#github-app-automatic-tools-when-a-new-pr-is-opened), or it can be invoked manually by commenting on any PR:
 
 ```toml
@@ -21,7 +21,7 @@ The tool can be triggered automatically every time a new PR is [opened](../usage
 
 Invoke the tool manually by commenting `/improve` on any PR. The code suggestions by default are presented as a single comment:
 
-To edit [configurations](#configuration-options) related to the improve tool, use the following template:
+To edit [configurations](#configuration-options) related to the `improve` tool, use the following template:
 
 ```toml
 /improve --pr_code_suggestions.some_config1=... --pr_code_suggestions.some_config2=...
