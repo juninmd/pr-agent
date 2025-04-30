@@ -42,6 +42,8 @@ enable_rag=true
 
 ### Applications
 
+The following represents the complete list of tools with RAG capability:
+
 === "`/review`"
     The [`/review`](https://qodo-merge-docs.qodo.ai/tools/review/) tool offers the _Focus area from RAG data_ which contains feedback based on the RAG references analysis.
     The complete list of references found relevant to the PR will be shown in the _References_ section, helping developers understand the broader context by exploring the provided references.
