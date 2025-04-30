@@ -42,7 +42,7 @@ enable_rag=true
 
 ### Applications
 
-The following represents the complete list of tools with RAG capability:
+RAG capability is exclusively available in the following tools:
 
 === "`/review`"
     The [`/review`](https://qodo-merge-docs.qodo.ai/tools/review/) tool offers the _Focus area from RAG data_ which contains feedback based on the RAG references analysis.
