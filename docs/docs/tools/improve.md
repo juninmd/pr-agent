@@ -270,7 +270,7 @@ In such cases, we recommend prioritizing the suggestion's detailed description, 
 Qodo Merge implements an orchestrator agent that enables interactive code discussions, listening and responding to comments without requiring explicit tool calls.
 The orchestrator intelligently analyzes your responses to determine if you want to implement a suggestion, ask a question, or request help, then delegates to the appropriate specialized tool.
 
-#### How it works
+#### Setup and Activation
 
 Enable interactive code discussions by adding the following to your configuration file (default is `True`):
 
