@@ -300,6 +300,9 @@ enable_chat_in_code_suggestions = true
 
 #### Explore the available interaction patterns:
 
+!!! tip "Tip: Direct the agent with keywords"
+    Use "implement" or "apply" for code generation. Use "explain", "why", or "how" for information and help.
+
 === "Asking for Details"
     ![Chat on code suggestions ask](https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_ask.png){width=512}
 
