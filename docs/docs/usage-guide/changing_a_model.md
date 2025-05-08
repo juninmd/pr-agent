@@ -278,6 +278,22 @@ key = "..." # your Codestral api key
 
 (you can obtain a Codestral key from [here](https://console.mistral.ai/codestral))
 
+### Openrouter
+
+To use model from Openrouter, for example, set:
+
+```toml
+[config] # in configuration.toml 
+model="openrouter/anthropic/claude-3.7-sonnet"
+fallback_models=["openrouter/deepseek/deepseek-chat"]
+custom_model_max_tokens=20000
+
+[openrouter]  # in .secrets.toml or passed an environment variable openrouter__key
+key = "..." # your openrouter api key
+```
+
+(you can obtain an Openrouter API key from [here](https://openrouter.ai/settings/keys))
+
 ### Custom models
 
 If the relevant model doesn't appear [here](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py), you can still use it as a custom model:
