@@ -7,11 +7,15 @@ The tool can be triggered automatically every time a new PR is [opened](../usage
 /improve
 ```
 
+## How it looks
+
 === "Suggestions Overview"
     ![code_suggestions_as_comment_closed](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png){width=512}
 
-=== "Implementation Details"
+=== "Selecting a specific suggestion"
     ![code_suggestions_as_comment_open](https://codium.ai/images/pr_agent/code_suggestions_as_comment_open.png){width=512}
+
+___
 
 !!! note "The following features are available only for Qodo Merge 💎 users:"
     - The `Apply this suggestion` checkbox, which interactively converts a suggestion into a committable code comment
