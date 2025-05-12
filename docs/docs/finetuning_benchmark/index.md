@@ -6,7 +6,30 @@
 
 ## Gemini-2.5-pro-preview-05-06
 
-### Model 'Gemini-2.5-pro-preview-05-06' vs 'Sonnet 3.7'
+### Gemini-2.5-pro-preview-05-06 vs GPT-4.1
+
+![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
+
+#### Analysis Summary
+
+Model 'Gemini-2.5-pro-preview-05-06' is generally more useful thanks to wider and more accurate bug detection and concrete patches, but it sacrifices compliance discipline and sometimes oversteps the task rules. Model 'GPT-4.1' is safer and highly rule-abiding, yet often too timid—missing many genuine issues and providing limited insight. An ideal reviewer would combine 'GPT-4.1’ restraint with 'Gemini-2.5-pro-preview-05-06' thoroughness.
+
+#### Gemini-2.5-pro-preview-05-06 vs GPT-4.1  - Detailed Analysis
+
+strengths:  
+
+- better_bug_coverage: Detects and explains more critical issues, winning in ~70 % of comparisons and achieving a higher average score.  
+- actionable_fixes: Supplies clear code snippets, correct language labels, and often multiple coherent suggestions per diff.  
+- deeper_reasoning: Shows stronger grasp of logic, edge cases, and cross-file implications, leading to broader, high-impact reviews.  
+
+weaknesses:  
+
+- guideline_violations: More prone to over-eager advice—non-critical tweaks, touching unchanged code, suggesting new imports, or minor format errors.  
+- occasional_overreach: Some fixes are speculative or risky, potentially introducing new bugs.  
+- redundant_or_duplicate: At times repeats the same point or exceeds the required brevity.  
+
+
+### Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/sonnet_37_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
@@ -17,7 +40,7 @@ Model 'Gemini-2.5-pro-preview-05-06' is the stronger reviewer—more frequently 
 See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/benchmark/sonnet_37_vs_gemini-2.5-pro-preview-05-06.md)
 
 
-#### Model 'Gemini-2.5-pro-preview-05-06' vs 'Sonnet 3.7'  - Detailed Analysis
+#### Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7  - Detailed Analysis
 
 strengths:  
 
@@ -32,7 +55,6 @@ weaknesses:
 - sporadic_technical_slips: a few patches contain minor coding errors, oversized snippets, or duplicate/contradicting advice.
 
 
-### Model 'Gemini-2.5-pro-preview-05-06' vs 'GPT-4.1'
 
 
 [//]: # (On coding tasks, the gap between open-source models and top closed-source models such as Claude and GPT is significant.)
