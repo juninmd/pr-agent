@@ -17,6 +17,15 @@ This approach provides not just a quantitative score but also a detailed analysi
 Note that this benchmark focuses on quality: the ability of an LLM to process complex pull request with multiple files and nuanced task to produce high-quality code suggestions.
 Other factors like speed, cost, and availability, while also relevant for model selection, are outside this benchmark's scope.
 
+## TL;DR
+
+Here's a summary of the win rates based on the benchmark:
+
+| Model A                       | Model B                       | Model A Win Rate | Model B Win Rate |
+|-------------------------------|-------------------------------|------------------|------------------|
+| Gemini-2.5-pro-preview-05-06  | GPT-4.1                       | 70.4%            | 29.6%            |
+| Gemini-2.5-pro-preview-05-06  | Sonnet 3.7                    | 78.1%            | 21.9%            |
+| GPT-4.1                       | Sonnet 3.7                    | 61.0%            | 39.0%            |
 
 ## Gemini-2.5-pro-preview-05-06 - Model Card
 
@@ -68,180 +77,87 @@ Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7 weaknesses:
 - overzealous_suggestions: may add speculative or stylistic fixes that exceed the “critical” scope, or mis-label severity.  
 - sporadic_technical_slips: a few patches contain minor coding errors, oversized snippets, or duplicate/contradicting advice.
 
+## GPT-4.1 - Model Card
 
+### GPT-4.1 vs Sonnet 3.7
 
+![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_sonnet_3.7_judge_o3.png){width=768}
 
-[//]: # (On coding tasks, the gap between open-source models and top closed-source models such as Claude and GPT is significant.)
+#### Analysis Summary
 
-[//]: # (<br>)
+Model 'GPT-4.1' is safer and more compliant, preferring silence over speculation, which yields fewer rule breaches and false positives but misses some real bugs.  
+Model 'Sonnet 3.7' is more adventurous and often uncovers important issues that 'GPT-4.1' ignores, yet its aggressive style leads to frequent guideline violations and a higher proportion of incorrect or non-critical advice. 
 
-[//]: # (In practice, open-source models are unsuitable for most real-world code tasks, and require further fine-tuning to produce acceptable results.)
+See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/benchmark/gpt-4.1_vs_sonnet_3.7_judge_o3.md)
 
-[//]: # ()
-[//]: # (_Qodo Merge pull request benchmark_ aims to benchmark models on their ability to be fine-tuned for a coding task.)
 
-[//]: # (Specifically, we chose to fine-tune open-source models on the task of analyzing a pull request, and providing useful feedback and code suggestions.)
+#### Detailed Analysis
 
-[//]: # ()
-[//]: # (Here are the results:)
+Model 'GPT-4.1' vs 'Sonnet 3.7'  
+strengths:  
+- Strong guideline adherence: usually stays strictly on `+` lines, avoids non-critical or stylistic advice, and rarely suggests forbidden imports; often outputs an empty list when no real bug exists.  
+- Lower false-positive rate: suggestions are more accurate and seldom introduce new bugs; fixes compile more reliably.  
+- Good schema discipline: YAML is almost always well-formed and fields are populated correctly.  
 
-[//]: # (<br>)
+weaknesses:  
+- Misses bugs: often returns an empty list even when a clear critical issue is present, so coverage is narrower.  
+- Sparse feedback: when it does comment, it tends to give fewer suggestions and sometimes lacks depth or completeness.  
+- Occasional metadata/slip-ups (wrong language tags, overly broad code spans), though less harmful than Sonnet 3.7 errors.  
 
-[//]: # (<br>)
+### GPT-4.1 vs Gemini-2.5-pro-preview-05-06
 
-[//]: # ()
-[//]: # (**Model performance:**)
+![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
-[//]: # ()
-[//]: # (| Model name                  | Model size [B] | Better than gpt-4 rate, after fine-tuning [%] |)
+#### Analysis Summary
 
-[//]: # (|-----------------------------|----------------|----------------------------------------------|)
+Model 'Gemini-2.5-pro-preview-05-06' is generally more useful thanks to wider and more accurate bug detection and concrete patches, but it sacrifices compliance discipline and sometimes oversteps the task rules. Model 'GPT-4.1' is safer and highly rule-abiding, yet often too timid—missing many genuine issues and providing limited insight. An ideal reviewer would combine 'GPT-4.1’ restraint with 'Gemini-2.5-pro-preview-05-06' thoroughness.
 
-[//]: # (| **DeepSeek 34B-instruct**   | **34**         | **40.7**                                     |)
+#### Detailed Analysis
 
-[//]: # (| DeepSeek 34B-base           | 34             | 38.2                                         |)
+GPT-4.1 strengths: 
+- strict_compliance: Usually sticks to the “critical bugs only / new ‘+’ lines only” rule, so outputs rarely violate task constraints.  
+- low_risk: Conservative behaviour avoids harmful or speculative fixes; safer when no obvious issue exists.  
+- concise_formatting: Tends to produce minimal, correctly-structured YAML without extra noise.  
 
-[//]: # (| Phind-34b                   | 34             | 38                                           |)
+GPT-4.1 weaknesses:
+- under_detection: Frequently returns an empty list even when real bugs are present, missing ~70 % of the time.  
+- shallow_analysis: When it does suggest fixes, coverage is narrow and technical depth is limited, sometimes with wrong language tags or minor format slips.  
+- occasional_inaccuracy: A few suggestions are unfounded or duplicate, and rare guideline breaches (e.g., import advice) still occur.  
 
-[//]: # (| Granite-34B                 | 34             | 37.6                                         |)
 
-[//]: # (| Codestral-22B-v0.1          | 22             | 32.7                                         |)
+## Sonnet 3.7 - Model Card
 
-[//]: # (| QWEN-1.5-32B                | 32             | 29                                           |)
+### Sonnet 3.7 vs GPT-4.1
 
-[//]: # (|                             |                |                                              |)
+![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_sonnet_3.7_judge_o3.png){width=768}
 
-[//]: # (| **CodeQwen1.5-7B**          | **7**          | **35.4**                                     |)
+#### Analysis Summary
 
-[//]: # (| Llama-3.1-8B-Instruct       | 8              | 35.2                                         |)
+Model 'GPT-4.1' is safer and more compliant, preferring silence over speculation, which yields fewer rule breaches and false positives but misses some real bugs.  
+Model 'Sonnet 3.7' is more adventurous and often uncovers important issues that 'GPT-4.1' ignores, yet its aggressive style leads to frequent guideline violations and a higher proportion of incorrect or non-critical advice. 
 
-[//]: # (| Granite-8b-code-instruct    | 8              | 34.2                                         |)
+See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/benchmark/gpt-4.1_vs_sonnet_3.7_judge_o3.md)
 
-[//]: # (| CodeLlama-7b-hf             | 7              | 31.8                                         |)
+#### Detailed Analysis
 
-[//]: # (| Gemma-7B                    | 7              | 27.2                                         |)
+Model 'Sonnet 3.7' vs 'GPT-4.1'  
+'Sonnet 3.7' strengths:
+- Better bug discovery breadth: more willing to dive into logic and spot critical problems that 'GPT-4.1' overlooks; often supplies multiple, detailed fixes.  
+- Richer explanations & patches: gives fuller context and, when correct, proposes more functional or user-friendly solutions.  
+- Generally correct language/context tagging and targeted code snippets.  
 
-[//]: # (| DeepSeek coder-7b-instruct  | 7              | 26.8                                         |)
+'Sonnet 3.7' weaknesses:
+- Guideline violations: frequently flags non-critical issues, edits untouched code, or recommends adding imports, breaching task rules.  
+- Higher error rate: suggestions are more speculative and sometimes introduce new defects or duplicate work already done.  
+- Occasional schema or formatting mistakes (missing list value, duplicated suggestions), reducing reliability.  
 
-[//]: # (| Llama-3-8B-Instruct         | 8              | 26.8                                         |)
 
-[//]: # (| Mistral-7B-v0.1             | 7              | 16.1                                         |)
+### Sonnet 3.7 vs Gemini-2.5-pro-preview-05-06
 
-[//]: # ()
-[//]: # (<br>)
+![Comparison](https://codium.ai/images/qodo_merge_benchmark/sonnet_37_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
-[//]: # ()
-[//]: # (**Fine-tuning impact:**)
+#### Analysis Summary
 
-[//]: # ()
-[//]: # (| Model name                | Model size [B] | Fine-tuned | Better than gpt-4 rate [%] |)
+Model 'Gemini-2.5-pro-preview-05-06' is the stronger reviewer—more frequently identifies genuine, high-impact bugs and provides well-formed, actionable fixes. Model 'Sonnet 3.7' is safer against false positives and tends to be concise but often misses important defects or offers low-value or incorrect suggestions.
 
-[//]: # (|---------------------------|----------------|------------|----------------------------|)
-
-[//]: # (| DeepSeek 34B-instruct     | 34             | yes        | 40.7                       |)
-
-[//]: # (| DeepSeek 34B-instruct     | 34             | no         | 3.6                        |)
-
-[//]: # ()
-[//]: # (## Results analysis)
-
-[//]: # ()
-[//]: # (- **Fine-tuning is a must** - without fine-tuning, open-source models provide poor results on most real-world code tasks, which include complicated prompt and lengthy context. We clearly see that without fine-tuning, deepseek model was 96.4% of the time inferior to GPT-4, while after fine-tuning, it is better 40.7% of the time.)
-
-[//]: # (- **Always start from a code-dedicated model** — When fine-tuning, always start from a code-dedicated model, and not from a general-usage model. The gaps in downstream results are very big.)
-
-[//]: # (- **Don't believe the hype** —newer models, or models from big-tech companies &#40;Llama3, Gemma, Mistral&#41;, are not always better for fine-tuning.)
-
-[//]: # (- **The best large model** - For large 34B code-dedicated models, the gaps when doing proper fine-tuning are small. The current top model is **DeepSeek 34B-instruct**)
-
-[//]: # (- **The best small model** - For small 7B code-dedicated models, the gaps when fine-tuning are much larger. **CodeQWEN 1.5-7B** is by far the best model for fine-tuning.)
-
-[//]: # (- **Base vs. instruct** - For the top model &#40;deepseek&#41;, we saw small advantage when starting from the instruct version. However, we recommend testing both versions on each specific task, as the base model is generally considered more suitable for fine-tuning.)
-
-[//]: # ()
-[//]: # (## Dataset)
-
-[//]: # ()
-[//]: # (### Training dataset)
-
-[//]: # ()
-[//]: # (Our training dataset comprises 25,000 pull requests, aggregated from permissive license repos. For each pull request, we generated responses for the three main tools of Qodo Merge:)
-
-[//]: # ([Describe]&#40;https://qodo-merge-docs.qodo.ai/tools/describe/&#41;, [Review]&#40;https://qodo-merge-docs.qodo.ai/tools/improve/&#41; and [Improve]&#40;https://qodo-merge-docs.qodo.ai/tools/improve/&#41;.)
-
-[//]: # ()
-[//]: # (On the raw data collected, we employed various automatic and manual cleaning techniques to ensure the outputs were of the highest quality, and suitable for instruct-tuning.)
-
-[//]: # ()
-[//]: # (Here are the prompts, and example outputs, used as input-output pairs to fine-tune the models:)
-
-[//]: # ()
-[//]: # (| Tool     | Prompt                                                                                                     | Example output |)
-
-[//]: # (|----------|------------------------------------------------------------------------------------------------------------|----------------|)
-
-[//]: # (| Describe | [link]&#40;https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/pr_description_prompts.toml&#41; | [link]&#40;https://github.com/Codium-ai/pr-agent/pull/910#issue-2303989601&#41;           |)
-
-[//]: # (| Review   | [link]&#40;https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/pr_reviewer_prompts.toml&#41; | [link]&#40;https://github.com/Codium-ai/pr-agent/pull/910#issuecomment-2118761219&#41;           |)
-
-[//]: # (| Improve  | [link]&#40;https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/pr_code_suggestions_prompts.toml&#41; | [link]&#40;https://github.com/Codium-ai/pr-agent/pull/910#issuecomment-2118761309&#41;           |)
-
-[//]: # ()
-[//]: # (### Evaluation dataset)
-
-[//]: # ()
-[//]: # (- For each tool, we aggregated 200 additional examples to be used for evaluation. These examples were not used in the training dataset, and were manually selected to represent diverse real-world use-cases.)
-
-[//]: # (- For each test example, we generated two responses: one from the fine-tuned model, and one from the best code model in the world, `gpt-4-turbo-2024-04-09`.)
-
-[//]: # ()
-[//]: # (- We used a third LLM to judge which response better answers the prompt, and will likely be perceived by a human as better response.)
-
-[//]: # (<br>)
-
-[//]: # ()
-[//]: # (We experimented with three model as judges: `gpt-4-turbo-2024-04-09`, `gpt-4o`, and `claude-3-opus-20240229`. All three produced similar results, with the same ranking order. This strengthens the validity of our testing protocol.)
-
-[//]: # (The evaluation prompt can be found [here]&#40;https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/pr_evaluate_prompt_response.toml&#41;)
-
-[//]: # ()
-[//]: # (Here is an example of a judge model feedback:)
-
-[//]: # ()
-[//]: # (```)
-
-[//]: # (command: improve)
-
-[//]: # (model1_score: 9,)
-
-[//]: # (model2_score: 6,)
-
-[//]: # (why: |)
-
-[//]: # (  Response 1 is better because it provides more actionable and specific suggestions that directly)
-
-[//]: # (  enhance the code's maintainability, performance, and best practices. For example, it suggests)
-
-[//]: # (  using a variable for reusable widget instances and using named routes for navigation, which)
-
-[//]: # (  are practical improvements. In contrast, Response 2 focuses more on general advice and less)
-
-[//]: # (  actionable suggestions, such as changing variable names and adding comments, which are less)
-
-[//]: # (  critical for immediate code improvement.")
-
-[//]: # (```)
-
-[//]: # ()
-[//]: # (## Comparing Top Closed-Source Models)
-
-[//]: # ()
-[//]: # (Another application of the Pull Request Benchmark is comparing leading closed-source models to determine which performs better at analyzing pull request code.)
-
-[//]: # ()
-[//]: # (The evaluation methodology resembles the approach used for evaluating fine-tuned models:)
-
-[//]: # ()
-[//]: # (- We ran each model across 200 diverse pull requests, asking them to generate code suggestions using Qodo Merge's `improve` tool)
-
-[//]: # (- A third top model served as judge to determine which response better fulfilled the prompt and would likely be perceived as superior by human users)
+See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/benchmark/sonnet_37_vs_gemini-2.5-pro-preview-05-06.md)
