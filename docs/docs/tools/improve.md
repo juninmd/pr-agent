@@ -20,6 +20,7 @@ ___
 !!! note "The following features are available only for Qodo Merge 💎 users:"
     - The `Apply / Chat` checkbox, which interactively converts a suggestion into a committable code comment
     - The `More` checkbox to generate additional suggestions
+    - On Bitbucket (Cloud & Data Center) and GitLab Server (v16 and earlier), you can invoke [More Suggestions manually](#manual-more-suggestions)
 
 ## Example usage
 
@@ -43,6 +44,13 @@ For example, you can choose to present all the suggestions as committable code c
 
 As can be seen, a single table comment has a significantly smaller PR footprint. We recommend this mode for most cases.
 Also note that collapsible are not supported in _Bitbucket_. Hence, the suggestions can only be presented in Bitbucket as code comments.
+
+#### Manual more suggestions
+To generate more suggestions (distinct from the ones already generated), for git-providers that don't support interactive checkbox option, you can manually run:
+
+```
+/improve --more_suggestions=true
+```
 
 ### Automatic triggering
 
