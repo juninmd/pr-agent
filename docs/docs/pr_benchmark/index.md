@@ -66,13 +66,13 @@ Model 'Gemini-2.5-pro-preview-05-06' is generally more useful thanks to wider an
 
 #### Detailed Analysis
 
-Gemini-2.5-pro-preview-05-06 vs GPT-4.1 strengths:  
+Gemini-2.5-pro-preview-05-06 strengths:  
 
 - better_bug_coverage: Detects and explains more critical issues, winning in ~70 % of comparisons and achieving a higher average score.  
 - actionable_fixes: Supplies clear code snippets, correct language labels, and often multiple coherent suggestions per diff.  
 - deeper_reasoning: Shows stronger grasp of logic, edge cases, and cross-file implications, leading to broader, high-impact reviews.  
 
-Gemini-2.5-pro-preview-05-06 vs GPT-4.1 weaknesses:  
+Gemini-2.5-pro-preview-05-06 weaknesses:  
 
 - guideline_violations: More prone to over-eager advice—non-critical tweaks, touching unchanged code, suggesting new imports, or minor format errors.  
 - occasional_overreach: Some fixes are speculative or risky, potentially introducing new bugs.  
@@ -92,13 +92,13 @@ See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/
 
 #### Detailed Analysis
 
-Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7 strengths:  
+Gemini-2.5-pro-preview-05-06 strengths:  
 
 - higher_accuracy_and_coverage: finds real critical bugs and supplies actionable patches in most examples (better in 78 % of cases).  
 - guideline_awareness: usually respects new-lines-only scope, ≤3 suggestions, proper YAML, and stays silent when no issues exist.  
 - detailed_reasoning_and_patches: explanations tie directly to the diff and fixes are concrete, often catching multiple related defects that 'Sonnet 3.7' overlooks.
 
-Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7 weaknesses:  
+Gemini-2.5-pro-preview-05-06 weaknesses:  
 
 - occasional_rule_violations: sometimes proposes new imports, package-version changes, or edits outside the added lines.  
 - overzealous_suggestions: may add speculative or stylistic fixes that exceed the “critical” scope, or mis-label severity.  
@@ -120,13 +120,12 @@ See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/
 
 #### Detailed Analysis
 
-Model 'GPT-4.1' vs 'Sonnet 3.7'  
-strengths:  
+GPT-4.1 strengths:  
 - Strong guideline adherence: usually stays strictly on `+` lines, avoids non-critical or stylistic advice, and rarely suggests forbidden imports; often outputs an empty list when no real bug exists.  
 - Lower false-positive rate: suggestions are more accurate and seldom introduce new bugs; fixes compile more reliably.  
 - Good schema discipline: YAML is almost always well-formed and fields are populated correctly.  
 
-weaknesses:  
+GPT-4.1 weaknesses:  
 - Misses bugs: often returns an empty list even when a clear critical issue is present, so coverage is narrower.  
 - Sparse feedback: when it does comment, it tends to give fewer suggestions and sometimes lacks depth or completeness.  
 - Occasional metadata/slip-ups (wrong language tags, overly broad code spans), though less harmful than Sonnet 3.7 errors.  
@@ -167,7 +166,6 @@ See raw results [here](https://github.com/Codium-ai/pr-agent-settings/blob/main/
 
 #### Detailed Analysis
 
-Model 'Sonnet 3.7' vs 'GPT-4.1'  
 'Sonnet 3.7' strengths:
 - Better bug discovery breadth: more willing to dive into logic and spot critical problems that 'GPT-4.1' overlooks; often supplies multiple, detailed fixes.  
 - Richer explanations & patches: gives fuller context and, when correct, proposes more functional or user-friendly solutions.  
