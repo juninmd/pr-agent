@@ -60,7 +60,7 @@ nav:
       - Data Privacy: 'chrome-extension/data_privacy.md'
       - Options: 'chrome-extension/options.md'
   - PR Benchmark:
-      - FAQ: 'pr_benchmark/index.md'
+      - PR Benchmark: 'pr_benchmark/index.md'
   - Recent Updates:
       - Recent Updates: 'recent_updates/index.md'
   - AI Docs Search: 'ai_search/index.md'
