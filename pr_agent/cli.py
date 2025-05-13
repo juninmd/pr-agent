@@ -88,9 +88,11 @@ def run(inargs=None, args=None):
             get_logger().debug("Waiting for event queue to complete")
             tasks = [task for task in asyncio.all_tasks() if task is not asyncio.current_task()]
             if tasks:
-                done, pending = await asyncio.wait(tasks, timeout=30)
+                _, pending = await asyncio.wait(tasks, timeout=30)
                 if pending:
-                    get_logger().warning(f"{len(pending)} callback tasks did not complete within timeout")
+                    get_logger().warning(
+                        f"{len(pending)} callback tasks({[task.get_coro() for task in pending]}) did not complete within timeout"
+                    )
 
         return result
 
