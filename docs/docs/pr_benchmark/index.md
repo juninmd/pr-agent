@@ -21,15 +21,42 @@ Other factors like speed, cost, and availability, while also relevant for model 
 
 Here's a summary of the win rates based on the benchmark:
 
-| Model A                       | Model B                       | Model A Win Rate | Model B Win Rate |
-|-------------------------------|-------------------------------|------------------|------------------|
-| Gemini-2.5-pro-preview-05-06  | GPT-4.1                       | 70.4%            | 29.6%            |
-| Gemini-2.5-pro-preview-05-06  | Sonnet 3.7                    | 78.1%            | 21.9%            |
-| GPT-4.1                       | Sonnet 3.7                    | 61.0%            | 39.0%            |
+[//]: # (| Model A                        | Model B                        | Model A Win Rate | Model B Win Rate |)
+
+[//]: # (|:-------------------------------|:-------------------------------|:----------------:|:----------------:|)
+
+[//]: # (| Gemini-2.5-pro-preview-05-06   | GPT-4.1                        |      70.4%       |      29.6%       |)
+
+[//]: # (| Gemini-2.5-pro-preview-05-06   | Sonnet 3.7                     |      78.1%       |      21.9%       |)
+
+[//]: # (| GPT-4.1                        | Sonnet 3.7                     |      61.0%       |      39.0%       |)
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align:left;">Model A</th>
+      <th style="text-align:left;">Model B</th>
+      <th style="text-align:center;">Model A Win Rate</th> <th style="text-align:center;">Model B Win Rate</th> </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:left;">Gemini-2.5-pro-preview-05-06</td>
+      <td style="text-align:left;">GPT-4.1</td>
+      <td style="text-align:center; color: #1E8449;"><b>70.4%</b></td> <td style="text-align:center; color: #D8000C;"><b>29.6%</b></td> </tr>
+    <tr>
+      <td style="text-align:left;">Gemini-2.5-pro-preview-05-06</td>
+      <td style="text-align:left;">Sonnet 3.7</td>
+      <td style="text-align:center; color: #1E8449;"><b>78.1%</b></td> <td style="text-align:center; color: #D8000C;"><b>21.9%</b></td> </tr>
+    <tr>
+      <td style="text-align:left;">GPT-4.1</td>
+      <td style="text-align:left;">Sonnet 3.7</td>
+      <td style="text-align:center; color: #1E8449;"><b>61.0%</b></td> <td style="text-align:center; color: #D8000C;"><b>39.0%</b></td> </tr>
+  </tbody>
+</table>
 
 ## Gemini-2.5-pro-preview-05-06 - Model Card
 
-### Gemini-2.5-pro-preview-05-06 vs GPT-4.1
+### Comparison against GPT-4.1
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
@@ -52,7 +79,7 @@ Gemini-2.5-pro-preview-05-06 vs GPT-4.1 weaknesses:
 - redundant_or_duplicate: At times repeats the same point or exceeds the required brevity.  
 
 
-### Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7
+### Comparison against Sonnet 3.7
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/sonnet_37_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
@@ -79,7 +106,7 @@ Gemini-2.5-pro-preview-05-06 vs Sonnet 3.7 weaknesses:
 
 ## GPT-4.1 - Model Card
 
-### GPT-4.1 vs Sonnet 3.7
+### Comparison against Sonnet 3.7
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_sonnet_3.7_judge_o3.png){width=768}
 
@@ -104,7 +131,7 @@ weaknesses:
 - Sparse feedback: when it does comment, it tends to give fewer suggestions and sometimes lacks depth or completeness.  
 - Occasional metadata/slip-ups (wrong language tags, overly broad code spans), though less harmful than Sonnet 3.7 errors.  
 
-### GPT-4.1 vs Gemini-2.5-pro-preview-05-06
+### Comparison against Gemini-2.5-pro-preview-05-06
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
@@ -127,7 +154,7 @@ GPT-4.1 weaknesses:
 
 ## Sonnet 3.7 - Model Card
 
-### Sonnet 3.7 vs GPT-4.1
+### Comparison against GPT-4.1
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/gpt-4.1_vs_sonnet_3.7_judge_o3.png){width=768}
 
@@ -152,7 +179,7 @@ Model 'Sonnet 3.7' vs 'GPT-4.1'
 - Occasional schema or formatting mistakes (missing list value, duplicated suggestions), reducing reliability.  
 
 
-### Sonnet 3.7 vs Gemini-2.5-pro-preview-05-06
+### Comparison against Gemini-2.5-pro-preview-05-06
 
 ![Comparison](https://codium.ai/images/qodo_merge_benchmark/sonnet_37_vs_gemini-2.5-pro-preview-05-06_judge_o3.png){width=768}
 
