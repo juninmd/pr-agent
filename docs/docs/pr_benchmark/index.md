@@ -48,11 +48,24 @@ Here's a summary of the win rates based on the benchmark:
       <td style="text-align:left;">Sonnet 3.7</td>
       <td style="text-align:center; color: #1E8449;"><b>78.1%</b></td> <td style="text-align:center; color: #D8000C;"><b>21.9%</b></td> </tr>
     <tr>
+      <td style="text-align:left;">Gemini-2.5-pro-preview-05-06</td>
+      <td style="text-align:left;">Gemini-2.5-flash-preview-04-17</td>
+      <td style="text-align:center; color: #1E8449;"><b>73.0%</b></td> <td style="text-align:center; color: #D8000C;"><b>27.0%</b></td> </tr>
+    <tr>
+      <td style="text-align:left;">Gemini-2.5-flash-preview-04-17</td>
+      <td style="text-align:left;">GPT-4.1</td>
+      <td style="text-align:center; color: #1E8449;"><b>54.6%</b></td> <td style="text-align:center; color: #D8000C;"><b>45.4%</b></td> </tr>
+    <tr>
+      <td style="text-align:left;">Gemini-2.5-flash-preview-04-17</td>
+      <td style="text-align:left;">Sonnet 3.7</td>
+      <td style="text-align:center; color: #1E8449;"><b>60.6%</b></td> <td style="text-align:center; color: #D8000C;"><b>39.4%</b></td> </tr>
+    <tr>
       <td style="text-align:left;">GPT-4.1</td>
       <td style="text-align:left;">Sonnet 3.7</td>
       <td style="text-align:center; color: #1E8449;"><b>61.0%</b></td> <td style="text-align:center; color: #D8000C;"><b>39.0%</b></td> </tr>
   </tbody>
 </table>
+
 
 ## Gemini-2.5-pro-preview-05-06 - Model Card
 
