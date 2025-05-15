@@ -16,7 +16,11 @@ def apply_repo_settings(pr_url):
     if get_settings().config.use_repo_settings_file:
         repo_settings_file = None
         try:
-            repo_settings = context.get("repo_settings", None)
+            try:
+                repo_settings = context.get("repo_settings", None)
+            except Exception:
+                repo_settings = None
+                pass
             if repo_settings is None:  # None is different from "", which is a valid value
                 repo_settings = git_provider.get_repo_settings()
                 try:
