@@ -105,11 +105,17 @@ class GiteaProvider(GitProvider):
 
     def publish_inline_comment(self, body: str, relevant_file: str, relevant_line_in_file: str,
                                original_suggestion=None):
-        url = f"{self.gitea_url}/api/v1/repos/{self.owner}/{self.repo}/pulls/{self.pr_num}/comments"
+        url = f"{self.gitea_url}/api/v1/repos/{self.owner}/{self.repo}/pulls/{self.pr_num}/reviews"
+
         data = {
-            'body': body,
-            'path': relevant_file,
-            'line': int(relevant_line_in_file)
+            'event': 'COMMENT',
+            'body': original_suggestion or '',
+            'commit_id': self.pr.get('head', {}).get('sha', ''),
+            'comments': [{
+                'body': body,
+                'path': relevant_file,
+                'line': int(relevant_line_in_file)
+            }]
         }
         response = requests.post(url, headers=self.headers, json=data)
         response.raise_for_status()
