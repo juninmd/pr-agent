@@ -126,7 +126,7 @@ def test_e2e_run_gitea_app():
             response.raise_for_status()
             comments = response.json()
             
-            if len(comments) >= 5:  # заголовок, 3 предложения, 1 ревью
+            if len(comments) >= 5:
                 valid_review = False
                 for comment in comments:
                     if comment['body'].startswith('## PR Reviewer Guide 🔍'):
@@ -152,7 +152,6 @@ def test_e2e_run_gitea_app():
         )
         response.raise_for_status()
         
-        # Удаляем ветку
         response = requests.delete(
             f"{gitea_url}/api/v1/repos/{owner}/{repo_name}/git/refs/heads/{new_branch}",
             headers=headers

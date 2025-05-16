@@ -122,22 +122,31 @@ class GiteaProvider(GitProvider):
 
     def publish_inline_comments(self, comments: list[dict]):
         for comment in comments:
-            self.publish_inline_comment(
-                comment['body'],
-                comment['relevant_file'],
-                comment['relevant_line_in_file'],
-                comment.get('original_suggestion')
-            )
+            try:
+                self.publish_inline_comment(
+                    comment['body'],
+                    comment['relevant_file'],
+                    comment['relevant_line_in_file'],
+                    comment.get('original_suggestion')
+                )
+            except Exception as e:
+                get_logger().error(f"Failed to publish inline comment on {comment.get('relevant_file')}: {e}")
 
     def publish_code_suggestions(self, code_suggestions: list) -> bool:
+        overall_success = True
         for suggestion in code_suggestions:
-            self.publish_inline_comment(
-                suggestion['body'],
-                suggestion['relevant_file'],
-                suggestion['relevant_line_in_file'],
-                suggestion.get('original_suggestion')
-            )
-        return True
+            try:
+                self.publish_inline_comment(
+                    suggestion['body'],
+                    suggestion['relevant_file'],
+                    suggestion['relevant_line_in_file'],
+                    suggestion.get('original_suggestion')
+                )
+            except Exception as e:
+                overall_success = False
+                get_logger().error(
+                    f"Failed to publish code suggestion on {suggestion.get('relevant_file')}: {e}")
+        return overall_success
 
     def publish_labels(self, labels):
         url = f"{self.gitea_url}/api/v1/repos/{self.owner}/{self.repo}/issues/{self.pr_num}/labels"
