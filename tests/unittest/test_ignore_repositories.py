@@ -51,7 +51,7 @@ class TestIgnoreRepositories:
             "sender": {"login": "user"}
         }
         result = provider_func(body_func(body["repository"]["full_name"]))
-        print(f"DEBUG: Provider={provider_name}, test_should_ignore_matching_repository, result={result}")
+        # print(f"DEBUG: Provider={provider_name}, test_should_ignore_matching_repository, result={result}")
         assert result is False, f"{provider_name}: PR from ignored repository should be ignored (return False)"
 
     @pytest.mark.parametrize("provider_name, provider_func, body_func", PROVIDERS)
@@ -63,7 +63,7 @@ class TestIgnoreRepositories:
             "sender": {"login": "user"}
         }
         result = provider_func(body_func(body["repository"]["full_name"]))
-        print(f"DEBUG: Provider={provider_name}, test_should_not_ignore_non_matching_repository, result={result}")
+        # print(f"DEBUG: Provider={provider_name}, test_should_not_ignore_non_matching_repository, result={result}")
         assert result is True, f"{provider_name}: PR from non-ignored repository should not be ignored (return True)"
 
     @pytest.mark.parametrize("provider_name, provider_func, body_func", PROVIDERS)
@@ -75,5 +75,5 @@ class TestIgnoreRepositories:
             "sender": {"login": "user"}
         }
         result = provider_func(body_func(body["repository"]["full_name"]))
-        print(f"DEBUG: Provider={provider_name}, test_should_not_ignore_when_config_empty, result={result}")
+        # print(f"DEBUG: Provider={provider_name}, test_should_not_ignore_when_config_empty, result={result}")
         assert result is True, f"{provider_name}: PR should not be ignored if ignore_repositories config is empty" 
