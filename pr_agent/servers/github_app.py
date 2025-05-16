@@ -263,7 +263,7 @@ def should_process_pr_logic(body) -> bool:
         # logic to ignore PRs from specific repositories
         ignore_repos = get_settings().get("CONFIG.IGNORE_REPOSITORIES", [])
         if ignore_repos and repo_full_name:
-            if repo_full_name in ignore_repos:
+            if any(re.search(regex, repo_full_name) for regex in ignore_repos):
                 get_logger().info(f"Ignoring PR from repository '{repo_full_name}' due to 'config.ignore_repositories' setting")
                 return False
 
