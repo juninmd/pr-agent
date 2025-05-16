@@ -107,25 +107,37 @@ class TokenHandler:
             get_logger().error( f"Error in Anthropic token counting: {e}")
             return MaxTokens
 
-    def estimate_token_count_for_non_anth_claude_models(self, model, default_encoder_estimate):
+    def is_openai_model(self, model_name):
+        from re import match
+
+        return 'gpt' in model_name or match(r"^o[1-9](-mini|-preview)?$", model_name)
+    
+    def apply_estimation_factor(self, model_name, default_estimate):
         from math import ceil
-        import re
 
-        model_is_from_o_series = re.match(r"^o[1-9](-mini|-preview)?$", model)
-        if ('gpt' in get_settings().config.model.lower() or model_is_from_o_series) and get_settings(use_context=False).get('openai.key'):
-            return default_encoder_estimate
-        #else: Model is not an OpenAI one - therefore, cannot provide an accurate token count and instead, return a higher number as best effort.
+        factor = 1 + get_settings().get('config.model_token_count_estimate_factor', 0)
+        get_logger().warning(f"{model_name}'s token count cannot be accurately estimated. Using factor of {factor}")
+        
+        return ceil(factor * default_estimate)
 
-        elbow_factor = 1 + get_settings().get('config.model_token_count_estimate_factor', 0)
-        get_logger().warning(f"{model}'s expected token count cannot be accurately estimated. Using {elbow_factor} of encoder output as best effort estimate")
-        return ceil(elbow_factor * default_encoder_estimate)
-
-    def count_tokens(self, patch: str, force_accurate=False) -> int:
+    def get_token_count_by_model_type(self, patch: str, default_estimate: int) -> int:
+        model_name = get_settings().config.model.lower()
+        
+        if 'claude' in model_name and get_settings(use_context=False).get('anthropic.key'):
+            return self.calc_claude_tokens(patch)
+        
+        if self.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
+            return default_estimate
+        
+        return self.apply_estimation_factor(model_name, default_estimate)
+    
+    def count_tokens(self, patch: str, force_accurate: bool = False) -> int:
         """
         Counts the number of tokens in a given patch string.
 
         Args:
         - patch: The patch string.
+        - force_accurate: If True, uses a more precise calculation method.
 
         Returns:
         The number of tokens in the patch string.
@@ -135,11 +147,5 @@ class TokenHandler:
         #If an estimate is enough (for example, in cases where the maximal allowed tokens is way below the known limits), return it.
         if not force_accurate:
             return encoder_estimate
-
-        #else, force_accurate==True: User requested providing an accurate estimation:
-        model = get_settings().config.model.lower()
-        if 'claude' in model and get_settings(use_context=False).get('anthropic.key'):
-            return self.calc_claude_tokens(patch) # API call to Anthropic for accurate token counting for Claude models
-
-        #else: Non Anthropic provided model:
-        return self.estimate_token_count_for_non_anth_claude_models(model, encoder_estimate)
+        else:
+            return self.get_token_count_by_model_type(patch, encoder_estimate=encoder_estimate)
