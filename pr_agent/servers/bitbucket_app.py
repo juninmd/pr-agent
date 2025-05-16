@@ -165,7 +165,6 @@ def should_process_pr_logic(data) -> bool:
                 return False
     except Exception as e:
         get_logger().error(f"Failed 'should_process_pr_logic': {e}")
-    print("DEBUG: Returning True from should_process_pr_logic")
     return True
 
 
