@@ -1,10 +1,14 @@
+_LANGCHAIN_INSTALLED = False
+
 try:
     from langchain_core.messages import HumanMessage, SystemMessage
     from langchain_openai import AzureChatOpenAI, ChatOpenAI
+    _LANGCHAIN_INSTALLED = True
 except:  # we don't enforce langchain as a dependency, so if it's not installed, just move on
     pass
 
 import functools
+from typing import Optional
 
 import openai
 from tenacity import retry, retry_if_exception_type, retry_if_not_exception_type, stop_after_attempt
@@ -18,7 +22,9 @@ OPENAI_RETRIES = 5
 
 class LangChainOpenAIHandler(BaseAiHandler):
     def __init__(self):
-        # Initialize OpenAIHandler specific attributes here
+        if not _LANGCHAIN_INSTALLED:
+            raise ImportError("LangChain is not installed. Please install it with `pip install langchain`.")
+        
         super().__init__()
         self.azure = get_settings().get("OPENAI.API_TYPE", "").lower() == "azure"
 
@@ -40,7 +46,9 @@ class LangChainOpenAIHandler(BaseAiHandler):
         retry=retry_if_exception_type(openai.APIError) & retry_if_not_exception_type(openai.RateLimitError),
         stop=stop_after_attempt(OPENAI_RETRIES),
     )
-    async def chat_completion(self, model: str, system: str, user: str, temperature: float = 0.2):
+    async def chat_completion(self, model: str, system: str, user: str, temperature: float = 0.2, img_path: Optional[str] = None):
+        if img_path:
+            get_logger().warning(f"Image path is not supported for LangChainOpenAIHandler. Ignoring image path: {img_path}")
         try:
             messages = [SystemMessage(content=system), HumanMessage(content=user)]
 
