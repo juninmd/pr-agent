@@ -45,8 +45,8 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 ## May 17, 2025
 
 - v0.29 was [released](https://github.com/qodo-ai/pr-agent/releases)
-- Qodo Merge Pull Request Benchmark was [released](https://qodo-merge-docs.qodo.ai/pr_benchmark/), which evaluates and compares the performance of Large Language Models (LLMs) in analyzing pull request code and providing meaningful code suggestions
-- 'Recent Updates and Future Roadmap' Page was added to the [Qodo Merge Docs](https://qodo-merge-docs.qodo.ai/recent_updates/)
+- `Qodo Merge Pull Request Benchmark` was [released](https://qodo-merge-docs.qodo.ai/pr_benchmark/). This benchmark  evaluates and compares the performance of LLMs in analyzing pull request code.
+- `Recent Updates and Future Roadmap` page was added to the [Qodo Merge Docs](https://qodo-merge-docs.qodo.ai/recent_updates/)
 
 ## Apr 30, 2025
 
