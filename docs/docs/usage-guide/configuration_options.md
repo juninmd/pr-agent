@@ -1,13 +1,13 @@
-The different tools and sub-tools used by Qodo Merge are adjustable via the **[configuration file](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/configuration.toml)**.
+The different tools and sub-tools used by Qodo Merge are adjustable via a configuration file.
 
 In addition to general configuration options, each tool has its own configurations. For example, the `review` tool will use parameters from the [pr_reviewer](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/settings/configuration.toml#L16) section in the configuration file.
 See the [Tools Guide](https://qodo-merge-docs.qodo.ai/tools/) for a detailed description of the different tools and their configurations.
 
-There are three ways to set persistent configurations:
+There are three main ways to set persistent configurations:
 
-1. Wiki configuration page 💎
-2. Local configuration file
-3. Global configuration file 💎
+1. [Wiki](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#wiki-configuration-file)configuration page 💎
+2. [Local](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#local-configuration-file) configuration file
+3. [Global](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#global-configuration-file) configuration file 💎
 
 In terms of precedence, wiki configurations will override local configurations, and local configurations will override global configurations.
 
