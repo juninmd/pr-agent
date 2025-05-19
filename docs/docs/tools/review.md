@@ -70,6 +70,10 @@ extra_instructions = "..."
         <td><b>enable_help_text</b></td>
         <td>If set to true, the tool will display a help text in the comment. Default is true.</td>
       </tr>
+      <tr>
+        <td><b>num_max_findings</b></td>
+        <td>Number of maximum returned finding. Default is 3.</td>
+      </tr>
     </table>
 
 !!! example "Enable\\disable specific sub-sections"
