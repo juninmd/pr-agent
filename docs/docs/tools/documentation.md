@@ -32,7 +32,8 @@ Comment `/add_docs` on a PR to invoke it manually.
 
 ## Automatic triggering
 
-To automatically run the `add_docs` tool when a pull request is opened, configure your `.pr_agent.yaml` or `configuration.toml` as follows:
+To automatically run the `add_docs` tool when a pull request is opened, define in a [configuration file](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/):
+
 
 ```toml
 [github_app]
