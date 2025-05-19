@@ -26,6 +26,10 @@ You can state a name of a specific component in the PR to get documentation only
 /add_docs component_name
 ```
 
+## Manual triggering
+
+Comment `/add_docs` on a PR to invoke it manually.
+
 ## Automatic triggering
 
 To automatically run the `add_docs` tool when a pull request is opened, configure your `.pr_agent.yaml` or `configuration.toml` as follows:
@@ -33,15 +37,16 @@ To automatically run the `add_docs` tool when a pull request is opened, configur
 ```toml
 [github_app]
 pr_commands = [
-    "/describe",
-    "/review",
-    "/improve",
-    "/add_docs"
+    "/add_docs",
+    ...
 ]
 ```
 
+The `pr_commands` list defines commands that run automatically when a PR is opened.
+This applies only if the Qodo Merge GitHub App is installed and active for the repository.
+
 !!! note
-    This behavior is **opt-in**; by default `/add_docs` only runs on manual invocation.
+By default, /add_docs is not triggered automatically. You must explicitly include it in pr_commands to enable this behavior.
 
 ## Configuration options
 
