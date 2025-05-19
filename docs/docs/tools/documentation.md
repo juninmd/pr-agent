@@ -26,6 +26,25 @@ You can state a name of a specific component in the PR to get documentation only
 /add_docs component_name
 ```
 
+## Automatic triggering
+
+To automatically run the `add_docs` tool when a pull request is opened, configure your `.pr_agent.yaml` or `configuration.toml` as follows:
+
+```toml
+[github_app]
+pr_commands = [
+    "/describe",
+    "/review",
+    "/improve",
+    "/add_docs"
+]
+```
+
+!!! note
+    This behavior is **opt-in**; by default `/add_docs` only runs on manual invocation.
+
+
+
 ## Configuration options
 
 - `docs_style`: The exact style of the documentation (for python docstring). you can choose between: `google`, `numpy`, `sphinx`, `restructuredtext`, `plain`. Default is `sphinx`.
