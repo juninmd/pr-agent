@@ -72,7 +72,7 @@ extra_instructions = "..."
       </tr>
       <tr>
         <td><b>num_max_findings</b></td>
-        <td>Number of maximum returned finding. Default is 3.</td>
+        <td>Number of maximum returned findings. Default is 3.</td>
       </tr>
     </table>
 
