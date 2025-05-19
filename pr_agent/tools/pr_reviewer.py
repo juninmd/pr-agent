@@ -316,7 +316,9 @@ class PRReviewer:
             get_logger().exception(f"Failed to remove previous review comment, error: {e}")
 
     def _can_run_incremental_review(self) -> bool:
-        """Checks if we can run incremental review according the various configurations and previous review"""
+        """
+        Checks if we can run incremental review according the various configurations and previous review.
+        """
         # checking if running is auto mode but there are no new commits
         if self.is_auto and not self.incremental.first_new_commit_sha:
             get_logger().info(f"Incremental review is enabled for {self.pr_url} but there are no new commits")
