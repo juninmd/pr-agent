@@ -43,8 +43,6 @@ pr_commands = [
 !!! note
     This behavior is **opt-in**; by default `/add_docs` only runs on manual invocation.
 
-
-
 ## Configuration options
 
 - `docs_style`: The exact style of the documentation (for python docstring). you can choose between: `google`, `numpy`, `sphinx`, `restructuredtext`, `plain`. Default is `sphinx`.
