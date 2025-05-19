@@ -5,7 +5,7 @@ See the [Tools Guide](https://qodo-merge-docs.qodo.ai/tools/) for a detailed des
 
 There are three main ways to set persistent configurations:
 
-1. [Wiki](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#wiki-configuration-file)configuration page 💎
+1. [Wiki](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#wiki-configuration-file) configuration page 💎
 2. [Local](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#local-configuration-file) configuration file
 3. [Global](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/#global-configuration-file) configuration file 💎
 
