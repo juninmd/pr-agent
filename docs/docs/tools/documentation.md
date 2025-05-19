@@ -43,7 +43,7 @@ pr_commands = [
 ```
 
 The `pr_commands` list defines commands that run automatically when a PR is opened.
-This applies only if the Qodo Merge GitHub App is installed and active for the repository.
+Since this is under the [github_app] section, it only applies when using the Qodo Merge GitHub App in GitHub environments.
 
 !!! note
 By default, /add_docs is not triggered automatically. You must explicitly include it in pr_commands to enable this behavior.
