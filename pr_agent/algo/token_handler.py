@@ -167,7 +167,7 @@ class TokenHandler:
         encoder_estimate = len(self.encoder.encode(patch, disallowed_special=()))
 
         if force_accurate:
-            return self.get_token_count_by_model_type(patch, encoder_estimate=encoder_estimate)
+            return self.get_token_count_by_model_type(patch, encoder_estimate)
 
         # If an estimate is enough (for example, in cases where the maximal allowed tokens is way below the known limits), return it.
         return encoder_estimate
