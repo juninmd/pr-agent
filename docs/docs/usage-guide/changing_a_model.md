@@ -226,7 +226,7 @@ To use Amazon Bedrock and its foundational models, add the below configuration:
 model="bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0"
 fallback_models=["bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0"]
 
-[aws]
+[aws] # in .secrets.toml
 AWS_ACCESS_KEY_ID="..."
 AWS_SECRET_ACCESS_KEY="..."
 AWS_REGION_NAME="..."
