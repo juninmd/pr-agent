@@ -47,11 +47,3 @@ Configure PR-Agent with Azure DevOps as:
 - Local Azure DevOps webhook
 
 [View Azure DevOps Integration Guide →](https://qodo-merge-docs.qodo.ai/installation/azure/)
-
-## 🔷 Gitea Integration
-
-Deploy PR-Agent on Gitea as:
-
-- Local Gitea webhook server
-
-[View Gitea Integration Guide →](https://qodo-merge-docs.qodo.ai/installation/gitea/)
