@@ -129,12 +129,12 @@ class TokenHandler:
         return ceil(factor * default_estimate)
 
     def get_token_count_by_model_type(self, patch: str, default_estimate: int) -> int:
-        model_name = get_settings().config.model.lower()
+        model_name = self.settings.config.model.lower()
         
-        if self.model_validator.is_claude_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
+        if self.model_validator.is_claude_model(model_name) and self.settings.get('anthropic.key'):
             return self.calc_claude_tokens(patch)
         
-        if self.model_validator.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
+        if self.model_validator.is_openai_model(model_name) and self.settings.get('openai.key'):
             return default_estimate
         
         return self.apply_estimation_factor(model_name, default_estimate)
