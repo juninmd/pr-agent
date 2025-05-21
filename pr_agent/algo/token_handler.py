@@ -15,7 +15,7 @@ class ModelTypeValidator:
         return 'gpt' in model_name or re.match(r"^o[1-9](-mini|-preview)?$", model_name)
     
     @staticmethod
-    def is_claude_model(model_name: str) -> bool:
+    def is_anthropic_model(model_name: str) -> bool:
         return 'claude' in model_name
 
 
@@ -145,7 +145,7 @@ class TokenHandler:
         """
         model_name = self.settings.config.model.lower()
         
-        if self.model_validator.is_claude_model(model_name) and self.settings.get('anthropic.key'):
+        if self.model_validator.is_anthropic_model(model_name) and self.settings.get('anthropic.key'):
             return self.calc_claude_tokens(patch)
         
         if self.model_validator.is_openai_model(model_name) and self.settings.get('openai.key'):
