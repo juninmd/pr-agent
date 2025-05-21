@@ -102,3 +102,19 @@ code_suggestions:
 '''
         expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancement'}]}
         assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
+
+    def test_tab_indent_yaml(self):
+        review_text = '''\
+code_suggestions:
+- relevant_file: |
+    src/index.ts
+  label: |
+\tbest practice
+
+- relevant_file: |
+    src/index2.ts
+  label: |
+    enhancement
+'''
+        expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancement\n'}]}
+        assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
