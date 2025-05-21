@@ -97,7 +97,7 @@ class TokenHandler:
             get_logger().error(f"Error in _get_system_user_tokens: {e}")
             return 0
 
-    def calc_claude_tokens(self, patch: str) -> int:
+    def _calc_claude_tokens(self, patch: str) -> int:
         try:
             import anthropic
             from pr_agent.algo import MAX_TOKENS
@@ -125,13 +125,13 @@ class TokenHandler:
             get_logger().error(f"Error in Anthropic token counting: {e}")
             return max_tokens
 
-    def apply_estimation_factor(self, model_name: str, default_estimate: int) -> int:
+    def _apply_estimation_factor(self, model_name: str, default_estimate: int) -> int:
         factor = 1 + get_settings().get('config.model_token_count_estimate_factor', 0)
         get_logger().warning(f"{model_name}'s token count cannot be accurately estimated. Using factor of {factor}")
         
         return ceil(factor * default_estimate)
 
-    def get_token_count_by_model_type(self, patch: str, default_estimate: int) -> int:
+    def _get_token_count_by_model_type(self, patch: str, default_estimate: int) -> int:
         """
         Get token count based on model type.
 
@@ -144,13 +144,13 @@ class TokenHandler:
         """
         model_name = get_settings().config.model.lower()
         
-            return self.calc_claude_tokens(patch)
         if self.model_validator.is_anthropic_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
+            return self._calc_claude_tokens(patch)
         
         if self.model_validator.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
             return default_estimate
         
-        return self.apply_estimation_factor(model_name, default_estimate)
+        return self._apply_estimation_factor(model_name, default_estimate)
     
     def count_tokens(self, patch: str, force_accurate: bool = False) -> int:
         """
@@ -169,4 +169,4 @@ class TokenHandler:
         if not force_accurate:
             return encoder_estimate
 
-        return self.get_token_count_by_model_type(patch, encoder_estimate)
+        return self._get_token_count_by_model_type(patch, encoder_estimate)
