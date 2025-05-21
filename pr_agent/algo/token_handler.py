@@ -67,7 +67,6 @@ class TokenHandler:
         - user: The user string.
         """
         self.encoder = TokenEncoder.get_token_encoder()
-        self.settings = get_settings()
         self.model_validator = ModelTypeValidator()
         
         if pr is not None:
@@ -103,8 +102,8 @@ class TokenHandler:
             import anthropic
             from pr_agent.algo import MAX_TOKENS
             
-            client = anthropic.Anthropic(api_key=self.settings.get('anthropic.key'))
-            max_tokens = MAX_TOKENS[self.settings.config.model]
+            client = anthropic.Anthropic(api_key=get_settings().get('anthropic.key'))
+            max_tokens = MAX_TOKENS[get_settings().config.model]
 
             if len(patch.encode('utf-8')) > self.CLAUDE_MAX_CONTENT_SIZE:
                 get_logger().warning(
@@ -127,7 +126,7 @@ class TokenHandler:
             return max_tokens
 
     def apply_estimation_factor(self, model_name: str, default_estimate: int) -> int:
-        factor = 1 + self.settings.get('config.model_token_count_estimate_factor', 0)
+        factor = 1 + get_settings().get('config.model_token_count_estimate_factor', 0)
         get_logger().warning(f"{model_name}'s token count cannot be accurately estimated. Using factor of {factor}")
         
         return ceil(factor * default_estimate)
@@ -143,12 +142,12 @@ class TokenHandler:
         Returns:
             int: The calculated token count.
         """
-        model_name = self.settings.config.model.lower()
+        model_name = get_settings().config.model.lower()
         
-        if self.model_validator.is_anthropic_model(model_name) and self.settings.get('anthropic.key'):
             return self.calc_claude_tokens(patch)
+        if self.model_validator.is_anthropic_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
         
-        if self.model_validator.is_openai_model(model_name) and self.settings.get('openai.key'):
+        if self.model_validator.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
             return default_estimate
         
         return self.apply_estimation_factor(model_name, default_estimate)
