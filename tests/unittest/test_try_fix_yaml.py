@@ -83,3 +83,22 @@ We can further improve the code by using the `const` keyword instead of `var` in
 '''
         expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancment'}]}
         assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
+
+
+    def test_with_brackets_yaml_content(self):
+        review_text = '''\
+{
+code_suggestions:
+- relevant_file: |
+    src/index.ts
+  label: |
+    best practice
+
+- relevant_file: |
+    src/index2.ts
+  label: |
+    enhancement
+}
+'''
+        expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancement'}]}
+        assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
