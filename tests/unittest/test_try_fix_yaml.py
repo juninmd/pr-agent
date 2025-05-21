@@ -118,3 +118,24 @@ code_suggestions:
 '''
         expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancement\n'}]}
         assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
+
+
+    def test_leading_plus_mark_code(self):
+        review_text = '''\
+code_suggestions:
+- relevant_file: |
+    src/index.ts
+  label: |
+    best practice
+  existing_code: |
++   var router = createBrowserRouter([
+  improved_code: |
++   const router = createBrowserRouter([
+'''
+        expected_output = {'code_suggestions': [{
+            'relevant_file': 'src/index.ts\n',
+            'label': 'best practice\n',
+            'existing_code': 'var router = createBrowserRouter([\n',
+            'improved_code': 'const router = createBrowserRouter([\n'
+        }]}
+        assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='improved_code') == expected_output
