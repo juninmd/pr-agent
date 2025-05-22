@@ -102,7 +102,7 @@ class GiteaProvider(GitProvider):
             if not is_valid_file(file_path):
                 continue
 
-            if file_path:
+            if file_path and self.sha:
                 try:
                     content = self.repo_api.get_file_content(
                         owner=self.owner,
