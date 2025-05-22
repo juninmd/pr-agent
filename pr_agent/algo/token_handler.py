@@ -144,11 +144,11 @@ class TokenHandler:
         """
         model_name = get_settings().config.model.lower()
         
-        if self.model_validator.is_anthropic_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
-            return self._calc_claude_tokens(patch)
-        
         if self.model_validator.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
             return default_estimate
+            
+        if self.model_validator.is_anthropic_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
+            return self._calc_claude_tokens(patch)
         
         return self._apply_estimation_factor(model_name, default_estimate)
     
