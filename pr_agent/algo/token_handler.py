@@ -102,7 +102,7 @@ class TokenHandler:
             import anthropic
             from pr_agent.algo import MAX_TOKENS
             
-            client = anthropic.Anthropic(api_key=get_settings().get('anthropic.key'))
+            client = anthropic.Anthropic(api_key=get_settings(use_context=False).get('anthropic.key'))
             max_tokens = MAX_TOKENS[get_settings().config.model]
 
             if len(patch.encode('utf-8')) > self.CLAUDE_MAX_CONTENT_SIZE:
