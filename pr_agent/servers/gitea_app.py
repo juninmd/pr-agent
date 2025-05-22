@@ -47,6 +47,10 @@ async def get_body(request: Request):
     if webhook_secret:
         body_bytes = await request.body()
         signature_header = request.headers.get('x-gitea-signature', None)
+        if not signature_header:
+            get_logger().error("Missing signature header")
+            raise HTTPException(status_code=400, detail="Missing signature header")
+        
         verify_signature(body_bytes, webhook_secret, f"sha256={signature_header}")
 
     return body
