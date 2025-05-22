@@ -59,6 +59,7 @@ class LiteLLMAIHandler(BaseAiHandler):
             litellm.api_version = get_settings().openai.api_version
         if get_settings().get("OPENAI.API_BASE", None):
             litellm.api_base = get_settings().openai.api_base
+            self.api_base = get_settings().openai.api_base
         if get_settings().get("ANTHROPIC.KEY", None):
             litellm.anthropic_key = get_settings().anthropic.key
         if get_settings().get("COHERE.KEY", None):
@@ -370,11 +371,11 @@ class LiteLLMAIHandler(BaseAiHandler):
                 get_logger().info(f"\nUser prompt:\n{user}")
 
             response = await acompletion(**kwargs)
-        except (openai.APIError, openai.APITimeoutError) as e:
-            get_logger().warning(f"Error during LLM inference: {e}")
-            raise
         except (openai.RateLimitError) as e:
             get_logger().error(f"Rate limit error during LLM inference: {e}")
+            raise
+        except (openai.APIError, openai.APITimeoutError) as e:
+            get_logger().warning(f"Error during LLM inference: {e}")
             raise
         except (Exception) as e:
             get_logger().warning(f"Unknown error during LLM inference: {e}")
