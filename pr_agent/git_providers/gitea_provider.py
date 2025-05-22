@@ -542,6 +542,10 @@ class GiteaProvider(GitProvider):
         if not self.pr:
             self.logger.error("Failed to get PR branch")
             return ""
+        
+        if not self.pr.head:
+            self.logger.error("PR head not found")
+            return ""
 
         return self.pr.head.ref if self.pr.head.ref else ""
 
