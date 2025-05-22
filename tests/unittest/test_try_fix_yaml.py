@@ -218,3 +218,36 @@ code_suggestions:
         }
         assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='existing_code') == expected_output
 
+
+    def test_wrong_indentation_code_block_scalar(self):
+        review_text = '''\
+code_suggestions:
+- relevant_file: |
+    a.c
+  existing_code: |
+  int sum(int a, int b) {
+    return a + b;
+  }
+
+  int sub(int a, int b) {
+    return a - b;
+  }
+'''
+        expected_code_block = '''\
+int sum(int a, int b) {
+  return a + b;
+}
+
+int sub(int a, int b) {
+  return a - b;
+}
+'''
+        expected_output = {
+            "code_suggestions": [
+                {
+                    "relevant_file": "a.c\n",
+                    "existing_code": expected_code_block
+                }
+            ]
+        }
+        assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='existing_code') == expected_output
