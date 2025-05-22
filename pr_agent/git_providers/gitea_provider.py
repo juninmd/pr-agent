@@ -757,8 +757,9 @@ class RepoApi(giteapy.RepositoryApi):
                 raw_data = response[0].read()
                 return raw_data.decode('utf-8')
             else:
-                self.logger.error("Unexpected response format")
-                return ""
+                error_msg = f"Unexpected response format received from API: {type(response)}"
+                self.logger.error(error_msg)
+                return RuntimeError(error_msg)
 
         except ApiException as e:
             self.logger.error(f"Error getting diff: {str(e)}")
