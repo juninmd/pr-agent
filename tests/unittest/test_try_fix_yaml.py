@@ -53,12 +53,12 @@ code_suggestions:
 - relevant_file: |
     src/index2.ts
   label: |
-    enhancment
+    enhancement
 ```
 
 We can further improve the code by using the `const` keyword instead of `var` in the `src/index.ts` file.
 '''
-        expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancment'}]}
+        expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancement'}]}
 
         assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
 
@@ -76,12 +76,12 @@ code_suggestions:
 - relevant_file: |
     src/index2.ts
   label: |
-    enhancment
+    enhancement
 ```
 
 We can further improve the code by using the `const` keyword instead of `var` in the `src/index.ts` file.
 '''
-        expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancment'}]}
+        expected_output = {'code_suggestions': [{'relevant_file': 'src/index.ts\n', 'label': 'best practice\n'}, {'relevant_file': 'src/index2.ts\n', 'label': 'enhancement'}]}
         assert try_fix_yaml(review_text, first_key='code_suggestions', last_key='label') == expected_output
 
 
