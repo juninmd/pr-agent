@@ -75,7 +75,7 @@ class KeyIssuesComponentLink(BaseModel):
 class TodoSection(BaseModel):
     relevant_file: str = Field(description="The file containing the TODO comment")
     line_number: int = Field(description="The line number of the TODO comment")
-    content: str = Field(description="The content of the TODO comment. Only include items that are actual TODO comments inside code comments (e.g., lines starting with #, //, /*, <!--, etc). Remove any leading 'TODO' or similar prefix from the content, but do include lines like '# TODO' even if they result in empty content after prefix removal. Do not include TODOs that are not in comments or not prefixed appropriately.")
+    content: str = Field(description="The content of the TODO comment. Only include actual TODO comments within code comments (e.g., lines starting with '#', '//', '/*', '<!--').  Remove leading 'TODO' prefixes. Include lines like '# TODO', even if empty after prefix removal. Exclude TODOs outside comments or without appropriate prefixes.")
 
 {%- if related_tickets %}
 

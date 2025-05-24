@@ -211,6 +211,26 @@ def convert_to_markdown_v2(output_data: dict,
                     value = emphasize_header(value.strip(), only_markdown=True)
                     markdown_text += f"{value}\n\n"
         elif 'todo sections' in key_nice.lower():
+            def format_todo_item(todo_item):
+                relevant_file = todo_item.get('relevant_file', '').strip()
+                line_number = todo_item.get('line_number', '')
+                content = todo_item.get('content', '')
+                reference_link = None
+                try:
+                    if git_provider and relevant_file and line_number:
+                        reference_link = git_provider.get_line_link(relevant_file, line_number, line_number)
+                except Exception as e:
+                    print(f"Error generating link: {e}")
+                    return f"{relevant_file} [{line_number}]: {content}"
+
+                file_line = f"{relevant_file} [{line_number}]"
+                if reference_link:
+                    if gfm_supported:
+                        file_line = f"<a href='{reference_link}'>{file_line}</a>"
+                    else:
+                        file_line = f"[{file_line}]({reference_link})"
+                return f"{file_line}: {content}" if content.strip() else file_line
+
             if gfm_supported:
                 markdown_text += f"<tr><td>"
                 if is_value_no(value):
@@ -220,20 +240,10 @@ def convert_to_markdown_v2(output_data: dict,
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
-                            relevant_file = todo_item.get('relevant_file', '').strip()
-                            line_number = todo_item.get('line_number', '')
-                            content = todo_item.get('content', '')
-                            reference_link = None
-                            if git_provider and relevant_file and line_number:
-                                reference_link = git_provider.get_line_link(relevant_file, line_number, line_number)
-                            file_line = f"{relevant_file} [{line_number}]"
-                            if reference_link:
-                                file_line = f"<a href='{reference_link}'>{file_line}</a>"
-                            if content.strip():
-                                markdown_text += f"<li>{file_line}: {content}</li>\n"
-                            else:
-                                markdown_text += f"<li>{file_line}</li>\n"
+                            markdown_text += f"<li>{format_todo_item(todo_item)}</li>\n"
                         markdown_text += "</ul>\n"
+                    else:
+                        markdown_text += f"<p>{format_todo_item(value)}</p>\n"
                 markdown_text += f"</td></tr>\n"
             else:
                 if is_value_no(value):
@@ -242,18 +252,9 @@ def convert_to_markdown_v2(output_data: dict,
                     markdown_text += f"### {emoji} ToDo sections\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
-                            relevant_file = todo_item.get('relevant_file', '').strip()
-                            line_number = todo_item.get('line_number', '')
-                            content = todo_item.get('content', '')
-                            if git_provider and relevant_file and line_number:
-                                reference_link = git_provider.get_line_link(relevant_file, line_number, line_number)
-                                file_line = f"[{relevant_file} [{line_number}]]({reference_link})"
-                            else:
-                                file_line = f"{relevant_file} [{line_number}]"
-                            if content.strip():
-                                markdown_text += f"- {file_line}: {content}\n"
-                            else:
-                                markdown_text += f"- {file_line}\n"
+                            markdown_text += f"- {format_todo_item(todo_item)}\n"
+                    else:
+                        markdown_text += f"- {format_todo_item(value)}\n"
         elif 'can be split' in key_nice.lower():
             if gfm_supported:
                 markdown_text += f"<tr><td>"
