@@ -220,7 +220,7 @@ def convert_to_markdown_v2(output_data: dict,
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
-                            relevant_file = todo_item.get('relevant_file', '')
+                            relevant_file = todo_item.get('relevant_file', '').strip()
                             line_number = todo_item.get('line_number', '')
                             content = todo_item.get('content', '')
                             reference_link = None
@@ -242,7 +242,7 @@ def convert_to_markdown_v2(output_data: dict,
                     markdown_text += f"### {emoji} ToDo sections\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
-                            relevant_file = todo_item.get('relevant_file', '')
+                            relevant_file = todo_item.get('relevant_file', '').strip()
                             line_number = todo_item.get('line_number', '')
                             content = todo_item.get('content', '')
                             if git_provider and relevant_file and line_number:
