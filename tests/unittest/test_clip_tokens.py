@@ -10,7 +10,7 @@ class TestClipTokens:
     def test_empty_input_text(self):
         """Test that empty input returns empty string."""
         assert clip_tokens("", 10) == ""
-        assert clip_tokens(None, 10) == None
+        assert clip_tokens(None, 10) is None
 
     def test_text_under_token_limit(self):
         """Test that text under the token limit is returned unchanged."""
