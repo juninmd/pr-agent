@@ -457,7 +457,7 @@ enable_auto_approval = true
 auto_approve_for_no_suggestions = true
 ```
 
-When no [code suggestion](https://www.qodo.ai/images/pr_agent/code_suggestions_as_comment_closed.png) were found for the PR, the PR will be auto-approved.
+When no [code suggestions](https://www.qodo.ai/images/pr_agent/code_suggestions_as_comment_closed.png) were found for the PR, the PR will be auto-approved.
 
 ___
 
