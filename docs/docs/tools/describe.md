@@ -1,6 +1,18 @@
 ## Overview
 
 The `describe` tool scans the PR code changes, and generates a description for the PR - title, type, summary, walkthrough and labels.
+### Mermaid Diagram Support 
+When the `add_diagram` option is enabled in your configuration, the `/describe` tool will include a `Mermaid` sequence diagram in the PR description.
+
+This diagram represents interactions between components/functions based on the diff content.
+
+### How to enable
+
+In your configuration:
+
+toml
+[pr_description]
+add_diagram = true
 
 The tool can be triggered automatically every time a new PR is [opened](../usage-guide/automations_and_usage.md#github-app-automatic-tools-when-a-new-pr-is-opened), or it can be invoked manually by commenting on any PR:
 
@@ -108,6 +120,10 @@ Everything below this marker is treated as previously auto-generated content and
       <tr>
         <td><b>enable_help_text</b></td>
         <td>If set to true, the tool will display a help text in the comment. Default is false.</td>
+      </tr>
+      <tr>
+  <td><b>add_diagram</b></td>
+  <td>If set to true, the tool will generate a <code>Mermaid</code> sequence diagram (in code block format) describing component interactions based on the code changes. Default is false.</td>
       </tr>
     </table>
 
