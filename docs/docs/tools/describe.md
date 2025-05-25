@@ -57,7 +57,7 @@ Everything below this marker is treated as previously auto-generated content and
 ![Describe comment](https://codium.ai/images/pr_agent/pr_description_user_description.png){width=512}
 
 ### Sequence Diagram Support 
-When the `add_diagram` option is enabled in your configuration, the `/describe` tool will include a `Mermaid` sequence diagram in the PR description.
+When the `enable_pr_diagram` option is enabled in your configuration, the `/describe` tool will include a `Mermaid` sequence diagram in the PR description.
 
 This diagram represents interactions between components/functions based on the diff content.
 
@@ -68,7 +68,7 @@ In your configuration:
 ```
 toml
 [pr_description]
-add_diagram = true
+enable_pr_diagram = true
 ```
 
 ## Configuration options
