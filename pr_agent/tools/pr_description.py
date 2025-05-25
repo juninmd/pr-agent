@@ -73,7 +73,7 @@ class PRDescription:
             "related_tickets": "",
             "include_file_summary_changes": len(self.git_provider.get_diff_files()) <= self.COLLAPSIBLE_FILE_LIST_THRESHOLD,
             "duplicate_prompt_examples": get_settings().config.get("duplicate_prompt_examples", False),
-            "add_diagram": get_settings().config.get('pr_description.add_diagram', False),
+            "enable_pr_diagram": get_settings().pr_description.get("enable_pr_diagram", False),
         }
 
         self.user_description = self.git_provider.get_user_description()
@@ -457,6 +457,10 @@ class PRDescription:
             self.data['labels'] = self.data.pop('labels')
         if 'description' in self.data:
             self.data['description'] = self.data.pop('description')
+        if 'changes_diagram' in self.data:
+            changes_diagram = self.data.pop('changes_diagram')
+            if changes_diagram.strip():
+                self.data['changes_diagram'] = changes_diagram
         if 'pr_files' in self.data:
             self.data['pr_files'] = self.data.pop('pr_files')
 
