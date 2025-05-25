@@ -65,9 +65,11 @@ This diagram represents interactions between components/functions based on the d
 
 In your configuration:
 
+```
 toml
 [pr_description]
 add_diagram = true
+```
 
 ## Configuration options
 
