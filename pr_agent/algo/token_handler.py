@@ -67,7 +67,6 @@ class TokenHandler:
         - user: The user string.
         """
         self.encoder = TokenEncoder.get_token_encoder()
-        self.model_validator = ModelTypeValidator()
         
         if pr is not None:
             self.prompt_tokens = self._get_system_user_tokens(pr, self.encoder, vars, system, user)
@@ -144,10 +143,10 @@ class TokenHandler:
         """
         model_name = get_settings().config.model.lower()
         
-        if self.model_validator.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
+        if ModelTypeValidator.is_openai_model(model_name) and get_settings(use_context=False).get('openai.key'):
             return default_estimate
-            
-        if self.model_validator.is_anthropic_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
+
+        if ModelTypeValidator.is_anthropic_model(model_name) and get_settings(use_context=False).get('anthropic.key'):
             return self._calc_claude_tokens(patch)
         
         return self._apply_estimation_factor(model_name, default_estimate)
