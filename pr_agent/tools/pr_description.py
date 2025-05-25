@@ -458,9 +458,11 @@ class PRDescription:
         if 'description' in self.data:
             self.data['description'] = self.data.pop('description')
         if 'changes_diagram' in self.data:
-            changes_diagram = self.data.pop('changes_diagram')
-            if changes_diagram.strip():
-                self.data['changes_diagram'] = changes_diagram
+            changes_diagram = self.data.pop('changes_diagram').strip()
+            if changes_diagram.startswith('```'):
+                if not changes_diagram.endswith('```'):  # fallback for missing closing
+                    changes_diagram += '\n```'
+                self.data['changes_diagram'] = '\n'+ changes_diagram
         if 'pr_files' in self.data:
             self.data['pr_files'] = self.data.pop('pr_files')
 
