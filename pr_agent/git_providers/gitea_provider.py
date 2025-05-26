@@ -760,7 +760,7 @@ class RepoApi(giteapy.RepositoryApi):
             else:
                 error_msg = f"Unexpected response format received from API: {type(response)}"
                 self.logger.error(error_msg)
-                return RuntimeError(error_msg)
+                raise RuntimeError(error_msg)
 
         except ApiException as e:
             self.logger.error(f"Error getting diff: {str(e)}")
