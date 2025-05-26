@@ -80,10 +80,11 @@ async def test():
         print('Error details:', e.__dict__ if hasattr(e, '__dict__') else 'No additional details')
 
 if __name__ == '__main__':
-    # Print environment variables (without showing the actual key)
     print('Environment variables:')
     print('OPENAI_API_KEY:', 'Set' if os.getenv('OPENAI_API_KEY') else 'Not set')
     print('OPENAI_API_TYPE:', os.getenv('OPENAI_API_TYPE', 'Not set'))
     print('OPENAI_API_BASE:', os.getenv('OPENAI_API_BASE', 'Not set'))
     
     asyncio.run(test()) 
+  
+    
