@@ -649,7 +649,7 @@ class GiteaProvider(GitProvider):
             return
 
         try:
-            comment_id = comment.get("comment_id")
+            comment_id = comment.get("comment_id") if isinstance(comment, dict) else comment.id
             if not comment_id:
                 self.logger.error("Comment ID not found")
                 return None
@@ -659,7 +659,7 @@ class GiteaProvider(GitProvider):
                 comment_id=comment_id
             )
 
-            if self.comments_list:
+            if self.comments_list and comment in self.comments_list:
                 self.comments_list.remove(comment)
 
             self.logger.info(f"Comment removed successfully: {comment}")
@@ -671,6 +671,8 @@ class GiteaProvider(GitProvider):
         """Remove the initial comment"""
         for comment in self.comments_list:
             try:
+                if not comment.get("is_temporary"):
+                    continue
                 self.remove_comment(comment)
             except Exception as e:
                 self.logger.error(f"Error removing comment: {e}")
