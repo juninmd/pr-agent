@@ -51,7 +51,11 @@ async def get_body(request: Request):
             get_logger().error("Missing signature header")
             raise HTTPException(status_code=400, detail="Missing signature header")
         
-        verify_signature(body_bytes, webhook_secret, f"sha256={signature_header}")
+        try:
+            verify_signature(body_bytes, webhook_secret, f"sha256={signature_header}")
+        except Exception as ex:
+            get_logger().error(f"Invalid signature: {ex}")
+            raise HTTPException(status_code=401, detail="Invalid signature")
 
     return body
 
