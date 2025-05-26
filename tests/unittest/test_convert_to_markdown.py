@@ -171,7 +171,13 @@ class TestConvertToMarkdown:
                         'src/file1.py',
                         'src/file2.py'
                     ],
-                    'title': 'Split PR into smaller parts',
+                    'title': 'Refactoring',
+                },
+                {
+                    'relevant_files': [
+                        'src/file3.py'
+                    ],
+                    'title': 'Bug Fix',
                 }
              ]
             }
@@ -183,8 +189,33 @@ class TestConvertToMarkdown:
             Here are some key observations to aid the review process:
 
             <table>
-            <tr><td>🔀 <strong>No multiple PR themes</strong>
-
+            <tr><td>🔀 <strong>Multiple PR themes</strong><br><br>
+                                          
+            <details><summary>
+            Sub-PR theme: <b>Refactoring</b></summary>
+                                          
+            ___
+                                          
+            Relevant files:
+                                          
+            - src/file1.py
+            - src/file2.py
+            ___
+                                          
+            </details>
+                                          
+            <details><summary>
+            Sub-PR theme: <b>Bug Fix</b></summary>
+                                          
+            ___
+                                          
+            Relevant files:
+                                          
+            - src/file3.py
+            ___
+                                          
+            </details>
+                                          
             </td></tr>
             </table>
         """)
