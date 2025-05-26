@@ -113,6 +113,7 @@ class GiteaProvider(GitProvider):
                     self.file_contents[file_path] = content
                 except ApiException as e:
                     self.logger.error(f"Error getting file content for {file_path}: {str(e)}")
+                    self.file_contents[file_path] = ""
 
     def __add_file_diff(self):
         try:
