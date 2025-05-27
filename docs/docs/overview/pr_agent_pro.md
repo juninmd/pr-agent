@@ -49,7 +49,7 @@ Here are additional tools that are available only for Qodo Merge users:
 
 ### Supported languages
 
-Qodo Merge leverages the world's leading code models, such as Claude 3.7 Sonnet and o3-mini.
+Qodo Merge leverages the world's leading code models, such as Claude 4 Sonnet, o4-mini and Gemini-2.5-Pro.
 As a result, its primary tools such as `describe`, `review`, and `improve`, as well as the PR-chat feature, support virtually all programming languages.
 
 For specialized commands that require static code analysis, Qodo Merge offers support for specific languages. For more details about features that require static code analysis, please refer to the [documentation](https://qodo-merge-docs.qodo.ai/tools/analyze/#overview).
