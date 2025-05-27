@@ -236,7 +236,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
-                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections</strong><br><br>\n\n"
+                    markdown_text += f"<details><summary>{emoji}&nbsp;<strong>TODO sections</strong></summary>\n\n"
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
@@ -244,17 +244,19 @@ def convert_to_markdown_v2(output_data: dict,
                         markdown_text += "</ul>\n"
                     else:
                         markdown_text += f"<p>{format_todo_item(value)}</p>\n"
+                    markdown_text += "\n</details>\n"
                 markdown_text += f"</td></tr>\n"
             else:
                 if is_value_no(value):
                     markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
-                    markdown_text += f"### {emoji} TODO sections\n\n"
+                    markdown_text += f"<details><summary>### {emoji} TODO sections</summary>\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
                             markdown_text += f"- {format_todo_item(todo_item)}\n"
                     else:
                         markdown_text += f"- {format_todo_item(value)}\n"
+                    markdown_text += "\n</details>\n\n"
         elif 'can be split' in key_nice.lower():
             if gfm_supported:
                 markdown_text += f"<tr><td>"
