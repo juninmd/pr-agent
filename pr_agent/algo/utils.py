@@ -234,9 +234,9 @@ def convert_to_markdown_v2(output_data: dict,
             if gfm_supported:
                 markdown_text += f"<tr><td>"
                 if is_value_no(value):
-                    markdown_text += f"{emoji}&nbsp;<strong>No ToDo sections</strong>"
+                    markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
-                    markdown_text += f"{emoji}&nbsp;<strong>ToDo sections</strong><br><br>\n\n"
+                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections</strong><br><br>\n\n"
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
@@ -247,9 +247,9 @@ def convert_to_markdown_v2(output_data: dict,
                 markdown_text += f"</td></tr>\n"
             else:
                 if is_value_no(value):
-                    markdown_text += f"### {emoji} No ToDo sections\n\n"
+                    markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
-                    markdown_text += f"### {emoji} ToDo sections\n\n"
+                    markdown_text += f"### {emoji} TODO sections\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
                             markdown_text += f"- {format_todo_item(todo_item)}\n"
