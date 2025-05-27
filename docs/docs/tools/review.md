@@ -150,7 +150,7 @@ extra_instructions = "..."
 
     The `review` tool automatically adds two specific labels to your Pull Requests:
 
-    - **`possible security issue`**: This label is applied if the tool detects a potential [security vulnerability](hhttps://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/pr_reviewer_prompts.toml#L103) in the PR's code. This feedback is controlled by the 'enable_review_labels_security' flag.
+    - **`possible security issue`**: This label is applied if the tool detects a potential [security vulnerability](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/pr_reviewer_prompts.toml#L103) in the PR's code. This feedback is controlled by the 'enable_review_labels_security' flag.
     - **`review effort [x/5]`**: This label estimates the [effort](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/pr_reviewer_prompts.toml#L90) required to review the PR on a relative scale of 1 to 5, where 'x' represents the assessed effort. This feedback is controlled by the 'enable_review_labels_effort' flag.
 
     Note: The `possible security issue` label highlights potential security risks. You can configure a GitHub Action to [prevent merging](https://medium.com/sequra-tech/quick-tip-block-pull-request-merge-using-labels-6cc326936221) PRs that have this label.
