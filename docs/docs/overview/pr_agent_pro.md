@@ -5,7 +5,7 @@ It is designed for companies and teams that require additional features and capa
 
 Free users receive a monthly quota of 75 PR reviews per git organization, while unlimited usage requires a paid subscription. See [details](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users).
 
-Qodo Merge provides following benefits:
+Qodo Merge provides the following benefits:
 
 1. **Fully managed** - We take care of everything for you - hosting, models, regular updates, and more. Installation is as simple as signing up and adding the Qodo Merge app to your GitHub\GitLab\BitBucket repo.
 
