@@ -220,7 +220,7 @@ def convert_to_markdown_v2(output_data: dict,
                     if git_provider and relevant_file and line_number:
                         reference_link = git_provider.get_line_link(relevant_file, line_number, line_number)
                 except Exception as e:
-                    print(f"Error generating link: {e}")
+                    get_logger().exception(f"Error generating link: {e}")
                     return f"{relevant_file} [{line_number}]: {content}"
 
                 file_line = f"{relevant_file} [{line_number}]"
