@@ -14,7 +14,7 @@ import traceback
 from datetime import datetime
 from enum import Enum
 from importlib.metadata import PackageNotFoundError, version
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, TypedDict
 
 import html2text
 import requests
@@ -37,20 +37,30 @@ def get_model(model_type: str = "model_weak") -> str:
         return get_settings().config.model_reasoning
     return get_settings().config.model
 
+
 class Range(BaseModel):
     line_start: int  # should be 0-indexed
     line_end: int
     column_start: int = -1
     column_end: int = -1
 
+
 class ModelType(str, Enum):
     REGULAR = "regular"
     WEAK = "weak"
     REASONING = "reasoning"
 
+
+class TodoItem(TypedDict):
+    relevant_file: str
+    line_number: int
+    content: str
+
+
 class PRReviewHeader(str, Enum):
     REGULAR = "## PR Reviewer Guide"
     INCREMENTAL = "## Incremental PR Reviewer Guide"
+
 
 class ReasoningEffort(str, Enum):
     HIGH = "high"
@@ -108,6 +118,7 @@ def unique_strings(input_list: List[str]) -> List[str]:
             unique_list.append(item)
             seen.add(item)
     return unique_list
+
 
 def convert_to_markdown_v2(output_data: dict,
                            gfm_supported: bool = True,
@@ -211,7 +222,7 @@ def convert_to_markdown_v2(output_data: dict,
                     value = emphasize_header(value.strip(), only_markdown=True)
                     markdown_text += f"{value}\n\n"
         elif 'todo sections' in key_nice.lower():
-            def format_todo_item(todo_item):
+            def format_todo_item(todo_item: TodoItem) -> str:
                 relevant_file = todo_item.get('relevant_file', '').strip()
                 line_number = todo_item.get('line_number', '')
                 content = todo_item.get('content', '')
