@@ -44,6 +44,7 @@ nav:
   - Core Abilities:
       - 'core-abilities/index.md'
       - Auto best practices: 'core-abilities/auto_best_practices.md'
+      - Chat on code suggestions: 'core-abilities/chat_on_code_suggestions.md'
       - Code validation: 'core-abilities/code_validation.md'
       - Compression strategy: 'core-abilities/compression_strategy.md'
       - Dynamic context: 'core-abilities/dynamic_context.md'
