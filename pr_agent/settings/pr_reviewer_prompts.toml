@@ -74,7 +74,7 @@ class KeyIssuesComponentLink(BaseModel):
 
 class TodoSection(BaseModel):
     relevant_file: str = Field(description="The file containing the TODO comment")
-    line_number: int = Field(description="The line number of the TODO comment")
+    line_range: Tuple[int, int] = Field(description="Start and end line numbers of the TODO comment (inclusive). Must be a tuple of two integers, e.g., (7, 7) for a single line or (7, 10) for a range. Do not use list format [7, 7].")
     content: str = Field(description="The content of the TODO comment. Only include actual TODO comments within code comments (e.g., lines starting with '#', '//', '/*', '<!--').  Remove leading 'TODO' prefixes. Include lines like '# TODO', even if empty after prefix removal. Exclude TODOs outside comments or without appropriate prefixes.")
 
 {%- if related_tickets %}

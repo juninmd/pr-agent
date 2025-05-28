@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import copy
 import difflib
 import hashlib
@@ -53,7 +54,7 @@ class ModelType(str, Enum):
 
 class TodoItem(TypedDict):
     relevant_file: str
-    line_number: int
+    line_range: Tuple[int, int]
     content: str
 
 
@@ -222,25 +223,51 @@ def convert_to_markdown_v2(output_data: dict,
                     value = emphasize_header(value.strip(), only_markdown=True)
                     markdown_text += f"{value}\n\n"
         elif 'todo sections' in key_nice.lower():
+
+            def format_multiline_html_item(file: str, line_range: Tuple[int, int], content: str, url: str) -> str:
+                label = f"{file} [{line_range[0]}-{line_range[1]}]" if line_range[0] != line_range[1] else f"{file} [{line_range[0]}]"
+                first_line, *rest_lines = content.strip().split("\n")
+                if rest_lines:
+                    rest = "<br>".join(rest_lines)
+                    return f"<li><a href='{url}'>{label}</a>: {first_line}<br><blockquote>{rest}</blockquote></li>"
+                else:
+                    return f"<li><a href='{url}'>{label}</a>: {first_line}</li>"
+
             def format_todo_item(todo_item: TodoItem) -> str:
                 relevant_file = todo_item.get('relevant_file', '').strip()
-                line_number = todo_item.get('line_number', '')
+                line_range = todo_item.get('line_range', [])
                 content = todo_item.get('content', '')
                 reference_link = None
+
+                if isinstance(line_range, str):
+                    line_range = ast.literal_eval(line_range.strip())
                 try:
-                    if git_provider and relevant_file and line_number:
-                        reference_link = git_provider.get_line_link(relevant_file, line_number, line_number)
+                    if git_provider and relevant_file and line_range:
+                        reference_link = git_provider.get_line_link(relevant_file, line_range[0], line_range[1])
                 except Exception as e:
                     get_logger().exception(f"Error generating link: {e}")
-                    return f"{relevant_file} [{line_number}]: {content}"
+                    line_str = f"[{line_range[0]}]" if line_range[0] == line_range[1] else f"[{line_range[0]}-{line_range[1]}]"
+                    return f"{relevant_file} {line_str}: {content}"
 
-                file_line = f"{relevant_file} [{line_number}]"
+                line_str = f"[{line_range[0]}]" if line_range[0] == line_range[1] else f"[{line_range[0]}-{line_range[1]}]"
+                file_line = f"{relevant_file} {line_str}"
                 if reference_link:
                     if gfm_supported:
                         file_line = f"<a href='{reference_link}'>{file_line}</a>"
                     else:
                         file_line = f"[{file_line}]({reference_link})"
-                return f"{file_line}: {content}" if content.strip() else file_line
+
+                content_lines = content.strip().split("\n")
+                # if TODO content is single-line :
+                if len(content_lines) == 1:
+                    return f"{file_line}: {content_lines[0]}"
+                # else if TODO content is multi-line:
+                elif len(content_lines) > 1:
+                    content_lines = "<br>".join(content_lines)
+                    return f"{file_line}: <blockquote>\n{content_lines}\n</blockquote>"
+                # else if TODO content is empty:
+                else:
+                    return file_line
 
             if gfm_supported:
                 markdown_text += f"<tr><td>"
