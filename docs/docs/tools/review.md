@@ -161,7 +161,7 @@ extra_instructions = "..."
 
     You can configure a CI/CD Action to prevent merging PRs with specific labels. For example, implement a dedicated [GitHub Action](https://medium.com/sequra-tech/quick-tip-block-pull-request-merge-using-labels-6cc326936221).
     This approach helps ensure PRs with potential security issues or ticket compliance problems will not be merged without further review.
-    Since AI may make mistakes or lack complete context, use this feature judiciously. For flexibility, users with appropriate permissions can remove generated labels when necessary. Any label removal will be documented in the PR discussion, clearly indicating it was a deliberate action by an authorized user to override the AI blocking the merge.
+    Since AI may make mistakes or lack complete context, use this feature judiciously. For flexibility, users with appropriate permissions can remove generated labels when necessary. When a label is removed, this action will be automatically documented in the PR discussion, clearly indicating it was a deliberate override by an authorized user to allow the merge.
 
 ### Extra instructions
 
