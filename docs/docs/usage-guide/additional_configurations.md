@@ -250,14 +250,3 @@ Where the `ignore_pr_authors` is a list of usernames that you want to ignore.
 
 !!! note
     There is one specific case where bots will receive an automatic response - when they generated a PR with a _failed test_. In that case, the [`ci_feedback`](https://qodo-merge-docs.qodo.ai/tools/ci_feedback/) tool will be invoked.
-
-## Secret Management
-
-For production deployments, consider using external secret management:
-
-- **AWS Secrets Manager**: Recommended for AWS Lambda deployments
-- **Google Cloud Storage**: For Google Cloud environments
-
-External secret providers automatically override environment variables at startup, providing enhanced security for sensitive information like API keys and webhook secrets.
-
-See [Configuration Options](configuration_options.md#secret-providers) for setup details.
