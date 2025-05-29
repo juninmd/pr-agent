@@ -203,6 +203,21 @@ For example: `GITHUB.WEBHOOK_SECRET` --> `GITHUB__WEBHOOK_SECRET`
 7. Go back to steps 8-9 of [Method 5](#run-as-a-github-app) with the function url as your Webhook URL.
     The Webhook URL would look like `https://<LAMBDA_FUNCTION_URL>/api/v1/github_webhooks`
 
+### Using AWS Secrets Manager (Recommended)
+
+For production Lambda deployments, use AWS Secrets Manager instead of environment variables:
+
+1. Create a secret in AWS Secrets Manager with your configuration
+2. Add IAM permissions for `secretsmanager:GetSecretValue`
+3. Set the secret ARN in your Lambda environment:
+
+```bash
+AWS_SECRETS_MANAGER__SECRET_ARN=arn:aws:secretsmanager:region:account:secret:name
+CONFIG__SECRET_PROVIDER=aws_secrets_manager
+```
+
+For detailed setup instructions, see [AWS Secrets Manager Integration](../usage-guide/aws_secrets_manager.md).
+
 ---
 
 ## AWS CodeCommit Setup
