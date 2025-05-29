@@ -51,20 +51,6 @@ class AWSSecretsManagerProvider(SecretProvider):
                 SecretId=secret_name,
                 SecretString=secret_value
             )
-        except ClientError as e:
-            if e.response['Error']['Code'] == 'ResourceNotFoundException':
-                # Create new secret if it doesn't exist
-                try:
-                    self.client.create_secret(
-                        Name=secret_name,
-                        SecretString=secret_value
-                    )
-                except Exception as create_error:
-                    get_logger().error(f"Failed to store secret {secret_name} in AWS Secrets Manager: {create_error}")
-                    raise create_error
-            else:
-                get_logger().error(f"Failed to store secret {secret_name} in AWS Secrets Manager: {e}")
-                raise e
         except Exception as e:
             get_logger().error(f"Failed to store secret {secret_name} in AWS Secrets Manager: {e}")
             raise e 

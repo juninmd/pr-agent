@@ -72,19 +72,6 @@ class TestAWSSecretsManagerProvider:
             SecretString='test-value'
         )
 
-    def test_store_secret_create_new(self):
-        provider, mock_client = self._provider()
-        mock_client.update_secret.side_effect = ClientError(
-            {'Error': {'Code': 'ResourceNotFoundException'}}, 'UpdateSecret'
-        )
-        mock_client.create_secret.return_value = {}
-
-        provider.store_secret('new-secret', 'test-value')
-        mock_client.create_secret.assert_called_once_with(
-            Name='new-secret',
-            SecretString='test-value'
-        )
-
     def test_init_failure_invalid_config(self):
         with patch('pr_agent.secret_providers.aws_secrets_manager_provider.get_settings') as mock_get_settings:
             settings = MagicMock()
