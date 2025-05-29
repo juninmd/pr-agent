@@ -95,7 +95,6 @@ def apply_secrets_manager_config():
         if not secret_provider:
             return
 
-        # Execute only when AWS Secrets Manager specific method is available
         if (hasattr(secret_provider, 'get_all_secrets') and
             get_settings().get("CONFIG.SECRET_PROVIDER") == 'aws_secrets_manager'):
             try:
@@ -106,7 +105,6 @@ def apply_secrets_manager_config():
             except Exception as e:
                 get_logger().error(f"Failed to apply AWS Secrets Manager config: {e}")
     except Exception as e:
-        # Fail silently when secret provider is not configured
         try:
             from pr_agent.log import get_logger
             get_logger().debug(f"Secret provider not configured: {e}")
@@ -118,12 +116,10 @@ def apply_secrets_manager_config():
 def apply_secrets_to_config(secrets: dict):
     """
     Apply secret dictionary to configuration
-    Configuration override with same pattern as Google Cloud Storage
     """
     try:
         from pr_agent.log import get_logger
     except:
-        # Do nothing if logging is not available
         def get_logger():
             class DummyLogger:
                 def debug(self, msg): pass
@@ -134,7 +130,6 @@ def apply_secrets_to_config(secrets: dict):
             parts = key.split('.')
             if len(parts) == 2:
                 section, setting = parts
-                # Convert case to match Dynaconf pattern
                 section_upper = section.upper()
                 setting_upper = setting.upper()
 
