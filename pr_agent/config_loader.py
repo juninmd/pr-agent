@@ -88,6 +88,7 @@ def apply_secrets_manager_config():
     Retrieve configuration from AWS Secrets Manager and override existing settings
     """
     try:
+        # Dynamic imports to avoid circular dependency (secret_providers imports config_loader)
         from pr_agent.secret_providers import get_secret_provider
         from pr_agent.log import get_logger
 
@@ -118,6 +119,7 @@ def apply_secrets_to_config(secrets: dict):
     Apply secret dictionary to configuration
     """
     try:
+        # Dynamic import to avoid potential circular dependency
         from pr_agent.log import get_logger
     except:
         def get_logger():
