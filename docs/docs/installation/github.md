@@ -207,16 +207,23 @@ For example: `GITHUB.WEBHOOK_SECRET` --> `GITHUB__WEBHOOK_SECRET`
 
 For production Lambda deployments, use AWS Secrets Manager instead of environment variables:
 
-1. Create a secret in AWS Secrets Manager with your configuration
-2. Add IAM permissions for `secretsmanager:GetSecretValue`
-3. Set the secret ARN in your Lambda environment:
+1. Create a secret in AWS Secrets Manager with JSON format like this:
 
-```bash
-AWS_SECRETS_MANAGER__SECRET_ARN=arn:aws:secretsmanager:region:account:secret:name
-CONFIG__SECRET_PROVIDER=aws_secrets_manager
+```json
+{
+  "openai.key": "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "github.webhook_secret": "your-webhook-secret-from-step-2",
+  "github.private_key": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA...\n-----END RSA PRIVATE KEY-----"
+}
 ```
 
-For detailed setup instructions, see [AWS Secrets Manager Integration](../usage-guide/aws_secrets_manager.md).
+2. Add IAM permission `secretsmanager:GetSecretValue` to your Lambda execution role
+3. Set these environment variables in your Lambda:
+
+```bash
+AWS_SECRETS_MANAGER__SECRET_ARN=arn:aws:secretsmanager:us-east-1:123456789012:secret:pr-agent-secrets-AbCdEf
+CONFIG__SECRET_PROVIDER=aws_secrets_manager
+```
 
 ---
 
