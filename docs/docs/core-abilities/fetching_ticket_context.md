@@ -9,9 +9,9 @@ This integration enriches the review process by automatically surfacing relevant
 
 **Ticket systems supported**:
 
-- GitHub
-- Jira (💎)
-- Linear (💎)
+- [GitHub](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#github-issues-integration)
+- [Jira (💎)](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#jira-integration)
+- [Linear (💎)](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#linear-integration)
 
 **Ticket data fetched:**
 
