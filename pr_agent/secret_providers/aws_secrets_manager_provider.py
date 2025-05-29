@@ -18,7 +18,8 @@ class AWSSecretsManagerProvider(SecretProvider):
                 self.client = boto3.client('secretsmanager')
 
             self.secret_arn = get_settings().aws_secrets_manager.secret_arn
-
+            if not self.secret_arn:
+                raise ValueError("AWS Secrets Manager ARN is not configured")
         except Exception as e:
             get_logger().error(f"Failed to initialize AWS Secrets Manager Provider: {e}")
             raise e
