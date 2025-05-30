@@ -16,10 +16,9 @@ Here is a list of Qodo Merge tools, each with a dedicated page that explains how
 | **💎 [CI Feedback (`/checks ci_job`](./ci_feedback.md))**                                | Automatically generates feedback and analysis for a failed CI job                                                                           |
 | **💎 [Custom Prompt (`/custom_prompt`](./custom_prompt.md))**                            | Automatically generates custom suggestions for improving the PR code, based on specific guidelines defined by the user                      |
 | **💎 [Generate Custom Labels (`/generate_labels`](./custom_labels.md))**                 | Generates custom labels for the PR, based on specific guidelines defined by the user                                                        |
-| **💎 [Generate Tests (`/test component_name`](./test.md))**                              | Automatically generates unit tests for a selected component, based on the PR code changes                                                   |
+| **💎 [Generate Tests (`/test`](./test.md))**                                             | Automatically generates unit tests for a selected component, based on the PR code changes                                                   |
 | **💎 [Implement (`/implement`](./implement.md))**                                        | Generates implementation code from review suggestions                                                                                       |
 | **💎 [Improve Component (`/improve_component component_name`](./improve_component.md))** | Generates code suggestions for a specific code component that changed in the PR                                                             |
 | **💎 [Scan Repo Discussions (`/scan_repo_discussions`](./scan_repo_discussions.md))**    | Generates `best_practices.md` file based on previous discussions in the repository                                                          |
-| **💎 [Test (`/test`](./test.md))**                                                       | generate tests for a selected component, based on the PR code changes                                                                       |
 
 Note that the tools marked with 💎 are available only for Qodo Merge users.
