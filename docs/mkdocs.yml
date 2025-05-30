@@ -40,6 +40,7 @@ nav:
      - 💎 Implement: 'tools/implement.md'
      - 💎 Improve Components: 'tools/improve_component.md'
      - 💎 Scan Repo Discussions: 'tools/scan_repo_discussions.md'
+     - 💎 Similar Code: 'tools/similar_code.md'
   - Core Abilities:
       - 'core-abilities/index.md'
       - Auto best practices: 'core-abilities/auto_best_practices.md'
