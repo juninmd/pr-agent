@@ -274,7 +274,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
-                    markdown_text += f"<details><summary>{emoji}&nbsp;<strong>TODO sections</strong></summary>\n\n"
+                    markdown_text += f"<details><summary>{emoji}&nbsp;<strong>TODO sections ({len(value)} items)</strong></summary>\n\n"
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
