@@ -44,7 +44,7 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 ## Getting Started
 
 ### Try it now 
-Test PR-Agent on any public GitHub repository by commenting `@CodiumAI-Agent /review`
+Test PR-Agent on any public GitHub repository by commenting `@CodiumAI-Agent /improve`
 
 ### GitHub Action
 Add automated PR reviews to your repository with a simple workflow file using [GitHub Action setup guide](https://qodo-merge-docs.qodo.ai/installation/github/#run-as-a-github-action)
