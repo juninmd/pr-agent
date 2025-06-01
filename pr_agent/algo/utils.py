@@ -164,6 +164,7 @@ def convert_to_markdown_v2(output_data: dict,
     if gfm_supported:
         markdown_text += "<table>\n"
 
+    todos_summary = output_data['review'].pop('todos_summary', '')
     for key, value in output_data['review'].items():
         if value is None or value == '' or value == {} or value == []:
             if key.lower() not in ['can_be_split', 'key_issues_to_review']:
@@ -274,7 +275,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
-                    markdown_text += f"<details><summary>{emoji}&nbsp;<strong>TODO sections ({len(value)} items)</strong></summary>\n\n"
+                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({len(value)} items)</strong>\n<details><summary>{todos_summary}</summary>\n\n"
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
@@ -288,7 +289,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
-                    markdown_text += f"<details><summary>### {emoji} TODO sections</summary>\n\n"
+                    markdown_text += f"### {emoji} TODO sections ({len(value)} items)\n<details><summary>{todos_summary}</summary>\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
                             markdown_text += f"- {format_todo_item(todo_item)}\n"
