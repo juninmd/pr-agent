@@ -224,16 +224,6 @@ def convert_to_markdown_v2(output_data: dict,
                     value = emphasize_header(value.strip(), only_markdown=True)
                     markdown_text += f"{value}\n\n"
         elif 'todo sections' in key_nice.lower():
-
-            def format_multiline_html_item(file: str, line_range: Tuple[int, int], content: str, url: str) -> str:
-                label = f"{file} [{line_range[0]}-{line_range[1]}]" if line_range[0] != line_range[1] else f"{file} [{line_range[0]}]"
-                first_line, *rest_lines = content.strip().split("\n")
-                if rest_lines:
-                    rest = "<br>".join(rest_lines)
-                    return f"<li><a href='{url}'>{label}</a>: {first_line}<br><blockquote>{rest}</blockquote></li>"
-                else:
-                    return f"<li><a href='{url}'>{label}</a>: {first_line}</li>"
-
             def format_todo_item(todo_item: TodoItem) -> str:
                 relevant_file = todo_item.get('relevant_file', '').strip()
                 line_range = todo_item.get('line_range', [])
