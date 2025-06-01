@@ -32,18 +32,18 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 - [Getting Started](#getting-started)
 - [News and Updates](#news-and-updates)
 - [Overview](#overview)
-- [Example results](#example-results)
-- [Try it now](#try-it-now)
-- [Qodo Merge](https://qodo-merge-docs.qodo.ai/overview/pr_agent_pro/)
-- [How it works](#how-it-works)
-- [Why use PR-Agent?](#why-use-pr-agent)
-- [Data privacy](#data-privacy)
+- [See It in Action](#see-it-in-action)
+- [Try It Now](#try-it-now)
+- [Qodo Merge 💎](#qodo-merge-)
+- [How It Works](#how-it-works)
+- [Why Use PR-Agent?](#why-use-pr-agent)
+- [Data Privacy](#data-privacy)
 - [Contributing](#contributing)
 - [Links](#links)
 
 ## Getting Started
 
-### Try it now
+### Try it now 
 Test PR-Agent on any public GitHub repository by commenting `@CodiumAI-Agent /review`
 
 ### GitHub Action
@@ -57,7 +57,7 @@ Add automated PR reviews to your repository with a simple workflow file using [G
 ### CLI Usage
 Run PR-Agent locally on your repository via command line: [Local CLI setup guide](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#local-repo-cli)
 
-### [Qodo Merge 💎](https://github.com/qodo-ai/pr-agent?tab=readme-ov-file#qodo-merge-)
+### Qodo Merge 💎 
 Zero-setup hosted solution with advanced features and priority support
 -  [Intro and Installation guide](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/)
 -  [Plans & Pricing](https://www.qodo.ai/pricing/)
@@ -144,7 +144,7 @@ Supported commands per platform:
 [//]: # (- Support for additional git providers is described in [here]&#40;./docs/Full_environments.md&#41;)
 ___
 
-## See it in Action
+## See It in Action
 
 </div>
 <h4><a href="https://github.com/Codium-ai/pr-agent/pull/530">/describe</a></h4>
@@ -179,7 +179,7 @@ ___
 </div>
 <hr>
 
-## Try it now
+## Try It Now
 
 Try the Claude Sonnet powered PR-Agent instantly on _your public GitHub repository_. Just mention `@CodiumAI-Agent` and add the desired command in any PR comment. The agent will generate a response based on your command.
 For example, add a comment to any pull request with the following text:
@@ -205,7 +205,7 @@ It does not have 'edit' access to your repo, for example, so it cannot update th
 4. **Extra features** - In addition to the benefits listed above, Qodo Merge will emphasize more customization, and the usage of static code analysis, in addition to LLM logic, to improve results.
 See [here](https://qodo-merge-docs.qodo.ai/overview/pr_agent_pro/) for a list of features available in Qodo Merge.
 
-## How it works
+## How It Works
 
 The following diagram illustrates PR-Agent tools and their flow:
 
@@ -213,7 +213,7 @@ The following diagram illustrates PR-Agent tools and their flow:
 
 Check out the [PR Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/#pr-compression-strategy) page for more details on how we convert a code diff to a manageable LLM prompt
 
-## Why use PR-Agent?
+## Why Use PR-Agent?
 
 A reasonable question that can be asked is: `"Why use PR-Agent? What makes it stand out from existing tools?"`
 
@@ -224,7 +224,7 @@ Here are some advantages of PR-Agent:
 - Our JSON prompting strategy enables us to have **modular, customizable tools**. For example, the '/review' tool categories can be controlled via the [configuration](pr_agent/settings/configuration.toml) file. Adding additional categories is easy and accessible.
 - We support **multiple git providers** (GitHub, GitLab, BitBucket), **multiple ways** to use the tool (CLI, GitHub Action, GitHub App, Docker, ...), and **multiple models** (GPT, Claude, Deepseek, ...)
 
-## Data privacy
+## Data Privacy
 
 ### Self-hosted PR-Agent
 
