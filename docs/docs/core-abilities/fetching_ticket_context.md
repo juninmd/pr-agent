@@ -339,11 +339,12 @@ Include a ticket reference in your PR description using either:
 Name your branch with the ticket ID as a prefix (e.g., `ABC-123-feature-description` or `feature/ABC-123/feature-description`).
 
 !!! note "Linear Base URL"
-   For shortened ticket IDs or branch detection (method 2), you must configure the Linear base URL in your configuration file under the [linear] section:
 
-   ```toml
-   [linear]
-   linear_base_url = "https://linear.app/[ORG_ID]"
-   ```
-
-   Replace `[ORG_ID]` with your Linear organization identifier.
+       For shortened ticket IDs or branch detection (method 2), you must configure the Linear base URL in your configuration file under the [linear] section:
+    
+       ```toml
+       [linear]
+       linear_base_url = "https://linear.app/[ORG_ID]"
+       ```
+    
+       Replace `[ORG_ID]` with your Linear organization identifier.
