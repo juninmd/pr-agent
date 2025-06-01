@@ -43,7 +43,7 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 
 ## Getting Started
 
-### Try it now 
+### Try it Instantly
 Test PR-Agent on any public GitHub repository by commenting `@CodiumAI-Agent /improve`
 
 ### GitHub Action
@@ -57,7 +57,7 @@ Add automated PR reviews to your repository with a simple workflow file using [G
 ### CLI Usage
 Run PR-Agent locally on your repository via command line: [Local CLI setup guide](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#local-repo-cli)
 
-### Qodo Merge 💎 
+### Discover Qodo Merge 💎 
 Zero-setup hosted solution with advanced features and priority support
 -  [Intro and Installation guide](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/)
 -  [Plans & Pricing](https://www.qodo.ai/pricing/)
