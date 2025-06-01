@@ -27,6 +27,20 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 </a>
 </div>
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [News and Updates](#news-and-updates)
+- [Overview](#overview)
+- [Example results](#example-results)
+- [Try it now](#try-it-now)
+- [Qodo Merge](https://qodo-merge-docs.qodo.ai/overview/pr_agent_pro/)
+- [How it works](#how-it-works)
+- [Why use PR-Agent?](#why-use-pr-agent)
+- [Data privacy](#data-privacy)
+- [Contributing](#contributing)
+- [Links](#links)
+
 ## Getting Started
 
 ### Try it now
