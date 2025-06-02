@@ -48,7 +48,7 @@ class AWSSecretsManagerProvider(SecretProvider):
 
     def store_secret(self, secret_name: str, secret_value: str):
         try:
-            self.client.update_secret(
+            self.client.put_secret_value(
                 SecretId=secret_name,
                 SecretString=secret_value
             )
