@@ -67,7 +67,7 @@ class TestAWSSecretsManagerProvider:
         mock_client.update_secret.return_value = {}
 
         provider.store_secret('test-secret', 'test-value')
-        mock_client.update_secret.assert_called_once_with(
+        mock_client.put_secret_value.assert_called_once_with(
             SecretId='test-secret',
             SecretString='test-value'
         )
@@ -83,7 +83,7 @@ class TestAWSSecretsManagerProvider:
 
     def test_store_secret_failure(self):
         provider, mock_client = self._provider()
-        mock_client.update_secret.side_effect = Exception("AWS error")
+        mock_client.put_secret_value.side_effect = Exception("AWS error")
 
         with pytest.raises(Exception):
             provider.store_secret('test-secret', 'test-value') 

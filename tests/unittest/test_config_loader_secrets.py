@@ -7,7 +7,7 @@ from pr_agent.config_loader import apply_secrets_manager_config, apply_secrets_t
 class TestConfigLoaderSecrets:
 
     def test_apply_secrets_manager_config_success(self):
-        with patch('pr_agent.config_loader.get_secret_provider') as mock_get_provider, \
+        with patch('pr_agent.secret_providers.get_secret_provider') as mock_get_provider, \
              patch('pr_agent.config_loader.apply_secrets_to_config') as mock_apply_secrets, \
              patch('pr_agent.config_loader.get_settings') as mock_get_settings:
 
@@ -26,14 +26,14 @@ class TestConfigLoaderSecrets:
             mock_apply_secrets.assert_called_once_with({'openai.key': 'sk-test'})
 
     def test_apply_secrets_manager_config_no_provider(self):
-        with patch('pr_agent.config_loader.get_secret_provider') as mock_get_provider:
+        with patch('pr_agent.secret_providers.get_secret_provider') as mock_get_provider:
             mock_get_provider.return_value = None
 
             # Confirm no exception is raised
             apply_secrets_manager_config()
 
     def test_apply_secrets_manager_config_not_aws(self):
-        with patch('pr_agent.config_loader.get_secret_provider') as mock_get_provider, \
+        with patch('pr_agent.secret_providers.get_secret_provider') as mock_get_provider, \
              patch('pr_agent.config_loader.get_settings') as mock_get_settings:
 
             # Mock Google Cloud Storage provider
@@ -113,7 +113,7 @@ class TestConfigLoaderSecrets:
             settings.set.assert_not_called()
 
     def test_apply_secrets_manager_config_exception_handling(self):
-        with patch('pr_agent.config_loader.get_secret_provider') as mock_get_provider:
+        with patch('pr_agent.secret_providers.get_secret_provider') as mock_get_provider:
             mock_get_provider.side_effect = Exception("Provider error")
 
             # Confirm processing continues even when exception occurs
