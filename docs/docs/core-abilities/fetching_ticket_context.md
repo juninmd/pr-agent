@@ -9,9 +9,8 @@ This integration enriches the review process by automatically surfacing relevant
 
 **Ticket systems supported**:
 
-- [GitHub](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#github-issues-integration)
-- [Jira (💎)](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#jira-integration)
-- [Linear (💎)](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#linear-integration)
+- GitHub
+- Jira (💎)
 
 **Ticket data fetched:**
 
@@ -76,17 +75,13 @@ The recommended way to authenticate with Jira Cloud is to install the Qodo Merge
 
 Installation steps:
 
-1. Go to the [Qodo Merge integrations page](https://app.qodo.ai/qodo-merge/integrations)
-
-2. Click on the Connect **Jira Cloud** button to connect the Jira Cloud app
-
-3. Click the `accept` button.<br>
+1. Click [here](https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=8krKmA4gMD8mM8z24aRCgPCSepZNP1xf&scope=read%3Ajira-work%20offline_access&redirect_uri=https%3A%2F%2Fregister.jira.pr-agent.codium.ai&state=qodomerge&response_type=code&prompt=consent) to install the Qodo Merge app in your Jira Cloud instance, click the `accept` button.<br>
 ![Jira Cloud App Installation](https://www.qodo.ai/images/pr_agent/jira_app_installation1.png){width=384}
 
-4. After installing the app, you will be redirected to the Qodo Merge registration page. and you will see a success message.<br>
+2. After installing the app, you will be redirected to the Qodo Merge registration page. and you will see a success message.<br>
 ![Jira Cloud App success message](https://www.qodo.ai/images/pr_agent/jira_app_success.png){width=384}
 
-5. Now Qodo Merge will be able to fetch Jira ticket context for your PRs.
+3. Now Qodo Merge will be able to fetch Jira ticket context for your PRs.
 
 **2) Email/Token Authentication**
 
@@ -286,6 +281,80 @@ This following steps will help you check if the token is working correctly, and 
             print(f"Error fetching JIRA ticket details: {e}")
     ```
 
+### Multi-JIRA Server Configuration 💎
+
+Qodo Merge supports connecting to multiple JIRA servers using different authentication methods.
+
+=== "Email/Token (Basic Auth)"
+
+    Configure multiple servers using Email/Token authentication:
+
+    - `jira_servers`: List of JIRA server URLs
+    - `jira_api_token`: List of API tokens (for Cloud) or passwords (for Data Center)
+    - `jira_api_email`: List of emails (for Cloud) or usernames (for Data Center)
+    - `jira_base_url`: Default server for ticket IDs like `PROJ-123`, Each repository can configure (local config file) its own `jira_base_url` to choose which server to use by default.
+
+    **Example Configuration:**
+    ```toml
+    [jira]
+    # Server URLs
+    jira_servers = ["https://company.atlassian.net", "https://datacenter.jira.com"]
+
+    # API tokens/passwords
+    jira_api_token = ["cloud_api_token_here", "datacenter_password"]
+
+    # Emails/usernames (both required)
+    jira_api_email = ["user@company.com", "datacenter_username"]
+
+    # Default server for ticket IDs
+    jira_base_url = "https://company.atlassian.net"
+    ```
+
+=== "PAT Auth"
+
+    Configure multiple servers using Personal Access Token authentication:
+
+    - `jira_servers`: List of JIRA server URLs
+    - `jira_api_token`: List of PAT tokens
+    - `jira_api_email`: Not needed (can be omitted or left empty)
+    - `jira_base_url`: Default server for ticket IDs like `PROJ-123`, Each repository can configure (local config file) its own `jira_base_url` to choose which server to use by default.
+
+    **Example Configuration:**
+    ```toml
+    [jira]
+    # Server URLs
+    jira_servers = ["https://server1.jira.com", "https://server2.jira.com"]
+
+    # PAT tokens only
+    jira_api_token = ["pat_token_1", "pat_token_2"]
+
+    # Default server for ticket IDs
+    jira_base_url = "https://server1.jira.com"
+    ```
+
+    **Mixed Authentication (Email/Token + PAT):**
+    ```toml
+    [jira]
+    jira_servers = ["https://company.atlassian.net", "https://server.jira.com"]
+    jira_api_token = ["cloud_api_token", "server_pat_token"]
+    jira_api_email = ["user@company.com", ""]  # Empty for PAT
+    ```
+
+=== "Jira Cloud App"
+
+    For Jira Cloud instances using App Authentication:
+
+    1. Install the Qodo Merge app on each JIRA Cloud instance you want to connect to
+    2. Set the default server for ticket ID resolution:
+
+    ```toml
+    [jira]
+    jira_base_url = "https://primary-team.atlassian.net"
+    ```
+
+    Full URLs (e.g., `https://other-team.atlassian.net/browse/TASK-456`) will automatically use the correct connected instance.
+
+
 ### How to link a PR to a Jira ticket
 
 To integrate with Jira, you can link your PR to a ticket using either of these methods:
@@ -305,46 +374,3 @@ Name your branch with the ticket ID as a prefix (e.g., `ISSUE-123-feature-descri
     [jira]
     jira_base_url = "https://<JIRA_ORG>.atlassian.net"
     ```
-
-## Linear Integration 💎
-
-### Linear App Authentication
-
-The recommended way to authenticate with Linear is to connect the Linear app through the Qodo Merge portal.
-
-Installation steps:
-
-1. Go to the [Qodo Merge integrations page](https://app.qodo.ai/qodo-merge/integrations)
-
-2. Navigate to the **Integrations** tab
-
-3. Click on the **Linear** button to connect the Linear app
-
-4. Follow the authentication flow to authorize Qodo Merge to access your Linear workspace
-
-5. Once connected, Qodo Merge will be able to fetch Linear ticket context for your PRs
-
-### How to link a PR to a Linear ticket
-
-Qodo Merge will automatically detect Linear tickets using either of these methods:
-
-**Method 1: Description Reference:**
-
-Include a ticket reference in your PR description using either:
-- The complete Linear ticket URL: `https://linear.app/[ORG_ID]/issue/[TICKET_ID]`
-- The shortened ticket ID: `[TICKET_ID]` (e.g., `ABC-123`) - requires linear_base_url configuration (see below).
-
-**Method 2: Branch Name Detection:**
-
-Name your branch with the ticket ID as a prefix (e.g., `ABC-123-feature-description` or `feature/ABC-123/feature-description`).
-
-!!! note "Linear Base URL"
-
-       For shortened ticket IDs or branch detection (method 2), you must configure the Linear base URL in your configuration file under the [linear] section:
-    
-       ```toml
-       [linear]
-       linear_base_url = "https://linear.app/[ORG_ID]"
-       ```
-    
-       Replace `[ORG_ID]` with your Linear organization identifier.
