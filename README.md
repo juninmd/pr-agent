@@ -65,6 +65,11 @@ Zero-setup hosted solution with advanced features and priority support
 
 ## News and Updates
 
+## Jun 3, 2025
+
+Qodo Merge now offers a simplified free tier 💎.
+Organizations can use Qodo Merge at no cost, with a [monthly limit](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users) of 75 PR reviews per organization.
+
 ## May 17, 2025
 
 - v0.29 was [released](https://github.com/qodo-ai/pr-agent/releases)
