@@ -286,6 +286,83 @@ This following steps will help you check if the token is working correctly, and 
             print(f"Error fetching JIRA ticket details: {e}")
     ```
 
+
+### Multi-JIRA Server Configuration 💎
+
+Qodo Merge supports connecting to multiple JIRA servers using different authentication methods.
+
+=== "Email/Token (Basic Auth)"
+
+    Configure multiple servers using Email/Token authentication:
+
+    - `jira_servers`: List of JIRA server URLs
+    - `jira_api_token`: List of API tokens (for Cloud) or passwords (for Data Center)
+    - `jira_api_email`: List of emails (for Cloud) or usernames (for Data Center)
+    - `jira_base_url`: Default server for ticket IDs like `PROJ-123`, Each repository can configure (local config file) its own `jira_base_url` to choose which server to use by default.
+
+    **Example Configuration:**
+    ```toml
+    [jira]
+    # Server URLs
+    jira_servers = ["https://company.atlassian.net", "https://datacenter.jira.com"]
+
+    # API tokens/passwords
+    jira_api_token = ["cloud_api_token_here", "datacenter_password"]
+
+    # Emails/usernames (both required)
+    jira_api_email = ["user@company.com", "datacenter_username"]
+
+    # Default server for ticket IDs
+    jira_base_url = "https://company.atlassian.net"
+    ```
+
+=== "PAT Auth"
+
+    Configure multiple servers using Personal Access Token authentication:
+
+    - `jira_servers`: List of JIRA server URLs
+    - `jira_api_token`: List of PAT tokens
+    - `jira_api_email`: Not needed (can be omitted or left empty)
+    - `jira_base_url`: Default server for ticket IDs like `PROJ-123`, Each repository can configure (local config file) its own `jira_base_url` to choose which server to use by default.
+
+    **Example Configuration:**
+    ```toml
+    [jira]
+    # Server URLs
+    jira_servers = ["https://server1.jira.com", "https://server2.jira.com"]
+
+    # PAT tokens only
+    jira_api_token = ["pat_token_1", "pat_token_2"]
+
+    # Default server for ticket IDs
+    jira_base_url = "https://server1.jira.com"
+    ```
+
+    **Mixed Authentication (Email/Token + PAT):**
+    ```toml
+    [jira]
+    jira_servers = ["https://company.atlassian.net", "https://server.jira.com"]
+    jira_api_token = ["cloud_api_token", "server_pat_token"]
+    jira_api_email = ["user@company.com", ""]  # Empty for PAT
+    ```
+
+=== "Jira Cloud App"
+
+    For Jira Cloud instances using App Authentication:
+
+    1. Install the Qodo Merge app on each JIRA Cloud instance you want to connect to
+    2. Set the default server for ticket ID resolution:
+
+    ```toml
+    [jira]
+    jira_base_url = "https://primary-team.atlassian.net"
+    ```
+
+    Full URLs (e.g., `https://other-team.atlassian.net/browse/TASK-456`) will automatically use the correct connected instance.
+
+
+
+
 ### How to link a PR to a Jira ticket
 
 To integrate with Jira, you can link your PR to a ticket using either of these methods:
@@ -339,12 +416,11 @@ Include a ticket reference in your PR description using either:
 Name your branch with the ticket ID as a prefix (e.g., `ABC-123-feature-description` or `feature/ABC-123/feature-description`).
 
 !!! note "Linear Base URL"
-
-       For shortened ticket IDs or branch detection (method 2), you must configure the Linear base URL in your configuration file under the [linear] section:
+    For shortened ticket IDs or branch detection (method 2), you must configure the Linear base URL in your configuration file under the [linear] section:
     
-       ```toml
-       [linear]
-       linear_base_url = "https://linear.app/[ORG_ID]"
-       ```
+    ```toml
+    [linear]
+    linear_base_url = "https://linear.app/[ORG_ID]"
+    ```
     
-       Replace `[ORG_ID]` with your Linear organization identifier.
+    Replace `[ORG_ID]` with your Linear organization identifier.
