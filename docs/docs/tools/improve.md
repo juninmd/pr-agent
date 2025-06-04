@@ -218,73 +218,73 @@ For organizations managing multiple repositories with different requirements, Qo
 2. **Groups of repositories**: Repositories can be mapped to shared group-level best practices for consistent standards across similar projects
 3. **Monorepos with subprojects**: Large monorepos can have both repository-level and subproject-level best practices, with automatic path-based matching
 
-???- info "Setting up global hierarchical best practices"
+#### Setting up global hierarchical best practices
     
-    1\. Create a new repository named `pr-agent-settings` in your organization/workspace.
-    
-    2\. Build the folder hierarchy in your `pr-agent-settings` repository, for example:
-    
-       ```bash
-       pr-agent-settings/
-       ├── metadata.yaml                     # Maps repos/folders to best practice paths
-       └── codebase_standards/               # Root for all best practice definitions
-           ├── global/                       # Global rules, inherited widely
-           │   └── best_practices.md
-           ├── groups/                       # For groups of repositories
-           │   ├── frontend_repos/
-           │   │   └── best_practices.md
-           │   ├── backend_repos/
-           │   │   └── best_practices.md
-           │   └── ...
-           ├── qodo-merge/                   # For standalone repositories
-           │   └── best_practices.md
-           ├── qodo-monorepo/                # For monorepo-specific rules 
-           │   ├── best_practices.md         # Root level monorepo rules
-           │   ├── qodo-github/              # Subproject best practices
-           │   │   └── best_practices.md
-           │   └── qodo-gitlab/              # Another subproject
-           │       └── best_practices.md
-           └── ...                           # More repositories
-       ```
-    
-    3\. Define the metadata file `metadata.yaml` that maps your repositories to their relevant best practices paths, for example:
-    
-       ```yaml
-       # Standalone repos
-       qodo-merge:
+1\. Create a new repository named `pr-agent-settings` in your organization/workspace.
+
+2\. Build the folder hierarchy in your `pr-agent-settings` repository, for example:
+
+   ```bash
+   pr-agent-settings/
+   ├── metadata.yaml                     # Maps repos/folders to best practice paths
+   └── codebase_standards/               # Root for all best practice definitions
+       ├── global/                       # Global rules, inherited widely
+       │   └── best_practices.md
+       ├── groups/                       # For groups of repositories
+       │   ├── frontend_repos/
+       │   │   └── best_practices.md
+       │   ├── backend_repos/
+       │   │   └── best_practices.md
+       │   └── ...
+       ├── qodo-merge/                   # For standalone repositories
+       │   └── best_practices.md
+       ├── qodo-monorepo/                # For monorepo-specific rules 
+       │   ├── best_practices.md         # Root level monorepo rules
+       │   ├── qodo-github/              # Subproject best practices
+       │   │   └── best_practices.md
+       │   └── qodo-gitlab/              # Another subproject
+       │       └── best_practices.md
+       └── ...                           # More repositories
+   ```
+
+3\. Define the metadata file `metadata.yaml` that maps your repositories to their relevant best practices paths, for example:
+
+   ```yaml
+   # Standalone repos
+   qodo-merge:
+     best_practices_paths:
+       - "qodo-merge"
+
+   # Group-associated repos
+   repo_b:
+     best_practices_paths:
+       - "groups/backend_repos"
+
+   # Multi-group repos
+   repo_c:
+     best_practices_paths:
+       - "groups/frontend_repos"
+       - "groups/backend_repos"
+
+   # Monorepo with subprojects
+   qodo-monorepo:
+     best_practices_paths:
+       - "qodo-monorepo"
+     monorepo_subprojects:
+       qodo-github:
          best_practices_paths:
-           - "qodo-merge"
-    
-       # Group-associated repos
-       repo_b:
+           - "qodo-monorepo/qodo-github"
+       qodo-gitlab:
          best_practices_paths:
-           - "groups/backend_repos"
-    
-       # Multi-group repos
-       repo_c:
-         best_practices_paths:
-           - "groups/frontend_repos"
-           - "groups/backend_repos"
-    
-       # Monorepo with subprojects
-       qodo-monorepo:
-         best_practices_paths:
-           - "qodo-monorepo"
-         monorepo_subprojects:
-           qodo-github:
-             best_practices_paths:
-               - "qodo-monorepo/qodo-github"
-           qodo-gitlab:
-             best_practices_paths:
-               - "qodo-monorepo/qodo-gitlab"
-       ```
-    
-    4\. Set the following configuration in your global configuration file:
-    
-       ```toml
-       [best_practices]
-       enable_global_best_practices = true
-       ```
+           - "qodo-monorepo/qodo-gitlab"
+   ```
+
+4\. Set the following configuration in your global configuration file:
+
+   ```toml
+   [best_practices]
+   enable_global_best_practices = true
+   ```
 
 ???- info "Best practices priority and fallback behavior"
 
@@ -312,21 +312,32 @@ For organizations managing multiple repositories with different requirements, Qo
     - **Monorepo subproject matching**: For monorepos, Qodo Merge automatically matches PR file paths against subproject paths to apply relevant best practices
     - **Multiple group inheritance**: Repositories can inherit from multiple groups, and all applicable best practices are combined
 
-#### Best practices for multiple languages
+[//]: # (#### Best practices for multiple languages)
 
-For a git organization working with multiple programming languages, you can maintain a centralized global `best_practices.md` file containing language-specific guidelines.
-When reviewing pull requests, Qodo Merge automatically identifies the programming language and applies the relevant best practices from this file.
+[//]: # ()
+[//]: # (For a git organization working with multiple programming languages, you can maintain a centralized global `best_practices.md` file containing language-specific guidelines.)
 
-To do this, structure your `best_practices.md` file using the following format:
+[//]: # (When reviewing pull requests, Qodo Merge automatically identifies the programming language and applies the relevant best practices from this file.)
 
-```
-# [Python]
-...
-# [Java]
-...
-# [JavaScript]
-...
-```
+[//]: # ()
+[//]: # (To do this, structure your `best_practices.md` file using the following format:)
+
+[//]: # ()
+[//]: # (```)
+
+[//]: # (# [Python])
+
+[//]: # (...)
+
+[//]: # (# [Java])
+
+[//]: # (...)
+
+[//]: # (# [JavaScript])
+
+[//]: # (...)
+
+[//]: # (```)
 
 #### Dedicated label for best practices suggestions
 
