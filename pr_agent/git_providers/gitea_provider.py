@@ -471,11 +471,11 @@ class GiteaProvider(GitProvider):
 
             if status == 'added':
                 edit_type = EDIT_TYPE.ADDED
-            elif status == 'removed':
+            elif status == 'removed' or status == 'deleted':
                 edit_type = EDIT_TYPE.DELETED
             elif status == 'renamed':
                 edit_type = EDIT_TYPE.RENAMED
-            elif status == 'modified':
+            elif status == 'modified' or status == 'changed':
                 edit_type = EDIT_TYPE.MODIFIED
             else:
                 self.logger.error(f"Unknown edit type: {status}")
