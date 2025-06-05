@@ -164,6 +164,7 @@ def convert_to_markdown_v2(output_data: dict,
     if gfm_supported:
         markdown_text += "<table>\n"
 
+    todos_summary = output_data['review'].pop('todos_summary', '')
     for key, value in output_data['review'].items():
         if value is None or value == '' or value == {} or value == []:
             if key.lower() not in ['can_be_split', 'key_issues_to_review']:
@@ -223,16 +224,6 @@ def convert_to_markdown_v2(output_data: dict,
                     value = emphasize_header(value.strip(), only_markdown=True)
                     markdown_text += f"{value}\n\n"
         elif 'todo sections' in key_nice.lower():
-
-            def format_multiline_html_item(file: str, line_range: Tuple[int, int], content: str, url: str) -> str:
-                label = f"{file} [{line_range[0]}-{line_range[1]}]" if line_range[0] != line_range[1] else f"{file} [{line_range[0]}]"
-                first_line, *rest_lines = content.strip().split("\n")
-                if rest_lines:
-                    rest = "<br>".join(rest_lines)
-                    return f"<li><a href='{url}'>{label}</a>: {first_line}<br><blockquote>{rest}</blockquote></li>"
-                else:
-                    return f"<li><a href='{url}'>{label}</a>: {first_line}</li>"
-
             def format_todo_item(todo_item: TodoItem) -> str:
                 relevant_file = todo_item.get('relevant_file', '').strip()
                 line_range = todo_item.get('line_range', [])
@@ -274,7 +265,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
-                    markdown_text += f"<details><summary>{emoji}&nbsp;<strong>TODO sections</strong></summary>\n\n"
+                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({len(value)} items)</strong>\n<details><summary>{todos_summary}</summary>\n\n"
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
@@ -288,7 +279,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
-                    markdown_text += f"<details><summary>### {emoji} TODO sections</summary>\n\n"
+                    markdown_text += f"### {emoji} TODO sections ({len(value)} items)\n<details><summary>{todos_summary}</summary>\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
                             markdown_text += f"- {format_todo_item(todo_item)}\n"
