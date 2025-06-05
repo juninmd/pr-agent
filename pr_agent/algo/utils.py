@@ -241,24 +241,24 @@ def convert_to_markdown_v2(output_data: dict,
                     return f"{relevant_file} {line_str}: {content}"
 
                 line_str = f"[{line_range[0]}]" if line_range[0] == line_range[1] else f"[{line_range[0]}-{line_range[1]}]"
-                file_line = f"{relevant_file} {line_str}"
+                file_ref = f"{relevant_file} {line_str}"
                 if reference_link:
                     if gfm_supported:
-                        file_line = f"<a href='{reference_link}'>{file_line}</a>"
+                        file_ref = f"<a href='{reference_link}'>{file_ref}</a>"
                     else:
-                        file_line = f"[{file_line}]({reference_link})"
+                        file_ref = f"[{file_ref}]({reference_link})"
 
                 content_lines = content.strip().split("\n")
                 # if TODO content is single-line :
                 if len(content_lines) == 1:
-                    return f"{file_line}: {content_lines[0]}"
+                    return f"{file_ref}: {content_lines[0]}"
                 # else if TODO content is multi-line:
                 elif len(content_lines) > 1:
                     content_lines = "<br>".join(content_lines)
-                    return f"{file_line}: <blockquote>\n{content_lines}\n</blockquote>"
+                    return f"{file_ref}: <blockquote>\n{content_lines}\n</blockquote>"
                 # else if TODO content is empty:
                 else:
-                    return file_line
+                    return file_ref
 
             if gfm_supported:
                 markdown_text += f"<tr><td>"
