@@ -409,7 +409,7 @@ class GiteaProvider(GitProvider):
     def _get_file_content_from_base(self, filename: str) -> str:
         return self.repo_api.get_file_content(
             owner=self.owner,
-            repo=self.base_ref,
+            repo=self.repo,
             commit_sha=self.base_sha,
             filepath=filename
         )
@@ -417,7 +417,7 @@ class GiteaProvider(GitProvider):
     def _get_file_content_from_latest_commit(self, filename: str) -> str:
         return self.repo_api.get_file_content(
             owner=self.owner,
-            repo=self.base_ref,
+            repo=self.repo,
             commit_sha=self.last_commit.sha,
             filepath=filename
         )
@@ -471,11 +471,11 @@ class GiteaProvider(GitProvider):
 
             if status == 'added':
                 edit_type = EDIT_TYPE.ADDED
-            elif status == 'removed':
+            elif status == 'removed' or status == 'deleted':
                 edit_type = EDIT_TYPE.DELETED
             elif status == 'renamed':
                 edit_type = EDIT_TYPE.RENAMED
-            elif status == 'modified':
+            elif status == 'modified' or status == 'changed':
                 edit_type = EDIT_TYPE.MODIFIED
             else:
                 self.logger.error(f"Unknown edit type: {status}")
