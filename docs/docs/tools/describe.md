@@ -73,7 +73,7 @@ enable_pr_diagram = true
 
 ## Configuration options
 
-!!! example "Possible configurations"
+???+ example "Possible configurations"
 
     <table>
       <tr>

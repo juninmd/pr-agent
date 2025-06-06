@@ -195,7 +195,7 @@ This following steps will help you check if the basic auth is working correctly,
 
 2. run the following Python script (after replacing the placeholders with your actual values):
 
-??? example "Script to validate basic auth"
+???- example "Script to validate basic auth"
 
     ```python
     from jira import JIRA
@@ -251,7 +251,7 @@ This following steps will help you check if the token is working correctly, and 
 
 2. run the following Python script (after replacing the placeholders with your actual values):
 
-??? example "Script to validate PAT token"
+??? example- "Script to validate PAT token"
 
     ```python
     from jira import JIRA

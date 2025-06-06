@@ -27,7 +27,7 @@ In order to enable the RAG feature, add the following lines to your configuratio
 enable_rag=true
 ```
 
-!!! example "RAG Arguments Options"
+???+ example "RAG Arguments Options"
 
     <table>
       <tr>
