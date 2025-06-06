@@ -168,9 +168,9 @@ review:
     - ...
   security_concerns: |
     No
-  todo_sections:
+  todo_sections: |
     No
-  todos_summary:
+  todos_summary: |
     No
 {%- if require_can_be_split_review %}
   can_be_split:
@@ -290,9 +290,9 @@ review:
     - ...
   security_concerns: |
     No
-  todo_sections:
+  todo_sections: |
     No
-  todos_summary:
+  todos_summary: |
     No
 {%- if require_can_be_split_review %}
   can_be_split:
