@@ -260,12 +260,9 @@ def convert_to_markdown_v2(output_data: dict,
                 else:
                     return file_ref
 
-            if gfm_supported:
-                markdown_text += f"<tr><td>"
-                if is_value_no(value):
-                    markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
-                else:
-                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({len(value)} items)</strong>\n<details><summary>{todos_summary}</summary>\n\n"
+            def format_todo_items(value: list[TodoItem] | TodoItem) -> str: 
+                markdown_text = ""
+                if gfm_supported:
                     if isinstance(value, list):
                         markdown_text += "<ul>\n"
                         for todo_item in value:
@@ -273,18 +270,33 @@ def convert_to_markdown_v2(output_data: dict,
                         markdown_text += "</ul>\n"
                     else:
                         markdown_text += f"<p>{format_todo_item(value)}</p>\n"
-                    markdown_text += "\n</details>\n"
-                markdown_text += f"</td></tr>\n"
-            else:
-                if is_value_no(value):
-                    markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
-                    markdown_text += f"### {emoji} TODO sections ({len(value)} items)\n<details><summary>{todos_summary}</summary>\n\n"
                     if isinstance(value, list):
                         for todo_item in value:
                             markdown_text += f"- {format_todo_item(todo_item)}\n"
                     else:
                         markdown_text += f"- {format_todo_item(value)}\n"
+                return markdown_text
+ 
+            markdown_todo_items = format_todo_items(value)
+            EXPAND_LINE_THRESHOLD = 10
+            details_open_attr = " open" if markdown_todo_items.count("\n") + 1 <= EXPAND_LINE_THRESHOLD else ""
+            if gfm_supported:
+                markdown_text += "<tr><td>"
+                if is_value_no(value):
+                    markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
+                else:
+                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({len(value)} items)</strong>\n"
+                    markdown_text += f"<details{details_open_attr}><summary>{todos_summary}</summary>\n\n"
+                    markdown_text += markdown_todo_items
+                    markdown_text += "\n</details>\n"
+                markdown_text += "</td></tr>\n"
+            else:
+                if is_value_no(value):
+                    markdown_text += f"### {emoji} No TODO sections\n\n"
+                else:
+                    markdown_text += f"### {emoji} TODO sections ({len(value)} items)\n<details{details_open_attr}><summary>{todos_summary}</summary>\n\n"
+                    markdown_text += markdown_todo_items
                     markdown_text += "\n</details>\n\n"
         elif 'can be split' in key_nice.lower():
             if gfm_supported:
