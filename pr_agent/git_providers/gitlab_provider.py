@@ -6,7 +6,7 @@ from urllib.parse import urlparse, parse_qs
 
 import gitlab
 import requests
-from gitlab import GitlabGetError
+from gitlab import GitlabGetError, GitlabAuthenticationError, GitlabCreateError, GitlabUpdateError
 
 from pr_agent.algo.types import EDIT_TYPE, FilePatchInfo
 
@@ -155,8 +155,14 @@ class GitLabProvider(GitProvider):
                     'commit_message': message
                 })
                 get_logger().debug(f"Created file {file_path} in branch {branch}")
+        except GitlabAuthenticationError as e:
+            get_logger().error(f"Authentication failed while creating/updating file {file_path} in branch {branch}: {e}")
+            raise
+        except (GitlabCreateError, GitlabUpdateError) as e:
+            get_logger().error(f"Permission denied or validation error for file {file_path} in branch {branch}: {e}")
+            raise
         except Exception as e:
-            get_logger().exception(f"Failed to create or update file {file_path} in branch {branch}: {e}")
+            get_logger().exception(f"Unexpected error creating/updating file {file_path} in branch {branch}: {e}")
             raise
 
     def get_diff_files(self) -> list[FilePatchInfo]:
