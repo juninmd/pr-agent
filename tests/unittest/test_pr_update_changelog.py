@@ -91,7 +91,7 @@ class TestPRUpdateChangelog:
         
         # Assert
         assert changelog_tool.changelog_file == ""
-        assert changelog_tool.changelog_file_str != ""  # Should have default content
+        assert changelog_tool.changelog_file_str == ""  # Exception should result in empty string, no default template
 
     def test_prepare_changelog_update_with_existing_content(self, changelog_tool):
         """Test preparing changelog update when existing content exists."""

@@ -198,6 +198,7 @@ Example:
             get_logger().warning(f"Error getting changelog file: {e}")
             self.changelog_file_str = ""
             self.changelog_file = ""
+            return
 
         if not self.changelog_file_str:
             self.changelog_file_str = self._get_default_changelog()
