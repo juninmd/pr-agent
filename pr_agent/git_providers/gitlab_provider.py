@@ -112,8 +112,10 @@ class GitLabProvider(GitProvider):
             get_logger().error(f"Could not get diff for merge request {self.id_mr}")
             raise DiffNotFoundError(f"Could not get diff for merge request {self.id_mr}") from e
 
-    def _ensure_string_content(self, content: Union[str, bytes]) -> str:
+    def _ensure_string_content(self, content: Union[str, bytes, None]) -> str:
         """Convert bytes content to UTF-8 string if needed."""
+        if content is None:
+            return ""
         if isinstance(content, bytes):
             return content.decode('utf-8')
         return content
