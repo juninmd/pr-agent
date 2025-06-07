@@ -53,7 +53,7 @@ class GitLabProvider(GitProvider):
 
     def is_supported(self, capability: str) -> bool:
         if capability in ['get_issue_comments', 'create_inline_comment', 'publish_inline_comments',
-            'publish_file_comments', 'gfm_markdown']: # gfm_markdown is supported in gitlab !
+            'publish_file_comments']: # gfm_markdown is supported in gitlab !
             return False
         return True
 
