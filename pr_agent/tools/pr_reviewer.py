@@ -160,14 +160,17 @@ class PRReviewer:
 
             if get_settings().config.publish_output:
                 # publish the review
-                if get_settings().pr_reviewer.persistent_comment:
-                    if self.incremental.is_incremental:
+                if get_settings().pr_reviewer.persistent_comment and not self.incremental.is_incremental:
+                    if get_settings().pr_reviewer.get('publish_output_no_suggestions', True) or "No major issues detected" not in pr_review:
                         final_update_message = get_settings().pr_reviewer.final_update_message
                         self.git_provider.publish_persistent_comment(pr_review,
                                                                     initial_header=f"{PRReviewHeader.REGULAR.value} 🔍",
                                                                     update_header=True,
                                                                     final_update_message=final_update_message, )
-                    elif get_settings().pr_reviewer.get('publish_output_no_suggestions', True) or "No major issues detected" not in pr_review:
+                    else:
+                        get_logger().info("Review output is not published: no major issues detected.")
+                else:
+                    if get_settings().pr_reviewer.get('publish_output_no_suggestions', True) or "No major issues detected" not in pr_review:
                         self.git_provider.publish_comment(pr_review)
                     else:
                         get_logger().info("Review output is not published: no major issues detected.")
