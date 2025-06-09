@@ -164,7 +164,7 @@ def convert_to_markdown_v2(output_data: dict,
     if gfm_supported:
         markdown_text += "<table>\n"
 
-    todos_summary = output_data['review'].pop('todos_summary', '')
+    todo_summary = output_data['review'].pop('todo_summary', '')
     for key, value in output_data['review'].items():
         if value is None or value == '' or value == {} or value == []:
             if key.lower() not in ['can_be_split', 'key_issues_to_review']:
@@ -289,7 +289,7 @@ def convert_to_markdown_v2(output_data: dict,
                     markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
                     markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({todo_entry_label})</strong>\n"
-                    markdown_text += f"<details{details_open_attr}><summary>{todos_summary}</summary>\n\n"
+                    markdown_text += f"<details{details_open_attr}><summary>{todo_summary}</summary>\n\n"
                     markdown_text += markdown_todo_items
                     markdown_text += "\n</details>\n"
                 markdown_text += "</td></tr>\n"
@@ -297,7 +297,7 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
-                    markdown_text += f"### {emoji} TODO sections ({todo_entry_label})\n<details{details_open_attr}><summary>{todos_summary}</summary>\n\n"
+                    markdown_text += f"### {emoji} TODO sections ({todo_entry_label})\n<details{details_open_attr}><summary>{todo_summary}</summary>\n\n"
                     markdown_text += markdown_todo_items
                     markdown_text += "\n</details>\n\n"
         elif 'can be split' in key_nice.lower():
