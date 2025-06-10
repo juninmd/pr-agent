@@ -108,7 +108,7 @@ class Review(BaseModel):
     security_concerns: str = Field(description="Does this PR code introduce possible vulnerabilities such as exposure of sensitive information (e.g., API keys, secrets, passwords), or security concerns like SQL injection, XSS, CSRF, and others ? Answer 'No' (without explaining why) if there are no possible issues. If there are security concerns or issues, start your answer with a short header, such as: 'Sensitive information exposure: ...', 'SQL injection: ...' etc. Explain your answer. Be specific and give examples if possible")
 {%- endif %}
 {%- if require_todo_scan %}
-    todo_sections: Union[List[TodoSection], str] = Field(description="A list of TODO comments found in the code. Return 'No' (as a string) if there are no TODO comments.")
+    todo_sections: Union[List[TodoSection], str] = Field(description="A list of TODO comments found in the code. Return 'No' (as a string) if there are no TODO comments or the list would be empty.")
     todo_summary: str = Field(description="Summarize the functional areas of the TODO comments found in the code.
       - Focus on describing the *functional areas* of the TODOs, such as:
           testing, error handling, validation, documentation, performance,

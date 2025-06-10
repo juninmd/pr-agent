@@ -278,16 +278,17 @@ def convert_to_markdown_v2(output_data: dict,
                         markdown_text += f"- {format_todo_item(value)}\n"
                 return markdown_text
  
-            markdown_todo_items = format_todo_items(value)
-            EXPAND_LINE_THRESHOLD = 10
-            details_open_attr = " open" if markdown_todo_items.count("\n") + 1 <= EXPAND_LINE_THRESHOLD else ""
-            
-            todo_entry_label = f"{len(value)} " + "entries" if len(value) > 1 else "entry"
             if gfm_supported:
                 markdown_text += "<tr><td>"
                 if is_value_no(value):
                     markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
                 else:
+                    markdown_todo_items = format_todo_items(value)
+
+                    EXPAND_LINE_THRESHOLD = 10
+                    details_open_attr = " open" if markdown_todo_items.count("\n") + 1 <= EXPAND_LINE_THRESHOLD else ""
+                    todo_entry_label = f"{len(value)} " + "entries" if len(value) > 1 else "entry"
+
                     markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({todo_entry_label})</strong>\n"
                     markdown_text += f"<details{details_open_attr}><summary>{todo_summary}</summary>\n\n"
                     markdown_text += markdown_todo_items
@@ -297,6 +298,12 @@ def convert_to_markdown_v2(output_data: dict,
                 if is_value_no(value):
                     markdown_text += f"### {emoji} No TODO sections\n\n"
                 else:
+                    markdown_todo_items = format_todo_items(value)
+
+                    EXPAND_LINE_THRESHOLD = 10
+                    details_open_attr = " open" if markdown_todo_items.count("\n") + 1 <= EXPAND_LINE_THRESHOLD else ""             
+                    todo_entry_label = f"{len(value)} " + "entries" if len(value) > 1 else "entry"
+
                     markdown_text += f"### {emoji} TODO sections ({todo_entry_label})\n<details{details_open_attr}><summary>{todo_summary}</summary>\n\n"
                     markdown_text += markdown_todo_items
                     markdown_text += "\n</details>\n\n"
