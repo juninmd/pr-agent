@@ -75,7 +75,7 @@ class KeyIssuesComponentLink(BaseModel):
 class TodoSection(BaseModel):
     relevant_file: str = Field(description="The file containing the TODO comment")
     line_range: Tuple[int, int] = Field(description="Start and end line numbers of the TODO comment (inclusive). Must be a tuple of two integers, e.g., (7, 7) for a single line or (7, 10) for a range. Do not use list format [7, 7].")
-    content: str = Field(description="The content of the TODO comment. Only include actual TODO comments within code comments (e.g., lines starting with '#', '//', '/*', '<!--').  Remove leading 'TODO' prefixes. Include lines like '# TODO', even if empty after prefix removal. Exclude TODOs outside comments or without appropriate prefixes.")
+    content: str = Field(description="The content of the TODO comment. Only include actual TODO comments within code comments (e.g., lines starting with '#', '//', '/*', '<!--').  Remove leading 'TODO' prefixes. Include lines like '# TODO', even if empty after prefix removal. Exclude TODOs outside comments or without appropriate prefixes. Use | block style only when the line range covers multiple lines (e.g., (7, 10)).")
 
 {%- if related_tickets %}
 
@@ -109,18 +109,15 @@ class Review(BaseModel):
 {%- endif %}
 {%- if require_todo_scan %}
     todo_sections: Union[List[TodoSection], str] = Field(description="A list of TODO comments found in the code. Return 'No' (as a string) if there are no TODO comments.")
-    todos_summary: str = Field(description="When writing TODO section summaries, use this format:
-      [count] TODOs found about [functional area based on TODO content]
-
-      - The [count] is the number of TODO items, equal to the length of the `todo_sections` list.
-      - Functional areas describe what the TODOs are about:
-          testing, error handling, validation, documentation, performance, 
+    todo_summary: str = Field(description="Summarize the functional areas of the TODO comments found in the code.
+      - Focus on describing the *functional areas* of the TODOs, such as:
+          testing, error handling, validation, documentation, performance,
           security, logging, refactoring, API design, UI/UX
 
-      Example:
-        3 TODOs found about input validation and error handling
-      
-      Return 'No' (as a string) if there are no TODO comments.")
+      - Example:
+          TODO related to input validation and error handling
+
+      - Return 'No' (as a string) if there are no TODO comments.")
 {%- endif %}
 {%- if require_can_be_split_review %}
     can_be_split: List[SubPR] = Field(min_items=0, max_items=3, description="Can this PR, which contains {{ num_pr_files }} changed files in total, be divided into smaller sub-PRs with distinct tasks that can be reviewed and merged independently, regardless of the order ? Make sure that the sub-PRs are indeed independent, with no code dependencies between them, and that each sub-PR represent a meaningful independent task. Output an empty list if the PR code does not need to be split.")
@@ -168,9 +165,9 @@ review:
     - ...
   security_concerns: |
     No
-  todo_sections:
+  todo_sections: |
     No
-  todos_summary:
+  todo_summary: |
     No
 {%- if require_can_be_split_review %}
   can_be_split:
@@ -290,9 +287,9 @@ review:
     - ...
   security_concerns: |
     No
-  todo_sections:
+  todo_sections: |
     No
-  todos_summary:
+  todo_summary: |
     No
 {%- if require_can_be_split_review %}
   can_be_split:
