@@ -11,6 +11,7 @@ from gitlab import GitlabGetError, GitlabAuthenticationError, GitlabCreateError,
 from pr_agent.algo.types import EDIT_TYPE, FilePatchInfo
 
 from ..algo.file_filter import filter_ignored
+from ..algo.git_patch_processing import decode_if_bytes
 from ..algo.language_handler import is_valid_file
 from ..algo.utils import (clip_tokens,
                           find_line_number_of_relevant_line_in_file,
@@ -112,19 +113,11 @@ class GitLabProvider(GitProvider):
             get_logger().error(f"Could not get diff for merge request {self.id_mr}")
             raise DiffNotFoundError(f"Could not get diff for merge request {self.id_mr}") from e
 
-    def _ensure_string_content(self, content: Union[str, bytes, None]) -> str:
-        """Convert bytes content to UTF-8 string if needed."""
-        if content is None:
-            return ""
-        if isinstance(content, bytes):
-            return content.decode('utf-8')
-        return content
-
     def get_pr_file_content(self, file_path: str, branch: str) -> str:
         try:
             file_obj = self.gl.projects.get(self.id_project).files.get(file_path, branch)
             content = file_obj.decode()
-            return self._ensure_string_content(content)
+            return decode_if_bytes(content)
         except GitlabGetError:
             # In case of file creation the method returns GitlabGetError (404 file not found).
             # In this case we return an empty string for the diff.
@@ -211,14 +204,9 @@ class GitLabProvider(GitProvider):
                 original_file_content_str = ''
                 new_file_content_str = ''
 
-            try:
-                if isinstance(original_file_content_str, bytes):
-                    original_file_content_str = bytes.decode(original_file_content_str, 'utf-8')
-                if isinstance(new_file_content_str, bytes):
-                    new_file_content_str = bytes.decode(new_file_content_str, 'utf-8')
-            except UnicodeDecodeError:
-                get_logger().warning(
-                    f"Cannot decode file {diff['old_path']} or {diff['new_path']} in merge request {self.id_mr}")
+            # Ensure content is properly decoded
+            original_file_content_str = decode_if_bytes(original_file_content_str)
+            new_file_content_str = decode_if_bytes(new_file_content_str)
 
             edit_type = EDIT_TYPE.MODIFIED
             if diff['new_file']:
