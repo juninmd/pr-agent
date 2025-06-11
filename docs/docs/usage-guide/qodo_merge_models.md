@@ -1,12 +1,12 @@
 
-The default models used by Qodo Merge (April 2025) are a combination of Claude Sonnet 3.7 and Gemini 2.5 Pro.
+The default models used by Qodo Merge (June 2025) are a combination of Claude Sonnet 4 and Gemini 2.5 Pro.
 
 ### Selecting a Specific Model
 
 Users can configure Qodo Merge to use only a specific model by editing the [configuration](https://qodo-merge-docs.qodo.ai/usage-guide/configuration_options/) file.
 The models supported by Qodo Merge are:
 
-- `claude-3-7-sonnet`
+- `claude-4-sonnet`
 - `o4-mini`
 - `gpt-4.1`
 - `gemini-2.5-pro`
