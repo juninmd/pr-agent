@@ -586,7 +586,7 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 line
 
 ## Configuration options
 
-??? example "General options"
+???+ example "General options"
 
     <table>
       <tr>
@@ -646,7 +646,7 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 line
       </tr>
     </table>
 
-??? example "Params for number of suggestions and AI calls"
+???+ example "Params for number of suggestions and AI calls"
 
     <table>
       <tr>

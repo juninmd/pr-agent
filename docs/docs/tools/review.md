@@ -51,7 +51,7 @@ extra_instructions = "..."
 
 ## Configuration options
 
-!!! example "General options"
+???+ example "General options"
 
     <table>
       <tr>
@@ -76,7 +76,7 @@ extra_instructions = "..."
       </tr>
     </table>
 
-!!! example "Enable\\disable specific sub-sections"
+???+ example "Enable\\disable specific sub-sections"
 
     <table>
       <tr>
@@ -105,7 +105,7 @@ extra_instructions = "..."
       </tr>
     </table>
 
-!!! example "Adding PR labels"
+???+ example "Adding PR labels"
 
     You can enable\disable the `review` tool to add specific labels to the PR:
 
