@@ -155,7 +155,7 @@ extra_instructions = "..."
     - **`ticket compliance`**: Adds a label indicating code compliance level ("Fully compliant" | "PR Code Verified" | "Partially compliant" | "Not compliant") to any GitHub/Jira/Linea ticket linked in the PR. Controlled by the 'require_ticket_labels' flag (default: false). If 'require_no_ticket_labels' is also enabled, PRs without ticket links will receive a "No ticket found" label.
 
 
-### Blocking PRs from merging based on the generated labels
+### Auto-blocking PRs from being merged based on the generated labels
 
 !!! tip ""
 
