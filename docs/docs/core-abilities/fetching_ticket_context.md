@@ -369,7 +369,7 @@ To integrate with Jira, you can link your PR to a ticket using either of these m
 
 **Method 1: Description Reference:**
 
-Include a ticket reference in your PR description using either the complete URL format https://<JIRA_ORG>.atlassian.net/browse/ISSUE-123 or the shortened ticket ID ISSUE-123.
+Include a ticket reference in your PR description, using either the complete URL format `https://<JIRA_ORG>.atlassian.net/browse/ISSUE-123` or the shortened ticket ID `ISSUE-123` (without prefix or suffix for the shortened ID).
 
 **Method 2: Branch Name Detection:**
 
@@ -382,6 +382,7 @@ Name your branch with the ticket ID as a prefix (e.g., `ISSUE-123-feature-descri
     [jira]
     jira_base_url = "https://<JIRA_ORG>.atlassian.net"
     ```
+    Where `<JIRA_ORG>` is your Jira organization identifier (e.g., `mycompany` for `https://mycompany.atlassian.net`).
 
 ## Linear Integration 💎
 
