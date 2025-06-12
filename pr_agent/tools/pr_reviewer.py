@@ -161,7 +161,7 @@ class PRReviewer:
             if get_settings().config.publish_output:
                 # publish the review
                 if get_settings().pr_reviewer.persistent_comment and not self.incremental.is_incremental:
-                    if get_settings().pr_reviewer.get('publish_output_no_suggestions', True) or "No major issues detected" not in pr_review:
+                    if self._should_publish_review(pr_review):
                         final_update_message = get_settings().pr_reviewer.final_update_message
                         self.git_provider.publish_persistent_comment(pr_review,
                                                                     initial_header=f"{PRReviewHeader.REGULAR.value} 🔍",
@@ -170,7 +170,7 @@ class PRReviewer:
                     else:
                         get_logger().info("Review output is not published: no major issues detected.")
                 else:
-                    if get_settings().pr_reviewer.get('publish_output_no_suggestions', True) or "No major issues detected" not in pr_review:
+                    if self._should_publish_review(pr_review):
                         self.git_provider.publish_comment(pr_review)
                     else:
                         get_logger().info("Review output is not published: no major issues detected.")
@@ -182,6 +182,9 @@ class PRReviewer:
                 return
         except Exception as e:
             get_logger().error(f"Failed to review PR: {e}")
+
+    def _should_publish_review(self, pr_review: str) -> bool:
+        return get_settings().pr_reviewer.get('publish_output_no_suggestions', True) or "No major issues detected" not in pr_review
 
     async def _prepare_prediction(self, model: str) -> None:
         self.patches_diff = get_pr_diff(self.git_provider,
