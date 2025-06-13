@@ -72,7 +72,7 @@ A `PR Code Verified` label indicates the PR code meets ticket requirements, but 
     ```
     (default: `false`)
     
-    the `review` tool will also validate that the PR code doesn't contain any additional content that is not related to the ticket. If it does, the PR will be labeled at best as `PR Code Verified`, and the `review` tool will provide a comment with the additional content found in the PR code.
+    the `review` tool will also validate that the PR code doesn't contain any additional content that is not related to the ticket. If it does, the PR will be labeled at best as `PR Code Verified`, and the `review` tool will provide a comment with the additional unrelated content found in the PR code.
 
 ## GitHub Issues Integration
 
