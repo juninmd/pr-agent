@@ -1,4 +1,7 @@
-## Overview - Static Code Analysis 💎
+# Static Code Analysis 💎
+
+` Supported Git Platforms: GitHub, GitLab, Bitbucket`
+
 
 By combining static code analysis with LLM capabilities, Qodo Merge can provide a comprehensive analysis of the PR code changes on a component level.
 

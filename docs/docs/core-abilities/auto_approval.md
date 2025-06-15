@@ -1,6 +1,6 @@
+# Auto-approval 💎
 
-
-> `💎 feature. Platforms supported: GitHub, GitLab, Bitbucket`
+`Supported Git Platforms: GitHub, GitLab, Bitbucket`
 
 Under specific conditions, Qodo Merge can auto-approve a PR when a manual comment is invoked, or when the PR meets certain criteria.
 
