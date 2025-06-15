@@ -118,20 +118,33 @@ For example: `GITLAB.PERSONAL_ACCESS_TOKEN` --> `GITLAB__PERSONAL_ACCESS_TOKEN`
 
 For production Lambda deployments, use AWS Secrets Manager instead of environment variables:
 
-1. Create a secret in AWS Secrets Manager with JSON format like this:
+1. Create individual secrets for each GitLab webhook with this JSON format (e.g., secret name: `project-webhook-secret-001`)
 
 ```json
 {
-  "openai.key": "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "gitlab.shared_secret": "your-shared-secret-from-step-3",
-  "gitlab.personal_access_token": "glpat-xxxxxxxxxxxxxxxxxxxxxxxx"
+  "gitlab_token": "glpat-xxxxxxxxxxxxxxxxxxxxxxxx",
+  "token_name": "project-webhook-001"
 }
 ```
 
-2. Add IAM permission `secretsmanager:GetSecretValue` to your Lambda execution role
+2. Create a main configuration secret for common settings (e.g., secret name: `pr-agent-main-config`)
+
+```json
+{
+  "openai.key": "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
 3. Set these environment variables in your Lambda:
 
 ```bash
-AWS_SECRETS_MANAGER__SECRET_ARN=arn:aws:secretsmanager:us-east-1:123456789012:secret:pr-agent-secrets-AbCdEf
 CONFIG__SECRET_PROVIDER=aws_secrets_manager
+AWS_SECRETS_MANAGER__SECRET_ARN=arn:aws:secretsmanager:us-east-1:123456789012:secret:pr-agent-main-config-AbCdEf
 ```
+
+4. In your GitLab webhook configuration, set the **Secret Token** to the **Secret name** created in step 1:
+   - Example: `project-webhook-secret-001`
+
+**Important**: When using Secrets Manager, GitLab's webhook secret must be the Secrets Manager secret name.
+
+5. Add IAM permission `secretsmanager:GetSecretValue` to your Lambda execution role
