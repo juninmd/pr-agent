@@ -55,7 +55,7 @@ There are two possible paths leading to this auto-approval - one via the `review
     auto_approve_for_low_review_effort = X # X is a number between 1 and 5
     ```
     
-    When the [review effort score](https://www.qodo.ai/images/pr_agent/review3.png) is lower than or equal to X, the PR will be auto-approved (if not disabled by ticket compliance criteria, see below).
+    When the [review effort score](https://www.qodo.ai/images/pr_agent/review3.png) is lower than or equal to X, the PR will be auto-approved (unless ticket compliance is enabled and fails, see below).
 
 - **Ticket compliance criteria**
     
