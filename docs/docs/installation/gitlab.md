@@ -88,3 +88,50 @@ OPENAI__KEY=<your_openai_api_key>
 8. Create a webhook in your GitLab project. Set the URL to `http[s]://<PR_AGENT_HOSTNAME>/webhook`, the secret token to the generated secret from step 3, and enable the triggers `push`, `comments` and `merge request events`.
 
 9. Test your installation by opening a merge request or commenting on a merge request using one of PR Agent's commands.
+
+## Deploy as a Lambda Function
+
+Note that since AWS Lambda env vars cannot have "." in the name, you can replace each "." in an env variable with "__".<br>
+For example: `GITLAB.PERSONAL_ACCESS_TOKEN` --> `GITLAB__PERSONAL_ACCESS_TOKEN`
+
+1. Follow steps 1-5 from [Run a GitLab webhook server](#run-a-gitlab-webhook-server).
+2. Build a docker image that can be used as a lambda function
+
+    ```shell
+    docker buildx build --platform=linux/amd64 . -t codiumai/pr-agent:serverless --target gitlab_lambda -f docker/Dockerfile.lambda
+   ```
+
+3. Push image to ECR
+
+    ```shell
+    docker tag codiumai/pr-agent:serverless <AWS_ACCOUNT>.dkr.ecr.<AWS_REGION>.amazonaws.com/codiumai/pr-agent:serverless
+    docker push <AWS_ACCOUNT>.dkr.ecr.<AWS_REGION>.amazonaws.com/codiumai/pr-agent:serverless
+    ```
+
+4. Create a lambda function that uses the uploaded image. Set the lambda timeout to be at least 3m.
+5. Configure the lambda function to have a Function URL.
+6. In the environment variables of the Lambda function, specify `AZURE_DEVOPS_CACHE_DIR` to a writable location such as /tmp. (see [link](https://github.com/Codium-ai/pr-agent/pull/450#issuecomment-1840242269))
+7. Go back to steps 8-9 of [Run a GitLab webhook server](#run-a-gitlab-webhook-server) with the function url as your Webhook URL.
+    The Webhook URL would look like `https://<LAMBDA_FUNCTION_URL>/webhook`
+
+### Using AWS Secrets Manager
+
+For production Lambda deployments, use AWS Secrets Manager instead of environment variables:
+
+1. Create a secret in AWS Secrets Manager with JSON format like this:
+
+```json
+{
+  "openai.key": "sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "gitlab.shared_secret": "your-shared-secret-from-step-3",
+  "gitlab.personal_access_token": "glpat-xxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+2. Add IAM permission `secretsmanager:GetSecretValue` to your Lambda execution role
+3. Set these environment variables in your Lambda:
+
+```bash
+AWS_SECRETS_MANAGER__SECRET_ARN=arn:aws:secretsmanager:us-east-1:123456789012:secret:pr-agent-secrets-AbCdEf
+CONFIG__SECRET_PROVIDER=aws_secrets_manager
+```
