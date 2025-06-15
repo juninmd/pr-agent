@@ -61,12 +61,12 @@ git clone https://github.com/qodo-ai/pr-agent.git
 ```
 
 5. Prepare variables and secrets. Skip this step if you plan on setting these as environment variables when running the agent:
-1. In the configuration file/variables:
-    - Set `config.git_provider` to "gitlab"
+    1. In the configuration file/variables:
+        - Set `config.git_provider` to "gitlab"
 
-2. In the secrets file/variables:
-    - Set your AI model key in the respective section
-    - In the [gitlab] section, set `personal_access_token` (with token from step 2) and `shared_secret` (with secret from step 3)
+    2. In the secrets file/variables:
+        - Set your AI model key in the respective section
+        - In the [gitlab] section, set `personal_access_token` (with token from step 2) and `shared_secret` (with secret from step 3)
 
 6. Build a Docker image for the app and optionally push it to a Docker repository. We'll use Dockerhub as an example:
 
