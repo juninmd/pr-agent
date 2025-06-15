@@ -55,6 +55,7 @@ nav:
       - Local and global metadata: 'core-abilities/metadata.md'
       - RAG context enrichment: 'core-abilities/rag_context_enrichment.md'
       - Self-reflection: 'core-abilities/self_reflection.md'
+      - Auto-approval: 'core-abilities/auto_approval.md'
       - Static code analysis: 'core-abilities/static_code_analysis.md'
   - Chrome Extension:
       - Qodo Merge Chrome Extension: 'chrome-extension/index.md'
