@@ -2,6 +2,7 @@
 
 Qodo Merge utilizes a variety of core abilities to provide a comprehensive and efficient code review experience. These abilities include:
 
+- [Auto approval](https://qodo-merge-docs.qodo.ai/core-abilities/auto_approval/)
 - [Auto best practices](https://qodo-merge-docs.qodo.ai/core-abilities/auto_best_practices/)
 - [Chat on code suggestions](https://qodo-merge-docs.qodo.ai/core-abilities/chat_on_code_suggestions/)
 - [Code validation](https://qodo-merge-docs.qodo.ai/core-abilities/code_validation/)
@@ -14,7 +15,6 @@ Qodo Merge utilizes a variety of core abilities to provide a comprehensive and e
 - [Local and global metadata](https://qodo-merge-docs.qodo.ai/core-abilities/metadata/)
 - [RAG context enrichment](https://qodo-merge-docs.qodo.ai/core-abilities/rag_context_enrichment/)
 - [Self-reflection](https://qodo-merge-docs.qodo.ai/core-abilities/self_reflection/)
-- [Auto approval](https://qodo-merge-docs.qodo.ai/core-abilities/auto_approval/)
 - [Static code analysis](https://qodo-merge-docs.qodo.ai/core-abilities/static_code_analysis/)
 
 ## Blogs

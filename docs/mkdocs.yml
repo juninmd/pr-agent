@@ -43,10 +43,11 @@ nav:
      - 💎 Similar Code: 'tools/similar_code.md'
   - Core Abilities:
       - 'core-abilities/index.md'
+      - Auto approval: 'core-abilities/auto_approval.md'
       - Auto best practices: 'core-abilities/auto_best_practices.md'
       - Chat on code suggestions: 'core-abilities/chat_on_code_suggestions.md'
       - Code validation: 'core-abilities/code_validation.md'
-      - Compression strategy: 'core-abilities/compression_strategy.md'
+#      - Compression strategy: 'core-abilities/compression_strategy.md'
       - Dynamic context: 'core-abilities/dynamic_context.md'
       - Fetching ticket context: 'core-abilities/fetching_ticket_context.md'
       - Impact evaluation: 'core-abilities/impact_evaluation.md'
@@ -55,7 +56,6 @@ nav:
       - Local and global metadata: 'core-abilities/metadata.md'
       - RAG context enrichment: 'core-abilities/rag_context_enrichment.md'
       - Self-reflection: 'core-abilities/self_reflection.md'
-      - Auto-approval: 'core-abilities/auto_approval.md'
       - Static code analysis: 'core-abilities/static_code_analysis.md'
   - Chrome Extension:
       - Qodo Merge Chrome Extension: 'chrome-extension/index.md'
