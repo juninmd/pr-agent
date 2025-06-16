@@ -28,6 +28,7 @@ Qodo Merge for GitHub cloud is available for installation through the [GitHub Ma
 ### GitHub Enterprise Server
 
 To use Qodo Merge on your private GitHub Enterprise Server, you will need to [contact](https://www.qodo.ai/contact/#pricing) Qodo for starting an Enterprise trial.
+
 (Note: The marketplace app is not compatible with GitHub Enterprise Server. Installation requires creating a private GitHub App instead.)
 
 ### GitHub Open Source Projects
