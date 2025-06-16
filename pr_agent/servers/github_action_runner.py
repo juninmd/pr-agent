@@ -3,6 +3,8 @@ import json
 import os
 from typing import Union
 
+from dynaconf.utils import DynaBox
+
 from pr_agent.agent.pr_agent import PRAgent
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import get_git_provider
@@ -80,12 +82,35 @@ async def run_action():
     except Exception as e:
         get_logger().info(f"github action: failed to apply repo settings: {e}")
 
+    # Append the response language in the extra instructions
+    response_language = get_settings().config.get('response_language', 'en-us')
+    if response_language.lower() != 'en-us':
+        get_logger().info(f'User has set the response language to: {response_language}')
+
+        lang_instruction_text = f"Your response MUST be written in the language corresponding to locale code: '{response_language}'. This is crucial."
+        separator_text = "\n======\n\nIn addition, "
+
+        for key in get_settings():
+            setting = get_settings().get(key)
+            if isinstance(setting, DynaBox):
+                if key.lower() in ['pr_description', 'pr_code_suggestions', 'pr_reviewer']:
+                    if hasattr(setting, 'extra_instructions'):
+                        extra_instructions = setting.extra_instructions
+
+                        if lang_instruction_text not in str(extra_instructions):
+                            updated_instructions = (
+                                str(extra_instructions) + separator_text + lang_instruction_text
+                                if extra_instructions else lang_instruction_text
+                            )
+                            setting.extra_instructions = updated_instructions
+
     # Handle pull request opened event
     if GITHUB_EVENT_NAME == "pull_request" or GITHUB_EVENT_NAME == "pull_request_target":
         action = event_payload.get("action")
 
         # Retrieve the list of actions from the configuration
-        pr_actions = get_settings().get("GITHUB_ACTION_CONFIG.PR_ACTIONS", ["opened", "reopened", "ready_for_review", "review_requested"])
+        pr_actions = get_settings().get("GITHUB_ACTION_CONFIG.PR_ACTIONS",
+                                        ["opened", "reopened", "ready_for_review", "review_requested"])
 
         if action in pr_actions:
             pr_url = event_payload.get("pull_request", {}).get("url")
@@ -102,9 +127,10 @@ async def run_action():
                     auto_improve = get_setting_or_env("GITHUB_ACTION_CONFIG.AUTO_IMPROVE", None)
 
                 # Set the configuration for auto actions
-                get_settings().config.is_auto_command = True # Set the flag to indicate that the command is auto
+                get_settings().config.is_auto_command = True  # Set the flag to indicate that the command is auto
                 get_settings().pr_description.final_update_message = False  # No final update message when auto_describe is enabled
-                get_logger().info(f"Running auto actions: auto_describe={auto_describe}, auto_review={auto_review}, auto_improve={auto_improve}")
+                get_logger().info(
+                    f"Running auto actions: auto_describe={auto_describe}, auto_review={auto_review}, auto_improve={auto_improve}")
 
                 # invoke by default all three tools
                 if auto_describe is None or is_true(auto_describe):
