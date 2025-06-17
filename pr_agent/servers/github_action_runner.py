@@ -3,7 +3,7 @@ import json
 import os
 from typing import Union
 
-from dynaconf.utils import DynaBox
+from dynaconf.utils.boxing.DynaBox import DynaBox
 
 from pr_agent.agent.pr_agent import PRAgent
 from pr_agent.config_loader import get_settings
