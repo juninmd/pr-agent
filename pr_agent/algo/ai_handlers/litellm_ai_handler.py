@@ -131,7 +131,7 @@ class LiteLLMAIHandler(BaseAiHandler):
             self.api_base = openrouter_api_base
             litellm.api_base = openrouter_api_base
 
-        # Models that only use user meessage
+        # Models that only use user message
         self.user_message_only_models = USER_MESSAGE_ONLY_MODELS
 
         # Model that doesn't support temperature argument
@@ -212,7 +212,7 @@ class LiteLLMAIHandler(BaseAiHandler):
 
         return kwargs
 
-    def add_litellm_callbacks(selfs, kwargs) -> dict:
+    def add_litellm_callbacks(self, kwargs) -> dict:
         captured_extra = []
 
         def capture_logs(message):
