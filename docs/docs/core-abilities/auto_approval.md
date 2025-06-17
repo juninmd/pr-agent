@@ -65,7 +65,7 @@ There are two possible paths leading to this auto-approval - one via the `review
     ensure_ticket_compliance = true # Default is false
     ```
     
-    If `ensure_ticket_compliance` is set to `true`, auto-approval will be disabled if no ticket is linked to the PR, or if the PR is not fully compliant with a linked ticket. This ensures that PRs are only auto-approved if their associated tickets are properly resolved.
+    If `ensure_ticket_compliance` is set to `true`, auto-approval for the `review` toll path will be disabled if no ticket is linked to the PR, or if the PR is not fully compliant with a linked ticket. This ensures that PRs are only auto-approved if their associated tickets are properly resolved.
     
     You can also prevent auto-approval if the PR exceeds the ticket's scope (see [here](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#configuration-options)).
 
