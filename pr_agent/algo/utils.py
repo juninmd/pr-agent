@@ -289,7 +289,7 @@ def convert_to_markdown_v2(output_data: dict,
                     details_open_attr = " open" if markdown_todo_items.count("\n") + 1 <= EXPAND_LINE_THRESHOLD else ""
                     todo_entry_label = f"{len(value)} " + "entries" if len(value) > 1 else "entry"
 
-                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections ({todo_entry_label})</strong>\n"
+                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections</strong>\n<br><br>\n"
                     markdown_text += f"<details{details_open_attr}><summary>{todo_summary}</summary>\n\n"
                     markdown_text += markdown_todo_items
                     markdown_text += "\n</details>\n"
