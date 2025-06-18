@@ -101,7 +101,7 @@ extra_instructions = "..."
       </tr>
         <tr>
         <td><b>require_todo_scan</b></td>
-        <td>If set to true, the tool will add a section that lists TODO comments found in the PR code changes. Default is true.
+        <td>If set to true, the tool will add a section that lists TODO comments found in the PR code changes. Default is false.
         </td>
       </tr>
       <tr>
