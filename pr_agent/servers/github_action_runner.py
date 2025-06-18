@@ -3,8 +3,6 @@ import json
 import os
 from typing import Union
 
-from dynaconf.utils.boxing.DynaBox import DynaBox
-
 from pr_agent.agent.pr_agent import PRAgent
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import get_git_provider
@@ -93,7 +91,7 @@ async def run_action():
 
             for key in get_settings():
                 setting = get_settings().get(key)
-                if isinstance(setting, DynaBox):
+                if str(type(setting)) == "<class 'dynaconf.utils.boxing.DynaBox'>":
                     if key.lower() in ['pr_description', 'pr_code_suggestions', 'pr_reviewer']:
                         if hasattr(setting, 'extra_instructions'):
                             extra_instructions = setting.extra_instructions
