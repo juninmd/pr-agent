@@ -72,10 +72,12 @@ class KeyIssuesComponentLink(BaseModel):
     start_line: int = Field(description="The start line that corresponds to this issue in the relevant file")
     end_line: int = Field(description="The end line that corresponds to this issue in the relevant file")
 
+{%- if require_todo_scan %}
 class TodoSection(BaseModel):
     relevant_file: str = Field(description="The file containing the TODO comment")
     line_range: Tuple[int, int] = Field(description="Start and end line numbers of the TODO comment (inclusive). Must be a tuple of two integers, e.g., (7, 7) for a single line or (7, 10) for a range. Do not use list format [7, 7].")
     content: str = Field(description="The content of the TODO comment. Only include actual TODO comments within code comments (e.g., lines starting with '#', '//', '/*', '<!--').  Remove leading 'TODO' prefixes. Include lines like '# TODO', even if empty after prefix removal. Exclude TODOs outside comments or without appropriate prefixes. Use | block style only when the line range covers multiple lines (e.g., (7, 10)).")
+{%- endif %}
 
 {%- if related_tickets %}
 
@@ -157,10 +159,12 @@ review:
     - ...
   security_concerns: |
     No
+{%- if require_todo_scan %}
   todo_sections: |
     No
   todo_summary: |
     ...
+{%- endif %} 
 {%- if require_can_be_split_review %}
   can_be_split:
   - relevant_files:
@@ -279,10 +283,12 @@ review:
     - ...
   security_concerns: |
     No
+{%- if require_todo_scan %}
   todo_sections: |
     No
   todo_summary: |
     ...
+{%- endif %}
 {%- if require_can_be_split_review %}
   can_be_split:
   - relevant_files:
