@@ -10,9 +10,9 @@ RUN pip install --no-cache-dir mangum==0.17.0
 COPY pr_agent/ ${LAMBDA_TASK_ROOT}/pr_agent/
 
 FROM base AS github_lambda
-CMD ["pr_agent.servers.serverless.serverless_github"]
+CMD ["pr_agent.servers.github_lambda_webhook.lambda_handler"]
 
 FROM base AS gitlab_lambda
-CMD ["pr_agent.servers.serverless.serverless_gitlab"]
+CMD ["pr_agent.servers.gitlab_lambda_webhook.lambda_handler"]
 
 FROM github_lambda

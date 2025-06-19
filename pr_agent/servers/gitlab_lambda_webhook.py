@@ -3,6 +3,8 @@ from mangum import Mangum
 from starlette.middleware import Middleware
 from starlette_context.middleware import RawContextMiddleware
 
+from pr_agent.servers.gitlab_webhook import router
+
 try:
     from pr_agent.config_loader import apply_secrets_manager_config
     apply_secrets_manager_config()
@@ -14,18 +16,12 @@ except Exception as e:
         # Fail completely silently if log module is not available
         pass
 
-def _create_handler(router):
-    middleware = [Middleware(RawContextMiddleware)]
-    app = FastAPI(middleware=middleware)
-    app.include_router(router)
-    return Mangum(app, lifespan="off")
+middleware = [Middleware(RawContextMiddleware)]
+app = FastAPI(middleware=middleware)
+app.include_router(router)
 
-def serverless_github(event, context):
-    from pr_agent.servers.github_app import router
-    handler = _create_handler(router)
-    return handler(event, context)
+handler = Mangum(app, lifespan="off")
 
-def serverless_gitlab(event, context):
-    from pr_agent.servers.gitlab_webhook import router
-    handler = _create_handler(router)
+
+def lambda_handler(event, context):
     return handler(event, context)
