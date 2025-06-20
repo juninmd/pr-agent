@@ -6,6 +6,7 @@ Your task is to provide a full description for the PR content: type, description
 - The generated title and description should prioritize the most significant changes.
 - If needed, each YAML output should be in block scalar indicator ('|')
 - When quoting variables, names or file paths from the code, use backticks (`) instead of single quote (').
+- When needed, use '- ' as bullets
 
 {%- if extra_instructions %}
 
