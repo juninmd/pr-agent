@@ -672,7 +672,6 @@ class AzureDevopsProvider(GitProvider):
                         "title": item.fields.get("System.Title", ""),
                         "url": item.url,
                         "body": item.fields.get("System.Description", ""),
-                        "state": item.fields.get("System.State", ""),
                         "acceptance_criteria": item.fields.get(
                             "Microsoft.VSTS.Common.AcceptanceCriteria", ""
                         ),

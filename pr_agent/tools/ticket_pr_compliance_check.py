@@ -147,7 +147,6 @@ async def extract_tickets(git_provider):
                             "ticket_url": ticket.get("url"),
                             "title": ticket.get("title"),
                             "body": ticket_body_str,
-                            "labels": ", ".join(ticket.get("labels", [])),
                             "requirements": ticket.get("acceptance_criteria", ""),
                         }
                     )
