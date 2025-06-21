@@ -22,6 +22,7 @@ try:
     from azure.devops.connection import Connection
     # noinspection PyUnresolvedReferences
     from azure.devops.released.git import (Comment, CommentThread, GitPullRequest, GitVersionDescriptor, GitClient, CommentThreadContext, CommentPosition)
+    from azure.devops.released.work_item_tracking import WorkItemTrackingClient
     # noinspection PyUnresolvedReferences
     from azure.identity import DefaultAzureCredential
     from msrest.authentication import BasicAuthentication
@@ -566,7 +567,7 @@ class AzureDevopsProvider(GitProvider):
         return workspace_slug, repo_slug, pr_number
 
     @staticmethod
-    def _get_azure_devops_client() -> GitClient:
+    def _get_azure_devops_client() -> Tuple[GitClient, WorkItemTrackingClient]:
         org = get_settings().azure_devops.get("org", None)
         pat = get_settings().azure_devops.get("pat", None)
 
@@ -654,7 +655,7 @@ class AzureDevopsProvider(GitProvider):
             get_logger().exception(f"Failed to get linked work items, error: {e}")
             return []
 
-    def get_work_items(self, work_item_ids: int) -> list:
+    def get_work_items(self, work_item_ids: list) -> list:
         """
         Get work items by their IDs.
         """
