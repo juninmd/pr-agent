@@ -3,7 +3,7 @@ from mangum import Mangum
 from starlette.middleware import Middleware
 from starlette_context.middleware import RawContextMiddleware
 
-from pr_agent.servers.github_app import router
+from pr_agent.servers.gitlab_webhook import router
 
 try:
     from pr_agent.config_loader import apply_secrets_manager_config
@@ -23,5 +23,5 @@ app.include_router(router)
 handler = Mangum(app, lifespan="off")
 
 
-def serverless(event, context):
+def lambda_handler(event, context):
     return handler(event, context)
