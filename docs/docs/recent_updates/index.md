@@ -7,6 +7,7 @@ This page summarizes recent enhancements to Qodo Merge (last three months).
 It also outlines our development roadmap for the upcoming three months. Please note that the roadmap is subject to change, and features may be adjusted, added, or reprioritized.
 
 === "Recent Updates"
+    - **Best Practices Hierarchy**: Introducing support for structured best practices, such as for folders in monorepos or a unified best practice file for a group of repositories.
     - **Simplified Free Tier**: Qodo Merge now offers a simplified free tier with a monthly limit of 75 PR reviews per organization, replacing the previous two-week trial. ([Learn more](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users))
     - **CLI Endpoint**: A new Qodo Merge endpoint that accepts a lists of before/after code changes, executes Qodo Merge commands, and return the results. Currently available for enterprise customers. Contact [Qodo](https://www.qodo.ai/contact/) for more information.
     - **Linear tickets support**: Qodo Merge now supports Linear tickets. ([Learn more](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#linear-integration))
@@ -17,7 +18,6 @@ It also outlines our development roadmap for the upcoming three months. Please n
 
 
 === "Future Roadmap"
-    - **Best Practices Hierarchy**: Introducing support for structured best practices, such as for folders in monorepos or a unified best practice file for a group of repositories.
     - **Enhanced `review` tool**: Enhancing the `review` tool validate compliance across multiple categories including security, tickets, and custom best practices.
     - **Smarter context retrieval**: Leverage AST and LSP analysis to gather relevant context from across the entire repository.
     - **Enhanced portal experience**: Improved user experience in the Qodo Merge portal with new options and capabilities.

@@ -65,6 +65,11 @@ Zero-setup hosted solution with advanced features and priority support
 
 ## News and Updates
 
+## Jun 21, 2025
+
+v0.30 was [released](https://github.com/qodo-ai/pr-agent/releases)
+
+
 ## Jun 3, 2025
 
 Qodo Merge now offers a simplified free tier 💎.
