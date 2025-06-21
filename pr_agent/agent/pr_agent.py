@@ -1,9 +1,6 @@
 import shlex
 from functools import partial
 
-import gitlab
-from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_503_SERVICE_UNAVAILABLE
-
 from pr_agent.algo.ai_handlers.base_ai_handler import BaseAiHandler
 from pr_agent.algo.ai_handlers.litellm_ai_handler import LiteLLMAIHandler
 from pr_agent.algo.cli_args import CliArgs
@@ -116,19 +113,7 @@ class PRAgent:
                 if notify:
                     notify()
 
-                try:
-                    await command2class[action](pr_url, ai_handler=self.ai_handler, args=args).run()
-                except gitlab.GitlabError as gitlab_error:
-                    # For GitLab 5xx codes see: https://docs.gitlab.com/api/rest/troubleshooting/#status-codes
-                    if gitlab_error.response_code in {HTTP_500_INTERNAL_SERVER_ERROR, HTTP_503_SERVICE_UNAVAILABLE}:
-                        # The problem is likely temporary and not on our side; therefore, do not fail the application.
-                        get_logger().error(
-                            f"Failed to process the command due to a problem on the GitLab API side: {gitlab_error!r}\n"
-                            + "Check https://status.gitlab.com and try again later."
-                        )
-                        return False
-                    raise
-
+                await command2class[action](pr_url, ai_handler=self.ai_handler, args=args).run()
             else:
                 return False
             return True
