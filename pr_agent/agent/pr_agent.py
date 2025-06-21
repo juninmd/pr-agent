@@ -54,7 +54,7 @@ class PRAgent:
     def __init__(self, ai_handler: partial[BaseAiHandler,] = LiteLLMAIHandler):
         self.ai_handler = ai_handler  # will be initialized in run_action
 
-    async def _handle_request(self, pr_url, request, notify=None) -> bool:
+    async def handle_request(self, pr_url, request, notify=None) -> bool:
         # First, apply repo specific settings if exists
         apply_repo_settings(pr_url)
 
@@ -116,25 +116,19 @@ class PRAgent:
                 if notify:
                     notify()
 
-                await command2class[action](pr_url, ai_handler=self.ai_handler, args=args).run()
+                try:
+                    await command2class[action](pr_url, ai_handler=self.ai_handler, args=args).run()
+                except gitlab.GitlabError as gitlab_error:
+                    # For GitLab 5xx codes see: https://docs.gitlab.com/api/rest/troubleshooting/#status-codes
+                    if gitlab_error.response_code in {HTTP_500_INTERNAL_SERVER_ERROR, HTTP_503_SERVICE_UNAVAILABLE}:
+                        # The problem is likely temporary and not on our side; therefore, do not fail the application.
+                        get_logger().error(
+                            f"Failed to process the command due to a problem on the GitLab API side: {gitlab_error!r}\n"
+                            + "Check https://status.gitlab.com and try again later."
+                        )
+                        return False
+                    raise
+
             else:
                 return False
             return True
-
-    async def handle_request(self, pr_url, request, notify=None) -> bool:
-        # We wrap the entire entry point to gracefully handle third-party
-        # service errors (such as the GitLab API) to cover cases when such
-        # errors were not handled or retried by the low-level code or upstream
-        # libraries. However, we avoid a bare `except` here to not silence
-        # critical errors on our side.
-        try:
-            return await self._handle_request(pr_url, request, notify)
-        except gitlab.GitlabError as gitlab_error:
-            # GitLab 5xx codes: https://docs.gitlab.com/api/rest/troubleshooting/#status-codes
-            if gitlab_error.response_code in {HTTP_500_INTERNAL_SERVER_ERROR, HTTP_503_SERVICE_UNAVAILABLE}:
-                get_logger().error(
-                    f"Failed to process the command due to a problem on the GitLab API side: {gitlab_error!r}\n"
-                    + "Check https://status.gitlab.com and try again later."
-                )
-                return False
-            raise
