@@ -224,81 +224,22 @@ def convert_to_markdown_v2(output_data: dict,
                     value = emphasize_header(value.strip(), only_markdown=True)
                     markdown_text += f"{value}\n\n"
         elif 'todo sections' in key_nice.lower():
-            def format_todo_item(todo_item: TodoItem) -> str:
-                relevant_file = todo_item.get('relevant_file', '').strip()
-                line_range = todo_item.get('line_range', [])
-                content = todo_item.get('content', '')
-                reference_link = None
-
-                if isinstance(line_range, str):
-                    line_range = ast.literal_eval(line_range.strip())
-                try:
-                    if git_provider and relevant_file and line_range:
-                        reference_link = git_provider.get_line_link(relevant_file, line_range[0], line_range[1])
-                except Exception as e:
-                    get_logger().exception(f"Error generating link: {e}")
-                    line_str = f"[{line_range[0]}]" if line_range[0] == line_range[1] else f"[{line_range[0]}-{line_range[1]}]"
-                    return f"{relevant_file} {line_str}: {content}"
-
-                line_str = f"[{line_range[0]}]" if line_range[0] == line_range[1] else f"[{line_range[0]}-{line_range[1]}]"
-                file_ref = f"{relevant_file} {line_str}"
-                if reference_link:
-                    if gfm_supported:
-                        file_ref = f"<a href='{reference_link}'>{file_ref}</a>"
-                    else:
-                        file_ref = f"[{file_ref}]({reference_link})"
-
-                content_lines = content.strip().split("\n")
-                # if TODO content is single-line :
-                if len(content_lines) == 1:
-                    return f"{file_ref}: {content_lines[0]}"
-                # else if TODO content is multi-line:
-                elif len(content_lines) > 1:
-                    content_lines = "<br>".join(content_lines)
-                    return f"{file_ref}: <blockquote>\n{content_lines}\n</blockquote>"
-                # else if TODO content is empty:
-                else:
-                    return file_ref
-
-            def format_todo_items(value: list[TodoItem] | TodoItem) -> str: 
-                markdown_text = ""
-                if gfm_supported:
-                    if isinstance(value, list):
-                        markdown_text += "<ul>\n"
-                        for todo_item in value:
-                            markdown_text += f"<li>{format_todo_item(todo_item)}</li>\n"
-                        markdown_text += "</ul>\n"
-                    else:
-                        markdown_text += f"<p>{format_todo_item(value)}</p>\n"
-                else:
-                    if isinstance(value, list):
-                        for todo_item in value:
-                            markdown_text += f"- {format_todo_item(todo_item)}\n"
-                    else:
-                        markdown_text += f"- {format_todo_item(value)}\n"
-                return markdown_text
- 
             if gfm_supported:
                 markdown_text += "<tr><td>"
                 if is_value_no(value):
-                    markdown_text += f"{emoji}&nbsp;<strong>No TODO sections</strong>"
+                    markdown_text += f"✅&nbsp;<strong>No TODO sections</strong>"
                 else:
-                    markdown_todo_items = format_todo_items(value)
-
+                    markdown_todo_items = format_todo_items(value, git_provider, gfm_supported)
                     markdown_text += f"{emoji}&nbsp;<strong>TODO sections</strong>\n<br><br>\n"
-                    markdown_text += f"<details><summary>{todo_summary}</summary>\n\n"
                     markdown_text += markdown_todo_items
-                    markdown_text += "\n</details>\n"
                 markdown_text += "</td></tr>\n"
             else:
                 if is_value_no(value):
-                    markdown_text += f"### {emoji} No TODO sections\n\n"
+                    markdown_text += f"### ✅ No TODO sections\n\n"
                 else:
-                    markdown_todo_items = format_todo_items(value)
-
-                    markdown_text += f"### {emoji} TODO sections\n<details><summary>{todo_summary}</summary>\n\n"
+                    markdown_todo_items = format_todo_items(value, git_provider, gfm_supported)
+                    markdown_text += f"### {emoji} TODO sections\n\n"
                     markdown_text += markdown_todo_items
-                    markdown_text += "\n</details>\n\n"
         elif 'can be split' in key_nice.lower():
             if gfm_supported:
                 markdown_text += f"<tr><td>"
@@ -1457,3 +1398,47 @@ def set_file_languages(diff_files) -> List[FilePatchInfo]:
         get_logger().exception(f"Failed to set file languages: {e}")
 
     return diff_files
+
+def format_todo_item(todo_item: TodoItem, git_provider, gfm_supported) -> str:
+    relevant_file = todo_item.get('relevant_file', '').strip()
+    line_number = todo_item.get('line_number', '')
+    content = todo_item.get('content', '')
+    reference_link = git_provider.get_line_link(relevant_file, line_number, line_number)
+    file_ref = f"{relevant_file} [{line_number}]"
+    if reference_link:
+        if gfm_supported:
+            file_ref = f"<a href='{reference_link}'>{file_ref}</a>"
+        else:
+            file_ref = f"[{file_ref}]({reference_link})"
+
+    if content:
+        return f"{file_ref}: {content.strip()}"
+    else:
+        # if content is empty, return only the file reference
+        return file_ref
+
+
+def format_todo_items(value: list[TodoItem] | TodoItem, git_provider, gfm_supported) -> str:
+    markdown_text = ""
+    MAX_ITEMS = 5 # limit the number of items to display
+    if gfm_supported:
+        if isinstance(value, list):
+            markdown_text += "<ul>\n"
+            if len(value) > MAX_ITEMS:
+                get_logger().debug(f"Truncating todo items to {MAX_ITEMS} items")
+                value = value[:MAX_ITEMS]
+            for todo_item in value:
+                markdown_text += f"<li>{format_todo_item(todo_item, git_provider, gfm_supported)}</li>\n"
+            markdown_text += "</ul>\n"
+        else:
+            markdown_text += f"<p>{format_todo_item(value, git_provider, gfm_supported)}</p>\n"
+    else:
+        if isinstance(value, list):
+            if len(value) > MAX_ITEMS:
+                get_logger().debug(f"Truncating todo items to {MAX_ITEMS} items")
+                value = value[:MAX_ITEMS]
+            for todo_item in value:
+                markdown_text += f"- {format_todo_item(todo_item, git_provider, gfm_supported)}\n"
+        else:
+            markdown_text += f"- {format_todo_item(value, git_provider, gfm_supported)}\n"
+    return markdown_text
