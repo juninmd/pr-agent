@@ -86,7 +86,7 @@ class BitbucketServerProvider(GitProvider):
 
     def get_repo_settings(self):
         try:
-            content = self.bitbucket_client.get_content_of_file(self.workspace_slug, self.repo_slug, ".pr_agent.toml", self.get_pr_branch())
+            content = self.bitbucket_client.get_content_of_file(self.workspace_slug, self.repo_slug, ".pr_agent.toml")
 
             return content
         except Exception as e:
