@@ -19,7 +19,7 @@ This approach provides not just a quantitative score but also a detailed analysi
 
 [//]: # ()
 
-## Results
+## PR Benchmark Results
 
 <table>
   <thead>
