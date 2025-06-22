@@ -232,6 +232,14 @@ AWS_SECRET_ACCESS_KEY="..."
 AWS_REGION_NAME="..."
 ```
 
+You can also use the new Meta Llama 4 models available on Amazon Bedrock:
+
+```toml
+[config] # in configuration.toml
+model="bedrock/us.meta.llama4-scout-17b-instruct-v1:0"
+fallback_models=["bedrock/us.meta.llama4-maverick-17b-instruct-v1:0"]
+```
+
 See [litellm](https://docs.litellm.ai/docs/providers/bedrock#usage) documentation for more information about the environment variables required for Amazon Bedrock.
 
 ### DeepSeek
