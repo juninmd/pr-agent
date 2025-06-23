@@ -3,7 +3,8 @@
 [Qodo Merge](https://www.codium.ai/pricing/){:target="_blank"} is a hosted version of the open-source [PR-Agent](https://github.com/Codium-ai/pr-agent){:target="_blank"}. 
 It is designed for companies and teams that require additional features and capabilities.
 
-Free users receive a monthly quota of 75 PR reviews per git organization, while unlimited usage requires a paid subscription. See [details](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users).
+Free users receive a quota of 75 monthly PR feedbacks per git organization. Unlimited usage requires a paid subscription. See [details](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users).
+
 
 Qodo Merge provides the following benefits:
 
