@@ -202,7 +202,23 @@ h1 {
 
 <script>
 window.addEventListener('load', function() {
-    function displayResults(responseText) {
+    function extractText(responseText) {
+        try {
+            console.log('responseText: ', responseText);
+            const results = JSON.parse(responseText);
+            const msg = results.message;
+
+            if (!msg || msg.trim() === '') {
+                return "No results found";
+            }
+            return msg;
+        } catch (error) {
+            console.error('Error parsing results:', error);
+            throw new Error("Failed parsing response message");
+        }
+    }
+
+    function displayResults(msg) {
         const resultsContainer = document.getElementById('results');
         const spinner = document.getElementById('spinner');
         const searchContainer = document.querySelector('.search-container');
@@ -214,8 +230,6 @@ window.addEventListener('load', function() {
         searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         try {
-            const results = JSON.parse(responseText);
-
             marked.setOptions({
                 breaks: true,
                 gfm: true,
@@ -223,7 +237,7 @@ window.addEventListener('load', function() {
                 sanitize: false
             });
 
-            const htmlContent = marked.parse(results.message);
+            const htmlContent = marked.parse(msg);
 
             resultsContainer.className = 'markdown-content';
             resultsContainer.innerHTML = htmlContent;
@@ -242,7 +256,7 @@ window.addEventListener('load', function() {
             }, 100);
         } catch (error) {
             console.error('Error parsing results:', error);
-            resultsContainer.innerHTML = '<div class="error-message">Error processing results</div>';
+            resultsContainer.innerHTML = '<div class="error-message">Cannot process results</div>';
         }
     }
 
@@ -275,24 +289,25 @@ window.addEventListener('load', function() {
                 body: JSON.stringify(data)
             };
 
-            // const API_ENDPOINT = 'http://0.0.0.0:3000/api/v1/docs_help';
+            //const API_ENDPOINT = 'http://0.0.0.0:3000/api/v1/docs_help';
             const API_ENDPOINT = 'https://help.merge.qodo.ai/api/v1/docs_help';
 
             const response = await fetch(API_ENDPOINT, options);
+            const responseText = await response.text();
+            const msg = extractText(responseText);
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`An error (${response.status}) occurred during search: "${msg}"`);
             }
-
-            const responseText = await response.text();
-            displayResults(responseText);
+ 
+            displayResults(msg);
         } catch (error) {
             spinner.style.display = 'none';
-            resultsContainer.innerHTML = `
-                <div class="error-message">
-                    An error occurred while searching. Please try again later.
-                </div>
-            `;
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = `${error}`;
+            resultsContainer.value = "";
+            resultsContainer.appendChild(errorDiv);
         }
     }
 
