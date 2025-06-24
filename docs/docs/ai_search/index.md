@@ -202,6 +202,21 @@ h1 {
 
 <script>
 window.addEventListener('load', function() {
+    function extractText(responseText) {
+        try {
+            console.log('responseText: ', responseText);
+            const results = JSON.parse(responseText);
+            msg = results.message;
+            if (!msg || msg.trim() === '') {
+                return "No results found.";
+            }
+            return msg;
+        } catch (error) {
+            console.error('Error parsing results:', error);
+            throw "Error processing results";
+        }
+    }
+
     function displayResults(responseText) {
         const resultsContainer = document.getElementById('results');
         const spinner = document.getElementById('spinner');
@@ -214,7 +229,7 @@ window.addEventListener('load', function() {
         searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         try {
-            const results = JSON.parse(responseText);
+            const msg = extractText(responseText)
 
             marked.setOptions({
                 breaks: true,
@@ -223,7 +238,7 @@ window.addEventListener('load', function() {
                 sanitize: false
             });
 
-            const htmlContent = marked.parse(results.message);
+            const htmlContent = marked.parse(msg);
 
             resultsContainer.className = 'markdown-content';
             resultsContainer.innerHTML = htmlContent;
@@ -275,22 +290,23 @@ window.addEventListener('load', function() {
                 body: JSON.stringify(data)
             };
 
-            // const API_ENDPOINT = 'http://0.0.0.0:3000/api/v1/docs_help';
+            //const API_ENDPOINT = 'http://0.0.0.0:3000/api/v1/docs_help';
             const API_ENDPOINT = 'https://help.merge.qodo.ai/api/v1/docs_help';
 
             const response = await fetch(API_ENDPOINT, options);
+            const responseText = await response.text();
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const msg = extractText(responseText);
+                throw new Error(`An error (${response.status}) occurred during search: "${msg}"`);
             }
-
-            const responseText = await response.text();
+ 
             displayResults(responseText);
         } catch (error) {
             spinner.style.display = 'none';
             resultsContainer.innerHTML = `
                 <div class="error-message">
-                    An error occurred while searching. Please try again later.
+                    ${error}. Please try again later.
                 </div>
             `;
         }
