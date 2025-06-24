@@ -207,17 +207,18 @@ window.addEventListener('load', function() {
             console.log('responseText: ', responseText);
             const results = JSON.parse(responseText);
             const msg = results.message;
+
             if (!msg || msg.trim() === '') {
-                return "No results found.";
+                return "No results found";
             }
             return msg;
         } catch (error) {
             console.error('Error parsing results:', error);
-            throw new Error("Error processing results");
+            throw new Error("Failed parsing response message");
         }
     }
 
-    function displayResults(responseText) {
+    function displayResults(msg) {
         const resultsContainer = document.getElementById('results');
         const spinner = document.getElementById('spinner');
         const searchContainer = document.querySelector('.search-container');
@@ -229,8 +230,6 @@ window.addEventListener('load', function() {
         searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         try {
-            const msg = extractText(responseText);
-
             marked.setOptions({
                 breaks: true,
                 gfm: true,
@@ -257,7 +256,7 @@ window.addEventListener('load', function() {
             }, 100);
         } catch (error) {
             console.error('Error parsing results:', error);
-            resultsContainer.innerHTML = '<div class="error-message">Error processing results</div>';
+            resultsContainer.innerHTML = '<div class="error-message">Cannot process results</div>';
         }
     }
 
@@ -295,18 +294,19 @@ window.addEventListener('load', function() {
 
             const response = await fetch(API_ENDPOINT, options);
             const responseText = await response.text();
+            const msg = extractText(responseText);
 
             if (!response.ok) {
-                const msg = extractText(responseText);
                 throw new Error(`An error (${response.status}) occurred during search: "${msg}"`);
             }
  
-            displayResults(responseText);
+            displayResults(msg);
         } catch (error) {
             spinner.style.display = 'none';
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
-            errorDiv.textContent = `${error}. Please try again later.`;
+            errorDiv.textContent = `${error}`;
+            resultsContainer.value = "";
             resultsContainer.appendChild(errorDiv);
         }
     }
