@@ -59,17 +59,23 @@ Everything below this marker is treated as previously auto-generated content and
 ### Sequence Diagram Support 
 When the `enable_pr_diagram` option is enabled in your configuration, the `/describe` tool will include a `Mermaid` sequence diagram in the PR description.
 
-This diagram represents interactions between components/functions based on the diff content.
+This diagram represents interactions between components/functions based on the PR content.
 
-### How to enable
+[//]: # (### How to enable\disable)
 
-In your configuration:
+[//]: # ()
+[//]: # (In your configuration:)
 
-```
-toml
-[pr_description]
-enable_pr_diagram = true
-```
+[//]: # ()
+[//]: # (```)
+
+[//]: # (toml)
+
+[//]: # ([pr_description])
+
+[//]: # (enable_pr_diagram = true)
+
+[//]: # (```)
 
 ## Configuration options
 
@@ -126,7 +132,7 @@ enable_pr_diagram = true
       </tr>
       <tr>
         <td><b>enable_pr_diagram</b></td>
-        <td>If set to true, the tool will generate a horizontal Mermaid flowchart summarizing the main pull request changes. This field remains empty if not applicable. Default is false.</td>
+        <td>If set to true, the tool will generate a horizontal Mermaid flowchart summarizing the main pull request changes. This field remains empty if not applicable. Default is true.</td>
       </tr>
     </table>
 
