@@ -213,7 +213,7 @@ window.addEventListener('load', function() {
             return msg;
         } catch (error) {
             console.error('Error parsing results:', error);
-            throw "Error processing results";
+            throw new Error("Error processing results");
         }
     }
 
@@ -229,7 +229,7 @@ window.addEventListener('load', function() {
         searchContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         try {
-            const msg = extractText(responseText)
+            const msg = extractText(responseText);
 
             marked.setOptions({
                 breaks: true,
