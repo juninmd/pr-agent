@@ -206,7 +206,7 @@ window.addEventListener('load', function() {
         try {
             console.log('responseText: ', responseText);
             const results = JSON.parse(responseText);
-            msg = results.message;
+            const msg = results.message;
             if (!msg || msg.trim() === '') {
                 return "No results found.";
             }
@@ -304,11 +304,10 @@ window.addEventListener('load', function() {
             displayResults(responseText);
         } catch (error) {
             spinner.style.display = 'none';
-            resultsContainer.innerHTML = `
-                <div class="error-message">
-                    ${error}. Please try again later.
-                </div>
-            `;
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = `${error}. Please try again later.`;
+            resultsContainer.appendChild(errorDiv);
         }
     }
 
