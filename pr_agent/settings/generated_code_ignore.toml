@@ -1,0 +1,14 @@
+[generated_code]
+
+# Protocol Buffers generated code.
+protobuf = [
+  "**/*.pb.go",
+  "**/*.pb.cc",
+  "**/*_pb2.py"
+]
+
+# Go generator output files.
+go_gen = [
+  "**/*_gen.go",
+  "**/*generated.go"
+]

@@ -14,6 +14,7 @@ global_settings = Dynaconf(
     settings_files=[join(current_dir, f) for f in [
         "settings/configuration.toml",
         "settings/ignore.toml",
+        "settings/generated_code_ignore.toml",
         "settings/language_extensions.toml",
         "settings/pr_reviewer_prompts.toml",
         "settings/pr_questions_prompts.toml",

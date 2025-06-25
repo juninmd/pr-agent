@@ -19,6 +19,13 @@ def filter_ignored(files, platform = 'github'):
             glob_setting = glob_setting.strip('[]').split(",")
         patterns += [fnmatch.translate(glob) for glob in glob_setting]
 
+        code_generators = get_settings().config.get('ignore_language_framework', [])
+        for cg in code_generators:
+            glob_patterns = get_settings().generated_code.get(cg, [])
+            if isinstance(glob_patterns, str):
+                glob_patterns = [glob_patterns]
+            patterns += [fnmatch.translate(glob) for glob in glob_patterns]
+
         # compile all valid patterns
         compiled_patterns = []
         for r in patterns:
