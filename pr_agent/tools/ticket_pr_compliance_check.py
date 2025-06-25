@@ -148,6 +148,7 @@ async def extract_tickets(git_provider):
                             "title": ticket.get("title"),
                             "body": ticket_body_str,
                             "requirements": ticket.get("acceptance_criteria", ""),
+                            "labels": ", ".join(ticket.get("labels", [])),
                         }
                     )
                 except Exception as e:

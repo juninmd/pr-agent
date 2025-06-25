@@ -675,6 +675,7 @@ class AzureDevopsProvider(GitProvider):
                         "acceptance_criteria": item.fields.get(
                             "Microsoft.VSTS.Common.AcceptanceCriteria", ""
                         ),
+                        "tags": item.fields.get("System.Tags", "").split("; ") if item.fields.get("System.Tags") else [],
                     }
                 )
             return work_items
