@@ -92,7 +92,8 @@ class TestIgnoreFilter:
             type('', (object,), {'filename': 'dir1/service.pb.go'})(),
             type('', (object,), {'filename': 'dir1/dir/data_pb2.py'})(),
             type('', (object,), {'filename': 'file.py'})(),
-            type('', (object,), {'filename': 'dir2/file_gen.go'})()
+            type('', (object,), {'filename': 'dir2/file_gen.go'})(),
+            type('', (object,), {'filename': 'file.generated.go'})()
         ]
         expected = [
             files[0],
