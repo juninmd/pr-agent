@@ -113,6 +113,8 @@ MAX_TOKENS = {
     'claude-3-5-sonnet': 100000,
     'groq/meta-llama/llama-4-scout-17b-16e-instruct': 131072,
     'groq/meta-llama/llama-4-maverick-17b-128e-instruct': 131072,
+    'bedrock/us.meta.llama4-scout-17b-instruct-v1:0': 128000,
+    'bedrock/us.meta.llama4-maverick-17b-instruct-v1:0': 128000,
     'groq/llama3-8b-8192': 8192,
     'groq/llama3-70b-8192': 8192,
     'groq/llama-3.1-8b-instant': 8192,
