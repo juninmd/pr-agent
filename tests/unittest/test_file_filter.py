@@ -105,3 +105,28 @@ class TestIgnoreFilter:
             f"Expected {[f.filename for f in expected]}, "
             f"but got {[f.filename for f in filtered]}"
         )
+
+    def test_skip_invalid_ignore_language_framework(self, monkeypatch):
+        """
+        Test skipping of generated code filtering when ignore_language_framework is not a list
+        """
+        monkeypatch.setattr(global_settings.config, 'ignore_language_framework', 'protobuf')
+
+        files = [
+            type('', (object,), {'filename': 'main.go'})(),
+            type('', (object,), {'filename': 'file.py'})(),
+            type('', (object,), {'filename': 'dir1/service.pb.go'})(),
+            type('', (object,), {'filename': 'file_pb2.py'})()
+        ]
+        expected = [
+            files[0],
+            files[1],
+            files[2],
+            files[3]
+        ]
+
+        filtered = filter_ignored(files)
+        assert filtered == expected, (
+            f"Expected {[f.filename for f in expected]}, "
+            f"but got {[f.filename for f in filtered]}"
+        )
