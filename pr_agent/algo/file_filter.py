@@ -2,6 +2,7 @@ import fnmatch
 import re
 
 from pr_agent.config_loader import get_settings
+from pr_agent.log import get_logger
 
 
 def filter_ignored(files, platform = 'github'):
@@ -17,7 +18,17 @@ def filter_ignored(files, platform = 'github'):
         glob_setting = get_settings().ignore.glob
         if isinstance(glob_setting, str):  # --ignore.glob=[.*utils.py], --ignore.glob=.*utils.py
             glob_setting = glob_setting.strip('[]').split(",")
-        patterns += [fnmatch.translate(glob) for glob in glob_setting]
+        patterns += translate_globs_to_regexes(glob_setting)
+
+        code_generators = get_settings().config.get('ignore_language_framework', [])
+        if isinstance(code_generators, str):
+            get_logger().warning("'ignore_language_framework' should be a list. Skipping language framework filtering.")
+            code_generators = []
+        for cg in code_generators:
+            glob_patterns = get_settings().generated_code.get(cg, [])
+            if isinstance(glob_patterns, str):
+                glob_patterns = [glob_patterns]
+            patterns += translate_globs_to_regexes(glob_patterns)
 
         # compile all valid patterns
         compiled_patterns = []
@@ -66,3 +77,11 @@ def filter_ignored(files, platform = 'github'):
         print(f"Could not filter file list: {e}")
 
     return files
+
+def translate_globs_to_regexes(globs: list):
+    regexes = []
+    for pattern in globs:
+        regexes.append(fnmatch.translate(pattern))
+        if pattern.startswith("**/"): # cover root-level files
+            regexes.append(fnmatch.translate(pattern[3:]))
+    return regexes
