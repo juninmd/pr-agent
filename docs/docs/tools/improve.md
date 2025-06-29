@@ -437,9 +437,26 @@ dual_publishing_score_threshold = x
 
 Where x represents the minimum score threshold (>=) for suggestions to be presented as committable PR comments in addition to the table. Default is -1 (disabled).
 
+### Controlling suggestions depth
+
+> `💎 feature`
+
+You can control the depth and comprehensiveness of the code suggestions by using the `pr_code_suggestions.suggestions_depth` parameter.
+
+Available options:
+
+- `selective` - Shows only suggestions above a score threshold of 6
+- `regular` - Default mode with balanced suggestion coverage  
+- `exhaustive` - Provides maximum suggestion comprehensiveness
+
+(Alternatively, use numeric values: 1, 2, or 3 respectively)
+
+We recommend starting with `regular` mode, then exploring `exhaustive` mode, which can provide more comprehensive suggestions and enhanced bug detection.
+
+
 ### Self-review
 
-> `💎 feature` Platforms supported: GitHub, GitLab
+> `💎 feature. Platforms supported: GitHub, GitLab`
 
 If you set in a configuration file:
 
@@ -520,6 +537,10 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 line
       <tr>
         <td><b>enable_chat_in_code_suggestions</b></td>
         <td>If set to true, QM bot will interact with comments made on code changes it has proposed. Default is true.</td>
+      </tr>
+      <tr>
+        <td><b>suggestions_depth 💎</b></td>
+        <td> Controls the depth of the suggestions. Can be set to 'selective', 'regular', or 'exhaustive'. Default is 'regular'.</td>
       </tr>
       <tr>
         <td><b>dual_publishing_score_threshold</b></td>
