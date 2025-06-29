@@ -57,7 +57,7 @@ Everything below this marker is treated as previously auto-generated content and
 ![Describe comment](https://codium.ai/images/pr_agent/pr_description_user_description.png){width=512}
 
 ### Sequence Diagram Support 
-The `/describe` tool includes a Mermaid sequence diagram in PR descriptions showing component/function interactions. 
+The `/describe` tool includes a Mermaid sequence diagram showing component/function interactions. 
 
 This option is enabled by default via the `pr_description.enable_pr_diagram` param.
 
