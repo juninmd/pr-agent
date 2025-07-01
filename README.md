@@ -57,7 +57,7 @@ Add automated PR reviews to your repository with a simple workflow file using [G
 ### CLI Usage
 Run PR-Agent locally on your repository via command line: [Local CLI setup guide](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#local-repo-cli)
 
-### Qodo Merge as post-commit in you local IDE
+### Qodo Merge as post-commit in your local IDE
 See [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)
 
 ### Discover Qodo Merge 💎 
