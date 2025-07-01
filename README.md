@@ -31,12 +31,12 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 
 - [Getting Started](#getting-started)
 - [News and Updates](#news-and-updates)
+- [Why Use PR-Agent?](#why-use-pr-agent)
 - [Features](#Features)
 - [See It in Action](#see-it-in-action)
 - [Try It Now](#try-it-now)
 - [Qodo Merge 💎](#qodo-merge-)
 - [How It Works](#how-it-works)
-- [Why Use PR-Agent?](#why-use-pr-agent)
 - [Data Privacy](#data-privacy)
 - [Contributing](#contributing)
 - [Links](#links)
@@ -100,6 +100,17 @@ New tool for Qodo Merge 💎 - `/scan_repo_discussions`.
 <img width="635" alt="image" src="https://codium.ai/images/pr_agent/scan_repo_discussions_2.png" />
 
 Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/scan_repo_discussions/).
+
+## Why Use PR-Agent?
+
+A reasonable question that can be asked is: `"Why use PR-Agent? What makes it stand out from existing tools?"`
+
+Here are some advantages of PR-Agent:
+
+- We emphasize **real-life practical usage**. Each tool (review, improve, ask, ...) has a single LLM call, no more. We feel that this is critical for realistic team usage - obtaining an answer quickly (~30 seconds) and affordably.
+- Our [PR Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/#pr-compression-strategy)  is a core ability that enables to effectively tackle both short and long PRs.
+- Our JSON prompting strategy enables us to have **modular, customizable tools**. For example, the '/review' tool categories can be controlled via the [configuration](pr_agent/settings/configuration.toml) file. Adding additional categories is easy and accessible.
+- We support **multiple git providers** (GitHub, GitLab, BitBucket), **multiple ways** to use the tool (CLI, GitHub Action, GitHub App, Docker, ...), and **multiple models** (GPT, Claude, Deepseek, ...)
 
 ## Features
 
@@ -226,17 +237,6 @@ The following diagram illustrates PR-Agent tools and their flow:
 ![PR-Agent Tools](https://www.qodo.ai/images/pr_agent/diagram-v0.9.png)
 
 Check out the [PR Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/#pr-compression-strategy) page for more details on how we convert a code diff to a manageable LLM prompt
-
-## Why Use PR-Agent?
-
-A reasonable question that can be asked is: `"Why use PR-Agent? What makes it stand out from existing tools?"`
-
-Here are some advantages of PR-Agent:
-
-- We emphasize **real-life practical usage**. Each tool (review, improve, ask, ...) has a single LLM call, no more. We feel that this is critical for realistic team usage - obtaining an answer quickly (~30 seconds) and affordably.
-- Our [PR Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/#pr-compression-strategy)  is a core ability that enables to effectively tackle both short and long PRs.
-- Our JSON prompting strategy enables us to have **modular, customizable tools**. For example, the '/review' tool categories can be controlled via the [configuration](pr_agent/settings/configuration.toml) file. Adding additional categories is easy and accessible.
-- We support **multiple git providers** (GitHub, GitLab, BitBucket), **multiple ways** to use the tool (CLI, GitHub Action, GitHub App, Docker, ...), and **multiple models** (GPT, Claude, Deepseek, ...)
 
 ## Data Privacy
 
