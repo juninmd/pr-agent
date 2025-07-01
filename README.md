@@ -65,11 +65,14 @@ Zero-setup hosted solution with advanced features and priority support
 -  [Intro and Installation guide](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/)
 -  [Plans & Pricing](https://www.qodo.ai/pricing/)
 
+### Qodo Merge as a Post-commit in Your Local IDE
+You can receive automatic feedback from Qodo Merge on your local IDE after each [commit](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)
+
 
 ## News and Updates
 
 ## Jul 1, 2025
-You can now run Qodo Merge locally on your IDE and get automatic feedback after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
+You can now receive automatic feedback from Qodo Merge in your local IDe after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
 
 ## Jun 21, 2025
 
