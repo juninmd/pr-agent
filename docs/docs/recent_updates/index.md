@@ -1,6 +1,6 @@
 # Recent Updates and Future Roadmap
 
-`Page last updated: 2025-06-01`
+`Page last updated: 2025-07-01`
 
 This page summarizes recent enhancements to Qodo Merge (last three months).
 

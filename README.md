@@ -72,7 +72,7 @@ You can receive automatic feedback from Qodo Merge on your local IDE after each 
 ## News and Updates
 
 ## Jul 1, 2025
-You can now receive automatic feedback from Qodo Merge in your local IDe after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
+You can now receive automatic feedback from Qodo Merge in your local IDE after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
 
 ## Jun 21, 2025
 
