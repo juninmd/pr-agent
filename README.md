@@ -62,6 +62,7 @@ See [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-co
 
 ### Discover Qodo Merge 💎
 Zero-setup hosted solution with advanced features and priority support
+-  **[FREE for Open Source](https://github.com/marketplace/qodo-merge-pro-for-open-source)**: Full features, zero cost for public repos
 -  [Intro and Installation guide](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/)
 -  [Plans & Pricing](https://www.qodo.ai/pricing/)
 
