@@ -57,6 +57,9 @@ Add automated PR reviews to your repository with a simple workflow file using [G
 ### CLI Usage
 Run PR-Agent locally on your repository via command line: [Local CLI setup guide](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#local-repo-cli)
 
+### Qodo Merge as post-commit in you local IDE
+See [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)
+
 ### Discover Qodo Merge 💎 
 Zero-setup hosted solution with advanced features and priority support
 -  [Intro and Installation guide](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/)
@@ -64,6 +67,9 @@ Zero-setup hosted solution with advanced features and priority support
 
 
 ## News and Updates
+
+## Jul 1, 2025
+You can now run Qodo Merge locally on your IDE and get automatic feedback after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
 
 ## Jun 21, 2025
 
@@ -75,11 +81,6 @@ v0.30 was [released](https://github.com/qodo-ai/pr-agent/releases)
 Qodo Merge now offers a simplified free tier 💎.
 Organizations can use Qodo Merge at no cost, with a [monthly limit](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users) of 75 PR reviews per organization.
 
-## May 17, 2025
-
-- v0.29 was [released](https://github.com/qodo-ai/pr-agent/releases)
-- `Qodo Merge Pull Request Benchmark` was [released](https://qodo-merge-docs.qodo.ai/pr_benchmark/). This benchmark  evaluates and compares the performance of LLMs in analyzing pull request code.
-- `Recent Updates and Future Roadmap` page was added to the [Qodo Merge Docs](https://qodo-merge-docs.qodo.ai/recent_updates/)
 
 ## Apr 30, 2025
 
