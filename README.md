@@ -31,7 +31,7 @@ PR-Agent aims to help efficiently review and handle pull requests, by providing 
 
 - [Getting Started](#getting-started)
 - [News and Updates](#news-and-updates)
-- [Overview](#overview)
+- [Features](#Features)
 - [See It in Action](#see-it-in-action)
 - [Try It Now](#try-it-now)
 - [Qodo Merge 💎](#qodo-merge-)
@@ -60,7 +60,7 @@ Run PR-Agent locally on your repository via command line: [Local CLI setup guide
 ### Qodo Merge as post-commit in your local IDE
 See [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)
 
-### Discover Qodo Merge 💎 
+### Discover Qodo Merge 💎
 Zero-setup hosted solution with advanced features and priority support
 -  [Intro and Installation guide](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/)
 -  [Plans & Pricing](https://www.qodo.ai/pricing/)
@@ -101,11 +101,11 @@ New tool for Qodo Merge 💎 - `/scan_repo_discussions`.
 
 Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/scan_repo_discussions/).
 
-## Overview
+## Features
 
 <div style="text-align:left;">
 
-Supported commands per platform:
+PR-Agent and Qodo Merge offer comprehensive pull request functionalities integrated with various git providers:
 
 |                                                         |                                                                                                                     | GitHub | GitLab | Bitbucket | Azure DevOps | Gitea |
 |---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|:------:|:------:|:---------:|:------------:|:-----:|
