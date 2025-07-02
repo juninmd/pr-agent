@@ -124,8 +124,8 @@ This option is enabled by default via the `pr_description.enable_pr_diagram` par
         <td>If set to true, the file list in the "Changes walkthrough" section will be collapsible. If set to "adaptive", the file list will be collapsible only if there are more than 8 files. Default is "adaptive".</td>
       </tr>
       <tr>
-        <td><b>enable_large_pr_handling</b></td>
-        <td>Pro feature. If set to true, in case of a large PR the tool will make several calls to the AI and combine them to be able to cover more files. Default is true.</td>
+        <td><b>enable_large_pr_handling 💎</b></td>
+        <td>If set to true, in case of a large PR the tool will make several calls to the AI and combine them to be able to cover more files. Default is true.</td>
       </tr>
       <tr>
         <td><b>enable_help_text</b></td>
