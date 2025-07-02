@@ -234,6 +234,8 @@ async def gitlab_webhook(background_tasks: BackgroundTasks, request: Request):
                     get_logger().info(f"Skipping draft MR: {url}")
                     return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder({"message": "success"}))
 
+                # Apply repo settings before checking push commands or handle_push_trigger
+                apply_repo_settings(url)
                 commands_on_push = get_settings().get(f"gitlab.push_commands", {})
                 handle_push_trigger = get_settings().get(f"gitlab.handle_push_trigger", False)
                 if not commands_on_push or not handle_push_trigger:
