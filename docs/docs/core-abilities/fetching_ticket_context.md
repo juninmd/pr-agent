@@ -50,6 +50,15 @@ Each ticket will be assigned a label (Compliance/Alignment level), Indicates the
 
 A `PR Code Verified` label indicates the PR code meets ticket requirements, but requires additional manual testing beyond the code scope. For example - validating UI display across different environments (Mac, Windows, mobile, etc.).
 
+### Ask tool
+
+The `ask` tool will also leverage the ticket content (title, description, labels, etc.) to provide additional context when answering questions about the PR. This means that when you use the Ask tool, it can:
+
+- Use ticket context to provide more relevant and accurate answers to your questions about the PR.
+- Directly answer questions related to the ticket itself, such as its requirements, acceptance criteria, or intent.
+- Help clarify how the code changes relate to the ticket, or whether the PR fulfills the ticket's goals.
+
+By including ticket context, the Ask tool ensures that responses are as informed and useful as those from the Describe and Review tools.
 
 #### Configuration options
 
