@@ -5,6 +5,7 @@ Qodo Merge utilizes a variety of core abilities to provide a comprehensive and e
 - [Auto approval](https://qodo-merge-docs.qodo.ai/core-abilities/auto_approval/)
 - [Auto best practices](https://qodo-merge-docs.qodo.ai/core-abilities/auto_best_practices/)
 - [Chat on code suggestions](https://qodo-merge-docs.qodo.ai/core-abilities/chat_on_code_suggestions/)
+- [Chrome extension](https://qodo-merge-docs.qodo.ai/chrome-extension/)
 - [Code validation](https://qodo-merge-docs.qodo.ai/core-abilities/code_validation/)
 - [Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/compression_strategy/)
 - [Dynamic context](https://qodo-merge-docs.qodo.ai/core-abilities/dynamic_context/)

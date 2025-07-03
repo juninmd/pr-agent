@@ -46,6 +46,7 @@ nav:
       - Auto approval: 'core-abilities/auto_approval.md'
       - Auto best practices: 'core-abilities/auto_best_practices.md'
       - Chat on code suggestions: 'core-abilities/chat_on_code_suggestions.md'
+      - Chrome extension: 'chrome-extension/index.md'
       - Code validation: 'core-abilities/code_validation.md'
 #      - Compression strategy: 'core-abilities/compression_strategy.md'
       - Dynamic context: 'core-abilities/dynamic_context.md'
@@ -57,11 +58,11 @@ nav:
       - RAG context enrichment: 'core-abilities/rag_context_enrichment.md'
       - Self-reflection: 'core-abilities/self_reflection.md'
       - Static code analysis: 'core-abilities/static_code_analysis.md'
-  - Chrome Extension:
-      - Qodo Merge Chrome Extension: 'chrome-extension/index.md'
-      - Features: 'chrome-extension/features.md'
-      - Data Privacy: 'chrome-extension/data_privacy.md'
-      - Options: 'chrome-extension/options.md'
+#  - Chrome Extension:
+#      - Qodo Merge Chrome Extension: 'chrome-extension/index.md'
+#      - Features: 'chrome-extension/features.md'
+#      - Data Privacy: 'chrome-extension/data_privacy.md'
+#      - Options: 'chrome-extension/options.md'
   - PR Benchmark:
       - PR Benchmark: 'pr_benchmark/index.md'
   - Recent Updates:
