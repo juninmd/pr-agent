@@ -560,11 +560,52 @@ class GitLabProvider(GitProvider):
     def get_workspace_name(self):
         return self.id_project.split('/')[0]
 
+
     def add_eyes_reaction(self, issue_comment_id: int, disable_eyes: bool = False) -> Optional[int]:
-        return True
+        if disable_eyes:
+            return None
+        try:
+            if not self.id_mr:
+                get_logger().warning("Cannot add eyes reaction: merge request ID is not set.")
+                return None
+            
+            mr = self.gl.projects.get(self.id_project).mergerequests.get(self.id_mr)
+            comment = mr.notes.get(issue_comment_id)
+            
+            if not comment:
+                get_logger().warning(f"Comment with ID {issue_comment_id} not found in merge request {self.id_mr}.")
+                return None
+            
+            return comment.awardemojis.create({
+                'name': 'eyes'
+            }).get_id()
+        except Exception as e:
+            get_logger().warning(f"Failed to add eyes reaction, error: {e}")
+            return None
 
     def remove_reaction(self, issue_comment_id: int, reaction_id: int) -> bool:
-        return True
+        try:
+            if not self.id_mr:
+                get_logger().warning("Cannot remove reaction: merge request ID is not set.")
+                return False
+            
+            mr = self.gl.projects.get(self.id_project).mergerequests.get(self.id_mr)
+            comment = mr.notes.get(issue_comment_id)
+
+            if not comment:
+                get_logger().warning(f"Comment with ID {issue_comment_id} not found in merge request {self.id_mr}.")
+                return False
+            
+            reaction = comment.awardemojis.get(reaction_id)
+            if reaction:
+                reaction.delete()
+                return True
+            else:
+                get_logger().warning(f"Reaction with ID {reaction_id} not found in comment {issue_comment_id}.")
+                return False
+        except Exception as e:
+            get_logger().warning(f"Failed to remove reaction, error: {e}")
+            return False
 
     def _parse_merge_request_url(self, merge_request_url: str) -> Tuple[str, int]:
         parsed_url = urlparse(merge_request_url)
