@@ -242,7 +242,7 @@ weaknesses:
 
 ## Appendix - Example Results
 
-Some example of benchmarked PRs and their results:
+Some examples of benchmarked PRs and their results:
 
 - [Example 1](https://www.qodo.ai/images/qodo_merge_benchmark/example_results1.html)
 - [Example 2](https://www.qodo.ai/images/qodo_merge_benchmark/example_results2.html)
