@@ -24,7 +24,7 @@ To search the documentation site using natural language:
 
 ## Features
 
-PR-Agent and Qodo Merge offers extensive pull request functionalities across various git providers:
+PR-Agent and Qodo Merge offer comprehensive pull request functionalities integrated with various git providers:
 
 |       |                                                                                                                     | GitHub | GitLab | Bitbucket | Azure DevOps | Gitea |
 | ----- |---------------------------------------------------------------------------------------------------------------------|:------:|:------:|:---------:|:------------:|:-----:|
