@@ -3,15 +3,18 @@
 ## Methodology
 
 Qodo Merge PR Benchmark evaluates and compares the performance of Large Language Models (LLMs) in analyzing pull request code and providing meaningful code suggestions.
-Our diverse dataset comprises of 400 pull requests from over 100 repositories, spanning various programming languages and frameworks to reflect real-world scenarios.
+Our diverse dataset contains 400 pull requests from over 100 repositories, spanning various programming languages and frameworks to reflect real-world scenarios.
 
-- For each pull request, we have pre-generated suggestions from [11](https://qodo-merge-docs.qodo.ai/pr_benchmark/#models-used-for-generating-the-benchmark-baseline) different top-performing models using the Qodo Merge `improve` tool. The prompt for response generation can be found [here](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/code_suggestions/pr_code_suggestions_prompts_not_decoupled.toml).
+- For each pull request, we have pre-generated suggestions from eleven different top-performing models using the Qodo Merge `improve` tool. The prompt for response generation can be found [here](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/code_suggestions/pr_code_suggestions_prompts_not_decoupled.toml). 
 
-- To benchmark a model, we generate its suggestions for the same pull requests and ask a high-performing judge model to **rank** the new model's output against the 11 pre-generated baseline suggestions. We utilize OpenAI's `o3` model as the judge, though other models have yielded consistent results. The prompt for this ranking judgment is available [here](https://github.com/Codium-ai/pr-agent-settings/tree/main/benchmark).
+- To benchmark a model, we generate its suggestions for the same pull requests and ask a high-performing judge model to **rank** the new model's output against the pre-generated baseline suggestions. We utilize OpenAI's `o3` model as the judge, though other models have yielded consistent results. The prompt for this ranking judgment is available [here](https://github.com/Codium-ai/pr-agent-settings/tree/main/benchmark).
 
-- We aggregate ranking outcomes across all pull requests, calculating performance metrics for the evaluated model. We also analyze the qualitative feedback from the judge to identify the model's comparative strengths and weaknesses against the established baselines.
+- We aggregate ranking outcomes across all pull requests, calculating performance metrics for the evaluated model. 
+
+- We also analyze the qualitative feedback from the judge to identify the model's comparative strengths and weaknesses against the established baselines.
 This approach provides not just a quantitative score but also a detailed analysis of each model's strengths and weaknesses.
 
+A list of the models used for generating the baseline suggestions, and example results, can be found in the [Appendix](#appendix-example-results).
 
 [//]: # (Note that this benchmark focuses on quality: the ability of an LLM to process complex pull request with multiple files and nuanced task to produce high-quality code suggestions.)
 
@@ -237,18 +240,40 @@ weaknesses:
 - **Introduces new problems:** Several suggestions add unsupported APIs, undeclared variables, wrong types, or break compilation, hurting trust in the recommendations.
 - **Rule violations:** It often edits lines outside the diff, exceeds the 3-suggestion cap, or labels cosmetic tweaks as “critical”, showing inconsistent guideline compliance.
 
-## Appendix - models used for generating the benchmark baseline
+## Appendix - Example Results
 
-- anthropic_sonnet_3.7_v1:0
-- claude-4-opus-20250514
-- claude-4-sonnet-20250514
-- claude-4-sonnet-20250514_thinking_2048
-- gemini-2.5-flash-preview-04-17
-- gemini-2.5-pro-preview-05-06
-- gemini-2.5-pro-preview-06-05_1024
-- gemini-2.5-pro-preview-06-05_4096
-- gpt-4.1
-- o3
-- o4-mini_medium
+Some example of benchmarked PRs and their results:
 
+- [Example 1](https://www.qodo.ai/images/qodo_merge_benchmark/example_results1.html)
+- [Example 2](https://www.qodo.ai/images/qodo_merge_benchmark/example_results2.html)
+- [Example 3](https://www.qodo.ai/images/qodo_merge_benchmark/example_results3.html)
+- [Example 4](https://www.qodo.ai/images/qodo_merge_benchmark/example_results4.html)
+
+### Models Used for Benchmarking
+
+The following models were used for generating the benchmark baseline:
+
+```markdown
+(1) anthropic_sonnet_3.7_v1:0
+
+(2) claude-4-opus-20250514
+
+(3) claude-4-sonnet-20250514
+
+(4) claude-4-sonnet-20250514_thinking_2048
+
+(5) gemini-2.5-flash-preview-04-17
+
+(6) gemini-2.5-pro-preview-05-06
+
+(7) gemini-2.5-pro-preview-06-05_1024
+
+(8) gemini-2.5-pro-preview-06-05_4096
+
+(9) gpt-4.1
+
+(10) o3
+
+(11) o4-mini_medium
+```
 
