@@ -47,11 +47,16 @@ publish_labels = true
 
 ## Preserving the original user description
 
-By default, Qodo Merge preserves your original PR description by placing it above the generated content.
+By default, Qodo Merge tries to preserve your original PR description by placing it above the generated content.
 This requires including your description during the initial PR creation.
-Be aware that if you edit the description while the automated tool is running, a race condition may occur, potentially causing your original description to be lost.
 
-When updating PR descriptions, the `/describe` tool considers everything above the "PR Type" field as user content and will preserve it.
+"Qodo removed the original description from the PR. Why"?
+
+From our experience, there are two possible reasons:
+
+- If you edit the description _while_ the automated tool is running, a race condition may occur, potentially causing your original description to be lost. Hence, create a description before launching the PR.
+
+- When _updating_ PR descriptions, the `/describe` tool considers everything above the "PR Type" field as user content and will preserve it.
 Everything below this marker is treated as previously auto-generated content and will be replaced.
 
 ![Describe comment](https://codium.ai/images/pr_agent/pr_description_user_description.png){width=512}
