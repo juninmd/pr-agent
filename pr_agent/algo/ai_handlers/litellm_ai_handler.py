@@ -365,11 +365,17 @@ class LiteLLMAIHandler(BaseAiHandler):
                 kwargs["extra_headers"] = litellm_extra_headers
 
             # Support for custom OpenAI body fields (e.g., Flex Processing)
-            if get_settings().litellm.extra_body:
+            # Only allow whitelisted keys for security
+            allowed_extra_body_keys = {"processing_mode", "service_tier"}
+            extra_body = getattr(getattr(get_settings(), "litellm", None), "extra_body", None)
+            if extra_body:
                 try:
-                    litellm_extra_body = json.loads(get_settings().litellm.extra_body)
+                    litellm_extra_body = json.loads(extra_body)
                     if not isinstance(litellm_extra_body, dict):
                         raise ValueError("LITELLM.EXTRA_BODY must be a JSON object")
+                    unsupported_keys = set(litellm_extra_body.keys()) - allowed_extra_body_keys
+                    if unsupported_keys:
+                        raise ValueError(f"LITELLM.EXTRA_BODY contains unsupported keys: {', '.join(unsupported_keys)}. Allowed keys: {', '.join(allowed_extra_body_keys)}")
                     colliding_keys = kwargs.keys() & litellm_extra_body.keys()
                     if colliding_keys:
                         raise ValueError(f"LITELLM.EXTRA_BODY cannot override existing parameters: {', '.join(colliding_keys)}")
