@@ -365,7 +365,6 @@ class LiteLLMAIHandler(BaseAiHandler):
                 kwargs["extra_headers"] = litellm_extra_headers
 
             # Support for custom OpenAI body fields (e.g., Flex Processing)
-            # Only allow whitelisted keys for security
             allowed_extra_body_keys = {"processing_mode", "service_tier"}
             extra_body = getattr(getattr(get_settings(), "litellm", None), "extra_body", None)
             if extra_body:
