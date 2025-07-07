@@ -19,7 +19,6 @@
 </div>
 
 <style>
-Untitled
 .search-section {
     max-width: 800px;
     margin: 0 auto;
@@ -306,7 +305,7 @@ window.addEventListener('load', function() {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
             errorDiv.textContent = `${error}`;
-            resultsContainer.value = "";
+            resultsContainer.innerHTML = "";
             resultsContainer.appendChild(errorDiv);
         }
     }
