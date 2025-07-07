@@ -304,9 +304,8 @@ window.addEventListener('load', function() {
             spinner.style.display = 'none';
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
-            errorDiv.textContent = `${error}`;
-            resultsContainer.innerHTML = "";
-            resultsContainer.appendChild(errorDiv);
+            errorDiv.textContent = error instanceof Error ? error.message : String(error);
+            resultsContainer.replaceChildren(errorDiv);
         }
     }
 
