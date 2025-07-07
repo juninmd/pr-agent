@@ -364,6 +364,16 @@ class LiteLLMAIHandler(BaseAiHandler):
                     raise ValueError(f"LITELLM.EXTRA_HEADERS contains invalid JSON: {str(e)}")
                 kwargs["extra_headers"] = litellm_extra_headers
 
+            # Support for custom OpenAI body fields (e.g., Flex Processing)
+            if get_settings().get("LITELLM.EXTRA_BODY", None):
+                try:
+                    litellm_extra_body = json.loads(get_settings().litellm.extra_body)
+                    if not isinstance(litellm_extra_body, dict):
+                        raise ValueError("LITELLM.EXTRA_BODY must be a JSON object")
+                    kwargs.update(litellm_extra_body)
+                except json.JSONDecodeError as e:
+                    raise ValueError(f"LITELLM.EXTRA_BODY contains invalid JSON: {str(e)}")
+
             get_logger().debug("Prompts", artifact={"system": system, "user": user})
 
             if get_settings().config.verbosity_level >= 2:
