@@ -5,7 +5,7 @@ import requests
 from litellm import acompletion
 from tenacity import retry, retry_if_exception_type, retry_if_not_exception_type, stop_after_attempt
 
-from pr_agent.algo import CLAUDE_EXTENDED_THINKING_MODELS, NO_SUPPORT_TEMPERATURE_MODELS, SUPPORT_REASONING_EFFORT_MODELS, USER_MESSAGE_ONLY_MODELS
+from pr_agent.algo import CLAUDE_EXTENDED_THINKING_MODELS, NO_SUPPORT_TEMPERATURE_MODELS, SUPPORT_REASONING_EFFORT_MODELS, USER_MESSAGE_ONLY_MODELS, STREAMING_REQUIRED_MODELS
 from pr_agent.algo.ai_handlers.base_ai_handler import BaseAiHandler
 from pr_agent.algo.utils import ReasoningEffort, get_version
 from pr_agent.config_loader import get_settings
@@ -142,6 +142,9 @@ class LiteLLMAIHandler(BaseAiHandler):
 
         # Models that support extended thinking
         self.claude_extended_thinking_models = CLAUDE_EXTENDED_THINKING_MODELS
+
+        # Models that require streaming
+        self.streaming_required_models = STREAMING_REQUIRED_MODELS
 
     def _get_azure_ad_token(self):
         """
@@ -370,7 +373,21 @@ class LiteLLMAIHandler(BaseAiHandler):
                 get_logger().info(f"\nSystem prompt:\n{system}")
                 get_logger().info(f"\nUser prompt:\n{user}")
 
-            response = await acompletion(**kwargs)
+            # Check if model requires streaming
+            if model in self.streaming_required_models:
+                kwargs["stream"] = True
+                get_logger().info(f"Using streaming mode for model {model}")
+                response = await acompletion(**kwargs)
+                # Handle streaming response
+                resp, finish_reason = await self._handle_streaming_response(response)
+            else:
+                response = await acompletion(**kwargs)
+                # Handle non-streaming response
+                if response is None or len(response["choices"]) == 0:
+                    raise openai.APIError
+                resp = response["choices"][0]['message']['content']
+                finish_reason = response["choices"][0]["finish_reason"]
+
         except openai.RateLimitError as e:
             get_logger().error(f"Rate limit error during LLM inference: {e}")
             raise
@@ -380,19 +397,43 @@ class LiteLLMAIHandler(BaseAiHandler):
         except Exception as e:
             get_logger().warning(f"Unknown error during LLM inference: {e}")
             raise openai.APIError from e
-        if response is None or len(response["choices"]) == 0:
-            raise openai.APIError
-        else:
-            resp = response["choices"][0]['message']['content']
-            finish_reason = response["choices"][0]["finish_reason"]
-            get_logger().debug(f"\nAI response:\n{resp}")
 
-            # log the full response for debugging
+        get_logger().debug(f"\nAI response:\n{resp}")
+
+        # log the full response for debugging
+        if not (model in self.streaming_required_models):
             response_log = self.prepare_logs(response, system, user, resp, finish_reason)
             get_logger().debug("Full_response", artifact=response_log)
 
-            # for CLI debugging
-            if get_settings().config.verbosity_level >= 2:
-                get_logger().info(f"\nAI response:\n{resp}")
+        # for CLI debugging
+        if get_settings().config.verbosity_level >= 2:
+            get_logger().info(f"\nAI response:\n{resp}")
 
         return resp, finish_reason
+
+    async def _handle_streaming_response(self, response):
+        """
+        Handle streaming response from acompletion and collect the full response.
+
+        Args:
+            response: The streaming response object from acompletion
+
+        Returns:
+            tuple: (full_response_content, finish_reason)
+        """
+        full_response = ""
+        finish_reason = None
+
+        try:
+            async for chunk in response:
+                if chunk.choices and len(chunk.choices) > 0:
+                    delta = chunk.choices[0].delta
+                    if hasattr(delta, 'content') and delta.content:
+                        full_response += delta.content
+                    if chunk.choices[0].finish_reason:
+                        finish_reason = chunk.choices[0].finish_reason
+        except Exception as e:
+            get_logger().error(f"Error handling streaming response: {e}")
+            raise
+
+        return full_response, finish_reason
