@@ -448,11 +448,13 @@ class LiteLLMAIHandler(BaseAiHandler):
         try:
             async for chunk in response:
                 if chunk.choices and len(chunk.choices) > 0:
-                    delta = chunk.choices[0].delta
-                    if hasattr(delta, 'content') and delta.content:
-                        full_response += delta.content
-                    if chunk.choices[0].finish_reason:
-                        finish_reason = chunk.choices[0].finish_reason
+                    choice = chunk.choices[0]
+                    delta = choice.delta
+                    content = getattr(delta, 'content', None)
+                    if content:
+                        full_response += content
+                    if choice.finish_reason:
+                        finish_reason = choice.finish_reason
         except Exception as e:
             get_logger().error(f"Error handling streaming response: {e}")
             raise
