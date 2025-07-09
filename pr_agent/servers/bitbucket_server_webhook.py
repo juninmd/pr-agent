@@ -1,6 +1,7 @@
 import ast
 import json
 import os
+import re
 from typing import List
 
 import uvicorn
@@ -87,6 +88,7 @@ def should_process_pr_logic(data) -> bool:
                 return False
     except Exception as e:
         get_logger().error(f"Failed 'should_process_pr_logic': {e}")
+        return False
     return True
 
 @router.post("/")
