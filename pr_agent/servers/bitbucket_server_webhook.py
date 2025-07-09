@@ -47,7 +47,9 @@ def should_process_pr_logic(data) -> bool:
         source_branch = pr_data.get("fromRef", {}).get("displayId", "")
         target_branch = pr_data.get("toRef", {}).get("displayId", "")
         sender = pr_data.get("author", {}).get("user", {}).get("name", "")
-        repo_full_name = pr_data.get("toRef", {}).get("repository", {}).get("project", {}).get("key", "") + "/" + pr_data.get("toRef", {}).get("repository", {}).get("slug", "")
+        project_key = pr_data.get("toRef", {}).get("repository", {}).get("project", {}).get("key", "")
+        repo_slug = pr_data.get("toRef", {}).get("repository", {}).get("slug", "")
+        repo_full_name = f"{project_key}/{repo_slug}" if project_key and repo_slug else ""
 
         # To ignore PRs from specific repositories
         ignore_repos = get_settings().get("CONFIG.IGNORE_REPOSITORIES", [])
