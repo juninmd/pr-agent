@@ -436,4 +436,8 @@ class LiteLLMAIHandler(BaseAiHandler):
             get_logger().error(f"Error handling streaming response: {e}")
             raise
 
+        if not full_response:
+            get_logger().warning("Streaming response resulted in empty content")
+            raise openai.APIError("Empty streaming response received")
+
         return full_response, finish_reason
