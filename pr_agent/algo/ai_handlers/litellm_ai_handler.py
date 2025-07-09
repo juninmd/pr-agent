@@ -175,6 +175,37 @@ class LiteLLMAIHandler(BaseAiHandler):
             response_log['main_pr_language'] = 'unknown'
         return response_log
 
+    def _process_litellm_extra_body(self, kwargs: dict) -> dict:
+        """
+        Process LITELLM.EXTRA_BODY configuration and update kwargs accordingly.
+        
+        Args:
+            kwargs: The current kwargs dictionary to update
+            
+        Returns:
+            Updated kwargs dictionary
+            
+        Raises:
+            ValueError: If extra_body contains invalid JSON, unsupported keys, or colliding keys
+        """
+        allowed_extra_body_keys = {"processing_mode", "service_tier"}
+        extra_body = getattr(getattr(get_settings(), "litellm", None), "extra_body", None)
+        if extra_body:
+            try:
+                litellm_extra_body = json.loads(extra_body)
+                if not isinstance(litellm_extra_body, dict):
+                    raise ValueError("LITELLM.EXTRA_BODY must be a JSON object")
+                unsupported_keys = set(litellm_extra_body.keys()) - allowed_extra_body_keys
+                if unsupported_keys:
+                    raise ValueError(f"LITELLM.EXTRA_BODY contains unsupported keys: {', '.join(unsupported_keys)}. Allowed keys: {', '.join(allowed_extra_body_keys)}")
+                colliding_keys = kwargs.keys() & litellm_extra_body.keys()
+                if colliding_keys:
+                    raise ValueError(f"LITELLM.EXTRA_BODY cannot override existing parameters: {', '.join(colliding_keys)}")
+                kwargs.update(litellm_extra_body)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"LITELLM.EXTRA_BODY contains invalid JSON: {str(e)}")
+        return kwargs
+
     def _configure_claude_extended_thinking(self, model: str, kwargs: dict) -> dict:
         """
         Configure Claude extended thinking parameters if applicable.
@@ -365,22 +396,7 @@ class LiteLLMAIHandler(BaseAiHandler):
                 kwargs["extra_headers"] = litellm_extra_headers
 
             # Support for custom OpenAI body fields (e.g., Flex Processing)
-            allowed_extra_body_keys = {"processing_mode", "service_tier"}
-            extra_body = getattr(getattr(get_settings(), "litellm", None), "extra_body", None)
-            if extra_body:
-                try:
-                    litellm_extra_body = json.loads(extra_body)
-                    if not isinstance(litellm_extra_body, dict):
-                        raise ValueError("LITELLM.EXTRA_BODY must be a JSON object")
-                    unsupported_keys = set(litellm_extra_body.keys()) - allowed_extra_body_keys
-                    if unsupported_keys:
-                        raise ValueError(f"LITELLM.EXTRA_BODY contains unsupported keys: {', '.join(unsupported_keys)}. Allowed keys: {', '.join(allowed_extra_body_keys)}")
-                    colliding_keys = kwargs.keys() & litellm_extra_body.keys()
-                    if colliding_keys:
-                        raise ValueError(f"LITELLM.EXTRA_BODY cannot override existing parameters: {', '.join(colliding_keys)}")
-                    kwargs.update(litellm_extra_body)
-                except json.JSONDecodeError as e:
-                    raise ValueError(f"LITELLM.EXTRA_BODY contains invalid JSON: {str(e)}")
+            kwargs = self._process_litellm_extra_body(kwargs)
 
             get_logger().debug("Prompts", artifact={"system": system, "user": user})
 
