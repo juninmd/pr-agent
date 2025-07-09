@@ -40,6 +40,53 @@ def handle_request(
 
     background_tasks.add_task(inner)
 
+def should_process_pr_logic(data) -> bool:
+    try:
+        pr_data = data.get("pullRequest", {})
+        title = pr_data.get("title", "")
+        source_branch = pr_data.get("fromRef", {}).get("displayId", "")
+        target_branch = pr_data.get("toRef", {}).get("displayId", "")
+        sender = pr_data.get("author", {}).get("user", {}).get("name", "")
+        repo_full_name = pr_data.get("toRef", {}).get("repository", {}).get("project", {}).get("key", "") + "/" + pr_data.get("toRef", {}).get("repository", {}).get("slug", "")
+
+        # To ignore PRs from specific repositories
+        ignore_repos = get_settings().get("CONFIG.IGNORE_REPOSITORIES", [])
+        if repo_full_name and ignore_repos:
+            if any(re.search(regex, repo_full_name) for regex in ignore_repos):
+                get_logger().info(f"Ignoring PR from repository '{repo_full_name}' due to 'config.ignore_repositories' setting")
+                return False
+
+        # To ignore PRs from specific users
+        ignore_pr_users = get_settings().get("CONFIG.IGNORE_PR_AUTHORS", [])
+        if ignore_pr_users and sender:
+            if sender in ignore_pr_users:
+                get_logger().info(f"Ignoring PR from user '{sender}' due to 'config.ignore_pr_authors' setting")
+                return False
+
+        # To ignore PRs with specific titles
+        if title:
+            ignore_pr_title_re = get_settings().get("CONFIG.IGNORE_PR_TITLE", [])
+            if not isinstance(ignore_pr_title_re, list):
+                ignore_pr_title_re = [ignore_pr_title_re]
+            if ignore_pr_title_re and any(re.search(regex, title) for regex in ignore_pr_title_re):
+                get_logger().info(f"Ignoring PR with title '{title}' due to config.ignore_pr_title setting")
+                return False
+
+        ignore_pr_source_branches = get_settings().get("CONFIG.IGNORE_PR_SOURCE_BRANCHES", [])
+        ignore_pr_target_branches = get_settings().get("CONFIG.IGNORE_PR_TARGET_BRANCHES", [])
+        if (ignore_pr_source_branches or ignore_pr_target_branches):
+            if any(re.search(regex, source_branch) for regex in ignore_pr_source_branches):
+                get_logger().info(
+                    f"Ignoring PR with source branch '{source_branch}' due to config.ignore_pr_source_branches settings")
+                return False
+            if any(re.search(regex, target_branch) for regex in ignore_pr_target_branches):
+                get_logger().info(
+                    f"Ignoring PR with target branch '{target_branch}' due to config.ignore_pr_target_branches settings")
+                return False
+    except Exception as e:
+        get_logger().error(f"Failed 'should_process_pr_logic': {e}")
+    return True
+
 @router.post("/")
 async def redirect_to_webhook():
     return RedirectResponse(url="/webhook")
@@ -73,6 +120,11 @@ async def handle_webhook(background_tasks: BackgroundTasks, request: Request):
 
     if data["eventKey"] == "pr:opened":
         apply_repo_settings(pr_url)
+        if not should_process_pr_logic(data):
+            get_logger().info(f"PR ignored due to config settings", **log_context)
+            return JSONResponse(
+                status_code=status.HTTP_200_OK, content=jsonable_encoder({"message": "PR ignored by config"})
+            )
         if get_settings().config.disable_auto_feedback:  # auto commands for PR, and auto feedback is disabled
             get_logger().info(f"Auto feedback is disabled, skipping auto commands for PR {pr_url}", **log_context)
             return
