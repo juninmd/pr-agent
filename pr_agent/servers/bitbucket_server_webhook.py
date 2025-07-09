@@ -88,7 +88,7 @@ def should_process_pr_logic(data) -> bool:
                     f"Ignoring PR with target branch '{target_branch}' due to config.ignore_pr_target_branches settings")
                 return False
 
-        # --- allow_only_specific_folders logic ---
+        # allow_only_specific_folders 
         allowed_folders = get_settings().config.get("allow_only_specific_folders", [])
         if allowed_folders and pr_id and project_key and repo_slug:
             try:
