@@ -66,7 +66,7 @@ ___
 ___
 
 ??? note "Q: Can Qodo Merge review draft/offline PRs?"
-    #### Answer:<span style="display:none;">5</span>
+    #### Answer:<span style="display:none;">6</span>
 
     Yes. While Qodo Merge won't automatically review draft PRs, you can still get feedback by manually requesting it through [online commenting](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#online-usage).
 
@@ -74,7 +74,7 @@ ___
 ___
 
 ??? note "Q: Can the 'Review effort' feedback be calibrated or customized?"
-    #### Answer:<span style="display:none;">5</span>
+    #### Answer:<span style="display:none;">7</span>
 
     Yes, you can customize review effort estimates using the `extra_instructions` configuration option (see [documentation](https://qodo-merge-docs.qodo.ai/tools/review/#configuration-options)).
     
