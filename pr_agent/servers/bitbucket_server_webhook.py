@@ -45,11 +45,22 @@ def should_process_pr_logic(data) -> bool:
     try:
         pr_data = data.get("pullRequest", {})
         title = pr_data.get("title", "")
-        source_branch = pr_data.get("fromRef", {}).get("displayId", "")
-        target_branch = pr_data.get("toRef", {}).get("displayId", "")
-        sender = pr_data.get("author", {}).get("user", {}).get("name", "")
-        project_key = pr_data.get("toRef", {}).get("repository", {}).get("project", {}).get("key", "")
-        repo_slug = pr_data.get("toRef", {}).get("repository", {}).get("slug", "")
+        
+        from_ref = pr_data.get("fromRef", {})
+        source_branch = from_ref.get("displayId", "") if from_ref else ""
+        
+        to_ref = pr_data.get("toRef", {})
+        target_branch = to_ref.get("displayId", "") if to_ref else ""
+        
+        author = pr_data.get("author", {})
+        user = author.get("user", {}) if author else {}
+        sender = user.get("name", "") if user else ""
+        
+        repository = to_ref.get("repository", {}) if to_ref else {}
+        project = repository.get("project", {}) if repository else {}
+        project_key = project.get("key", "") if project else ""
+        repo_slug = repository.get("slug", "") if repository else ""
+        
         repo_full_name = f"{project_key}/{repo_slug}" if project_key and repo_slug else ""
         pr_id = pr_data.get("id", None)
 
@@ -63,7 +74,7 @@ def should_process_pr_logic(data) -> bool:
         # To ignore PRs from specific users
         ignore_pr_users = get_settings().get("CONFIG.IGNORE_PR_AUTHORS", [])
         if ignore_pr_users and sender:
-            if sender in ignore_pr_users:
+            if any(re.search(regex, sender) for regex in ignore_pr_users):
                 get_logger().info(f"Ignoring PR from user '{sender}' due to 'config.ignore_pr_authors' setting")
                 return False
 
@@ -110,7 +121,7 @@ def should_process_pr_logic(data) -> bool:
                         return False
             except Exception as e:
                 get_logger().error(f"Failed allow_only_specific_folders logic: {e}")
-                pass
+                return True
     except Exception as e:
         get_logger().error(f"Failed 'should_process_pr_logic': {e}")
         return False
