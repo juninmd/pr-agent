@@ -51,6 +51,7 @@ def should_process_pr_logic(data) -> bool:
         project_key = pr_data.get("toRef", {}).get("repository", {}).get("project", {}).get("key", "")
         repo_slug = pr_data.get("toRef", {}).get("repository", {}).get("slug", "")
         repo_full_name = f"{project_key}/{repo_slug}" if project_key and repo_slug else ""
+        pr_id = pr_data.get("id", None)
 
         # To ignore PRs from specific repositories
         ignore_repos = get_settings().get("CONFIG.IGNORE_REPOSITORIES", [])
@@ -85,6 +86,24 @@ def should_process_pr_logic(data) -> bool:
             if any(re.search(regex, target_branch) for regex in ignore_pr_target_branches):
                 get_logger().info(
                     f"Ignoring PR with target branch '{target_branch}' due to config.ignore_pr_target_branches settings")
+                return False
+
+        # --- allow_only_specific_folders logic ---
+        allowed_folders = get_settings().config.get("allow_only_specific_folders", [])
+        if allowed_folders and pr_id and project_key and repo_slug:
+            try:
+                from pr_agent.git_providers.bitbucket_server_provider import BitbucketServerProvider
+                bitbucket_server_url = get_settings().get("BITBUCKET_SERVER.URL", "")
+                pr_url = f"{bitbucket_server_url}/projects/{project_key}/repos/{repo_slug}/pull-requests/{pr_id}"
+                provider = BitbucketServerProvider(pr_url=pr_url)
+                changed_files = provider.get_files()
+                if changed_files:
+                    for file_path in changed_files:
+                        if not any(file_path.startswith(folder) for folder in allowed_folders):
+                            get_logger().info(f"Ignoring PR because file '{file_path}' is not in allowed folders {allowed_folders}")
+                            return False
+            except Exception as e:
+                get_logger().error(f"Failed allow_only_specific_folders logic: {e}")
                 return False
     except Exception as e:
         get_logger().error(f"Failed 'should_process_pr_logic': {e}")
