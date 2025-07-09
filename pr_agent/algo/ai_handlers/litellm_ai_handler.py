@@ -15,6 +15,23 @@ import json
 OPENAI_RETRIES = 5
 
 
+class MockResponse:
+    """Mock response object for streaming models to enable consistent logging."""
+
+    def __init__(self, resp, finish_reason):
+        self._data = {
+            "choices": [
+                {
+                    "message": {"content": resp},
+                    "finish_reason": finish_reason
+                }
+            ]
+        }
+
+    def dict(self):
+        return self._data
+
+
 class LiteLLMAIHandler(BaseAiHandler):
     """
     This class handles interactions with the OpenAI API for chat completions.
@@ -401,9 +418,13 @@ class LiteLLMAIHandler(BaseAiHandler):
         get_logger().debug(f"\nAI response:\n{resp}")
 
         # log the full response for debugging
-        if not (model in self.streaming_required_models):
+        if model in self.streaming_required_models:
+            # for streaming, we don't have the full response object, so we create a mock one
+            mock_response = MockResponse(resp, finish_reason)
+            response_log = self.prepare_logs(mock_response, system, user, resp, finish_reason)
+        else:
             response_log = self.prepare_logs(response, system, user, resp, finish_reason)
-            get_logger().debug("Full_response", artifact=response_log)
+        get_logger().debug("Full_response", artifact=response_log)
 
         # for CLI debugging
         if get_settings().config.verbosity_level >= 2:
