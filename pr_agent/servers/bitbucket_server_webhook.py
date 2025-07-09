@@ -88,7 +88,7 @@ def should_process_pr_logic(data) -> bool:
                     f"Ignoring PR with target branch '{target_branch}' due to config.ignore_pr_target_branches settings")
                 return False
 
-        # allow_only_specific_folders 
+        # Allow_only_specific_folders
         allowed_folders = get_settings().config.get("allow_only_specific_folders", [])
         if allowed_folders and pr_id and project_key and repo_slug:
             try:
@@ -98,13 +98,19 @@ def should_process_pr_logic(data) -> bool:
                 provider = BitbucketServerProvider(pr_url=pr_url)
                 changed_files = provider.get_files()
                 if changed_files:
+                    # Check if ALL files are outside allowed folders
+                    all_files_outside = True
                     for file_path in changed_files:
-                        if not any(file_path.startswith(folder) for folder in allowed_folders):
-                            get_logger().info(f"Ignoring PR because file '{file_path}' is not in allowed folders {allowed_folders}")
-                            return False
+                        if any(file_path.startswith(folder) for folder in allowed_folders):
+                            all_files_outside = False
+                            break
+                    
+                    if all_files_outside:
+                        get_logger().info(f"Ignoring PR because all files {changed_files} are outside allowed folders {allowed_folders}")
+                        return False
             except Exception as e:
                 get_logger().error(f"Failed allow_only_specific_folders logic: {e}")
-                return False
+                pass
     except Exception as e:
         get_logger().error(f"Failed 'should_process_pr_logic': {e}")
         return False
