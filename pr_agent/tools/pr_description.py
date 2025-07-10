@@ -168,8 +168,8 @@ class PRDescription:
                         get_logger().debug(f"Labels are the same, not updating")
 
                 # publish description
+                pr_title_clean = pr_title.strip().replace('\n', ' ')
                 if get_settings().pr_description.publish_description_as_comment:
-                    pr_title_clean = pr_title.strip().replace('\n', ' ')
                     full_markdown_description = f"## Title\n\n{pr_title_clean}\n\n___\n{pr_body}"
                     if get_settings().pr_description.publish_description_as_comment_persistent:
                         self.git_provider.publish_persistent_comment(full_markdown_description,
@@ -180,7 +180,6 @@ class PRDescription:
                     else:
                         self.git_provider.publish_comment(full_markdown_description)
                 else:
-                    pr_title_clean = pr_title.strip().replace('\n', ' ')
                     self.git_provider.publish_description(pr_title_clean, pr_body)
 
                     # publish final update message
