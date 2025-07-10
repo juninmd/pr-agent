@@ -761,7 +761,9 @@ class PRDescription:
 
     @staticmethod
     def clean_title(title: str) -> str:
-        """Clean the PR title by normalizing all whitespace to a single space and stripping leading/trailing spaces."""
+        """Clean the PR title by normalizing all whitespace to a single space and stripping leading/trailing spaces. Returns empty string if input is None or empty."""
+        if not title:
+            return ""
         return re.sub(r'\s+', ' ', title.strip())
 
 
