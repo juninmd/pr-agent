@@ -761,8 +761,8 @@ class PRDescription:
 
     @staticmethod
     def clean_title(title: str) -> str:
-        """Clean the PR title by stripping whitespace and replacing newlines with spaces."""
-        return title.strip().replace('\n', ' ')
+        """Clean the PR title by normalizing all whitespace to a single space and stripping leading/trailing spaces."""
+        return re.sub(r'\s+', ' ', title.strip())
 
 
 def count_chars_without_html(string):
