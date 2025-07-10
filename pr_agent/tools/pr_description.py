@@ -169,7 +169,8 @@ class PRDescription:
 
                 # publish description
                 if get_settings().pr_description.publish_description_as_comment:
-                    full_markdown_description = f"## Title\n\n{pr_title}\n\n___\n{pr_body}"
+                    pr_title_clean = pr_title.strip().replace('\n', ' ')
+                    full_markdown_description = f"## Title\n\n{pr_title_clean}\n\n___\n{pr_body}"
                     if get_settings().pr_description.publish_description_as_comment_persistent:
                         self.git_provider.publish_persistent_comment(full_markdown_description,
                                                                      initial_header="## Title",
@@ -179,7 +180,8 @@ class PRDescription:
                     else:
                         self.git_provider.publish_comment(full_markdown_description)
                 else:
-                    self.git_provider.publish_description(pr_title, pr_body)
+                    pr_title_clean = pr_title.strip().replace('\n', ' ')
+                    self.git_provider.publish_description(pr_title_clean, pr_body)
 
                     # publish final update message
                     if (get_settings().pr_description.final_update_message and not get_settings().config.get('is_auto_command', False)):
