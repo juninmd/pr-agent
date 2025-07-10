@@ -168,7 +168,7 @@ class PRDescription:
                         get_logger().debug(f"Labels are the same, not updating")
 
                 # publish description
-                pr_title_clean = pr_title.strip().replace('\n', ' ')
+                pr_title_clean = self.clean_title(pr_title)
                 if get_settings().pr_description.publish_description_as_comment:
                     full_markdown_description = f"## Title\n\n{pr_title_clean}\n\n___\n{pr_body}"
                     if get_settings().pr_description.publish_description_as_comment_persistent:
@@ -758,6 +758,12 @@ class PRDescription:
 </tr>
 """
         return pr_body
+
+    @staticmethod
+    def clean_title(title: str) -> str:
+        """Clean the PR title by stripping whitespace and replacing newlines with spaces."""
+        return title.strip().replace('\n', ' ')
+
 
 def count_chars_without_html(string):
     if '<' not in string:
