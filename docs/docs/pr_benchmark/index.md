@@ -61,7 +61,7 @@ A list of the models used for generating the baseline suggestions, and example r
     <tr>
       <td style="text-align:left;">Grok-4</td>
       <td style="text-align:left;">2025-07-09</td>
-      <td style="text-align:left;">Unknown</td>
+      <td style="text-align:left;">unknown</td>
       <td style="text-align:center;"><b>41.7</b></td>
     </tr>
     <tr>
