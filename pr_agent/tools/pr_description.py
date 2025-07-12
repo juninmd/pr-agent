@@ -758,9 +758,6 @@ class PRDescription:
 """
         return pr_body
 
-
-
-
 def count_chars_without_html(string):
     if '<' not in string:
         return len(string)
