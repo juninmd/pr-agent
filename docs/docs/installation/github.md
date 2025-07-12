@@ -138,7 +138,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           config.model: "anthropic/claude-3-opus-20240229"
-          config.fallback_models: '["anthropic/claude-3-opus-20240229"]'
+          config.fallback_models: '["anthropic/claude-3-haiku-20240307"]'
           ANTHROPIC.KEY: ${{ secrets.ANTHROPIC_KEY }}
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "true"
@@ -212,7 +212,7 @@ To use Claude models:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # Set the model to Claude
         config.model: "anthropic/claude-3-opus-20240229"
-        config.fallback_models: '["anthropic/claude-3-opus-20240229"]'
+        config.fallback_models: '["anthropic/claude-3-haiku-20240307"]'
         # Add your Anthropic API key
         ANTHROPIC.KEY: ${{ secrets.ANTHROPIC_KEY }}
         # Tool configuration
@@ -273,7 +273,7 @@ To use local models via Ollama:
         github_action_config.auto_improve: "true"
 ```
 
-**Note:** For local models, you'll need to run Ollama on your GitHub Actions runner or use a self-hosted runner.
+**Note:** For local models, you'll need to use a self-hosted runner with Ollama installed, as GitHub Actions hosted runners cannot access localhost services.
 
 ### Advanced Configuration Options
 
@@ -438,9 +438,9 @@ If you encounter rate limiting:
 - **Solution**: Check that arrays are properly formatted as JSON strings:
   ```yaml
   # Correct
-  config.fallback_models: '["model1", "model2"]'
-  # Incorrect
-  config.fallback_models: "[model1, model2]"
+config.fallback_models: '["model1", "model2"]'
+# Incorrect (interpreted as a YAML list, not a string)
+config.fallback_models: ["model1", "model2"]
   ```
 
 #### Debugging Tips
