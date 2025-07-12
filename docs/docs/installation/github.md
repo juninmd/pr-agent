@@ -105,7 +105,6 @@ jobs:
       - name: PR Agent action step
         uses: qodo-ai/pr-agent@main
         env:
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           config.model: "gemini/gemini-1.5-flash"
           config.fallback_models: '["gemini/gemini-1.5-flash"]'
@@ -137,7 +136,6 @@ jobs:
       - name: PR Agent action step
         uses: qodo-ai/pr-agent@main
         env:
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           config.model: "anthropic/claude-3-opus-20240229"
           config.fallback_models: '["anthropic/claude-3-opus-20240229"]'
@@ -188,7 +186,6 @@ To use Gemini models instead of the default OpenAI models:
 
 ```yaml
       env:
-        OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # Set the model to Gemini
         config.model: "gemini/gemini-1.5-flash"
@@ -204,13 +201,14 @@ To use Gemini models instead of the default OpenAI models:
 **Required Secrets:**
 - Add `GEMINI_API_KEY` to your repository secrets (get it from [Google AI Studio](https://aistudio.google.com/))
 
+**Note:** When using non-OpenAI models like Gemini, you don't need to set `OPENAI_KEY` - only the model-specific API key is required.
+
 #### Using Claude (Anthropic)
 
 To use Claude models:
 
 ```yaml
       env:
-        OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # Set the model to Claude
         config.model: "anthropic/claude-3-opus-20240229"
@@ -225,6 +223,8 @@ To use Claude models:
 
 **Required Secrets:**
 - Add `ANTHROPIC_KEY` to your repository secrets (get it from [Anthropic Console](https://console.anthropic.com/))
+
+**Note:** When using non-OpenAI models like Claude, you don't need to set `OPENAI_KEY` - only the model-specific API key is required.
 
 #### Using Azure OpenAI
 
@@ -367,7 +367,6 @@ jobs:
         id: pragent
         uses: qodo-ai/pr-agent@main
         env:
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC.KEY: ${{ secrets.ANTHROPIC_KEY }}
@@ -417,10 +416,11 @@ If you encounter rate limiting:
 #### Common Error Messages and Solutions
 
 **Error: "Model not found"**
-- **Solution**: Check the model name format and ensure it matches the exact identifier from the [model list](https://github.com/Codium-ai/pr-agent/blob/main/pr_agent/algo/__init__.py)
+- **Solution**: Check the model name format and ensure it matches the exact identifier. See the [Changing a model in PR-Agent](../usage-guide/changing_a_model.md) guide for supported models and their correct identifiers.
 
 **Error: "API key not found"**
 - **Solution**: Verify that your API key is correctly set as a repository secret and the environment variable name matches exactly
+- **Note**: For non-OpenAI models (Gemini, Claude, etc.), you only need the model-specific API key, not `OPENAI_KEY`
 
 **Error: "Rate limit exceeded"**
 - **Solution**: Add fallback models or increase the `config.ai_timeout` value
