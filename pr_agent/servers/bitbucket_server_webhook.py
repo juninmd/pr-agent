@@ -119,13 +119,9 @@ def should_process_pr_logic(data) -> bool:
                     if all_files_outside:
                         get_logger().info(f"Ignoring PR because all files {changed_files} are outside allowed folders {allowed_folders}")
                         return False
-            except Exception as e:
-                get_logger().error(f"Failed allow_only_specific_folders logic: {e}")
-                # Continue processing PR when folder check fails
-                pass
     except Exception as e:
         get_logger().error(f"Failed 'should_process_pr_logic': {e}")
-        return False
+        return True
     return True
 
 @router.post("/")
