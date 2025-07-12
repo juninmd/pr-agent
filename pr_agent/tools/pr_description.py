@@ -168,9 +168,8 @@ class PRDescription:
                         get_logger().debug(f"Labels are the same, not updating")
 
                 # publish description
-                pr_title_clean = self.clean_title(pr_title)
                 if get_settings().pr_description.publish_description_as_comment:
-                    full_markdown_description = f"## Title\n\n{pr_title_clean}\n\n___\n{pr_body}"
+                    full_markdown_description = f"## Title\n\n{pr_title.strip()}\n\n___\n{pr_body}"
                     if get_settings().pr_description.publish_description_as_comment_persistent:
                         self.git_provider.publish_persistent_comment(full_markdown_description,
                                                                      initial_header="## Title",
@@ -180,7 +179,7 @@ class PRDescription:
                     else:
                         self.git_provider.publish_comment(full_markdown_description)
                 else:
-                    self.git_provider.publish_description(pr_title_clean, pr_body)
+                    self.git_provider.publish_description(pr_title.strip(), pr_body)
 
                     # publish final update message
                     if (get_settings().pr_description.final_update_message and not get_settings().config.get('is_auto_command', False)):
@@ -759,12 +758,7 @@ class PRDescription:
 """
         return pr_body
 
-    @staticmethod
-    def clean_title(title: str) -> str:
-        """Clean the PR title by normalizing all whitespace to a single space and stripping leading/trailing spaces. Returns empty string if input is None or empty."""
-        if not title:
-            return ""
-        return re.sub(r'\s+', ' ', title.strip())
+
 
 
 def count_chars_without_html(string):
