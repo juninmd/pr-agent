@@ -447,7 +447,7 @@ class LiteLLMAIHandler(BaseAiHandler):
             raise openai.APIError("Empty streaming response received without proper completion")
         elif not full_response and finish_reason:
             get_logger().debug(f"Streaming response resulted in empty content but completed with finish_reason: {finish_reason}")
-
+            raise openai.APIError(f"Streaming response completed with finish_reason '{finish_reason}' but no content received")
         return full_response, finish_reason
 
     async def _get_completion(self, model, **kwargs):
