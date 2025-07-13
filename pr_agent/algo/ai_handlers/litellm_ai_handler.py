@@ -359,7 +359,7 @@ class LiteLLMAIHandler(BaseAiHandler):
                 get_logger().info(f"\nUser prompt:\n{user}")
 
             # Get completion with automatic streaming detection
-            resp, finish_reason, response_obj = await self._get_completion(model, **kwargs)
+            resp, finish_reason, response_obj = await self._get_completion(**kwargs)
 
         except openai.RateLimitError as e:
             get_logger().error(f"Rate limit error during LLM inference: {e}")
@@ -383,10 +383,11 @@ class LiteLLMAIHandler(BaseAiHandler):
 
         return resp, finish_reason
 
-    async def _get_completion(self, model, **kwargs):
+    async def _get_completion(self, **kwargs):
         """
         Wrapper that automatically handles streaming for required models.
         """
+        model = kwargs["model"]
         if model in self.streaming_required_models:
             kwargs["stream"] = True
             get_logger().info(f"Using streaming mode for model {model}")
