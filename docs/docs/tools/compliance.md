@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `compliance` tool performs comprehensive compliance checks on PR code changes, validating them against security standards, ticket requirements, and custom organizational compliance checklists.
+The `compliance` tool performs comprehensive compliance checks on PR code changes, validating them against security standards, ticket requirements, and custom organizational compliance checklists, thereby helping teams maintain consistent code quality and security practices while ensuring that development work aligns with business requirements.
 
 === "Fully Compliant"
     ![compliance_overview](https://codium.ai/images/pr_agent/compliance_full.png){width=256}
@@ -296,5 +296,3 @@ enable_global_pr_compliance = true
     
     Implement a dedicated [GitHub Action](https://medium.com/sequra-tech/quick-tip-block-pull-request-merge-using-labels-6cc326936221) to enforce these checklists.
 
-
-The compliance tool provides a comprehensive view of PR quality and adherence to organizational standards, helping teams maintain consistent code quality and security practices while ensuring that development work aligns with business requirements.
