@@ -34,6 +34,7 @@ nav:
      - 💎 Add Documentation: 'tools/documentation.md'
      - 💎 Analyze: 'tools/analyze.md'
      - 💎 CI Feedback: 'tools/ci_feedback.md'
+     - 💎 Compliance: 'tools/compliance.md'
      - 💎 Custom Prompt: 'tools/custom_prompt.md'
      - 💎 Generate Labels: 'tools/custom_labels.md'
      - 💎 Generate Tests: 'tools/test.md'

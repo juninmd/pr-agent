@@ -39,6 +39,7 @@ PR-Agent and Qodo Merge offer comprehensive pull request functionalities integra
 |       | [Analyze](https://qodo-merge-docs.qodo.ai/tools/analyze/) 💎                                                        |   ✅   |   ✅   |           |              |       |
 |       | [Auto-Approve](https://qodo-merge-docs.qodo.ai/tools/improve/?h=auto#auto-approval) 💎                              |   ✅   |   ✅   |    ✅     |              |       |
 |       | [CI Feedback](https://qodo-merge-docs.qodo.ai/tools/ci_feedback/) 💎                                                |   ✅   |        |           |              |       |
+|       | [Compliance](https://qodo-merge-docs.qodo.ai/tools/compliance/) 💎                                                |   ✅   |   ✅    |    ✅     |              |       |
 |       | [Custom Prompt](https://qodo-merge-docs.qodo.ai/tools/custom_prompt/) 💎                                            |   ✅   |   ✅   |    ✅     |              |       |
 |       | [Generate Custom Labels](https://qodo-merge-docs.qodo.ai/tools/custom_labels/) 💎                                   |   ✅   |   ✅   |           |              |       |
 |       | [Generate Tests](https://qodo-merge-docs.qodo.ai/tools/test/) 💎                                                    |   ✅   |   ✅   |           |              |       |
