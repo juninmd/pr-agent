@@ -149,7 +149,7 @@ pr-agent-settings/
     │   ├── frontend_repos/
     │   │   └── pr_compliance_checklist.yaml
     │   └── backend_repos/
-    │   └── pr_compliance_checklist.yaml
+    │       └── pr_compliance_checklist.yaml
     ├── qodo-merge/                            # For standalone repositories
     │   └── pr_compliance_checklist.yaml
     └── qodo-monorepo/                         # For monorepo-specific compliance
