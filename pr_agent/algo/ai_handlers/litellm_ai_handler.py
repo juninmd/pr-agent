@@ -5,14 +5,16 @@ import requests
 from litellm import acompletion
 from tenacity import retry, retry_if_exception_type, retry_if_not_exception_type, stop_after_attempt
 
-from pr_agent.algo import CLAUDE_EXTENDED_THINKING_MODELS, NO_SUPPORT_TEMPERATURE_MODELS, SUPPORT_REASONING_EFFORT_MODELS, USER_MESSAGE_ONLY_MODELS
+from pr_agent.algo import CLAUDE_EXTENDED_THINKING_MODELS, NO_SUPPORT_TEMPERATURE_MODELS, SUPPORT_REASONING_EFFORT_MODELS, USER_MESSAGE_ONLY_MODELS, STREAMING_REQUIRED_MODELS
 from pr_agent.algo.ai_handlers.base_ai_handler import BaseAiHandler
+from pr_agent.algo.ai_handlers.litellm_helpers import _handle_streaming_response, MockResponse, _get_azure_ad_token, \
+    _process_litellm_extra_body
 from pr_agent.algo.utils import ReasoningEffort, get_version
 from pr_agent.config_loader import get_settings
 from pr_agent.log import get_logger
 import json
 
-OPENAI_RETRIES = 5
+MODEL_RETRIES = 2
 
 
 class LiteLLMAIHandler(BaseAiHandler):
@@ -110,7 +112,7 @@ class LiteLLMAIHandler(BaseAiHandler):
         if get_settings().get("AZURE_AD.CLIENT_ID", None):
             self.azure = True
             # Generate access token using Azure AD credentials from settings
-            access_token = self._get_azure_ad_token()
+            access_token = _get_azure_ad_token()
             litellm.api_key = access_token
             openai.api_key = access_token
             
@@ -143,25 +145,8 @@ class LiteLLMAIHandler(BaseAiHandler):
         # Models that support extended thinking
         self.claude_extended_thinking_models = CLAUDE_EXTENDED_THINKING_MODELS
 
-    def _get_azure_ad_token(self):
-        """
-        Generates an access token using Azure AD credentials from settings.
-        Returns:
-            str: The access token
-        """
-        from azure.identity import ClientSecretCredential
-        try:
-            credential = ClientSecretCredential(
-                tenant_id=get_settings().azure_ad.tenant_id,
-                client_id=get_settings().azure_ad.client_id,
-                client_secret=get_settings().azure_ad.client_secret
-            )
-            # Get token for Azure OpenAI service
-            token = credential.get_token("https://cognitiveservices.azure.com/.default")
-            return token.token
-        except Exception as e:
-            get_logger().error(f"Failed to get Azure AD token: {e}")
-            raise
+        # Models that require streaming
+        self.streaming_required_models = STREAMING_REQUIRED_MODELS
 
     def prepare_logs(self, response, system, user, resp, finish_reason):
         response_log = response.dict().copy()
@@ -275,7 +260,7 @@ class LiteLLMAIHandler(BaseAiHandler):
 
     @retry(
         retry=retry_if_exception_type(openai.APIError) & retry_if_not_exception_type(openai.RateLimitError),
-        stop=stop_after_attempt(OPENAI_RETRIES),
+        stop=stop_after_attempt(MODEL_RETRIES),
     )
     async def chat_completion(self, model: str, system: str, user: str, temperature: float = 0.2, img_path: str = None):
         try:
@@ -364,13 +349,18 @@ class LiteLLMAIHandler(BaseAiHandler):
                     raise ValueError(f"LITELLM.EXTRA_HEADERS contains invalid JSON: {str(e)}")
                 kwargs["extra_headers"] = litellm_extra_headers
 
+            # Support for custom OpenAI body fields (e.g., Flex Processing)
+            kwargs = _process_litellm_extra_body(kwargs)
+
             get_logger().debug("Prompts", artifact={"system": system, "user": user})
 
             if get_settings().config.verbosity_level >= 2:
                 get_logger().info(f"\nSystem prompt:\n{system}")
                 get_logger().info(f"\nUser prompt:\n{user}")
 
-            response = await acompletion(**kwargs)
+            # Get completion with automatic streaming detection
+            resp, finish_reason, response_obj = await self._get_completion(**kwargs)
+
         except openai.RateLimitError as e:
             get_logger().error(f"Rate limit error during LLM inference: {e}")
             raise
@@ -380,19 +370,36 @@ class LiteLLMAIHandler(BaseAiHandler):
         except Exception as e:
             get_logger().warning(f"Unknown error during LLM inference: {e}")
             raise openai.APIError from e
-        if response is None or len(response["choices"]) == 0:
-            raise openai.APIError
-        else:
-            resp = response["choices"][0]['message']['content']
-            finish_reason = response["choices"][0]["finish_reason"]
-            get_logger().debug(f"\nAI response:\n{resp}")
 
-            # log the full response for debugging
-            response_log = self.prepare_logs(response, system, user, resp, finish_reason)
-            get_logger().debug("Full_response", artifact=response_log)
+        get_logger().debug(f"\nAI response:\n{resp}")
 
-            # for CLI debugging
-            if get_settings().config.verbosity_level >= 2:
-                get_logger().info(f"\nAI response:\n{resp}")
+        # log the full response for debugging
+        response_log = self.prepare_logs(response_obj, system, user, resp, finish_reason)
+        get_logger().debug("Full_response", artifact=response_log)
+
+        # for CLI debugging
+        if get_settings().config.verbosity_level >= 2:
+            get_logger().info(f"\nAI response:\n{resp}")
 
         return resp, finish_reason
+
+    async def _get_completion(self, **kwargs):
+        """
+        Wrapper that automatically handles streaming for required models.
+        """
+        model = kwargs["model"]
+        if model in self.streaming_required_models:
+            kwargs["stream"] = True
+            get_logger().info(f"Using streaming mode for model {model}")
+            response = await acompletion(**kwargs)
+            resp, finish_reason = await _handle_streaming_response(response)
+            # Create MockResponse for streaming since we don't have the full response object
+            mock_response = MockResponse(resp, finish_reason)
+            return resp, finish_reason, mock_response
+        else:
+            response = await acompletion(**kwargs)
+            if response is None or len(response["choices"]) == 0:
+                raise openai.APIError
+            return (response["choices"][0]['message']['content'],
+                    response["choices"][0]["finish_reason"],
+                    response)

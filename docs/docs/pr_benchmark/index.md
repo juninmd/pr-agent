@@ -59,6 +59,12 @@ A list of the models used for generating the baseline suggestions, and example r
       <td style="text-align:center;"><b>44.3</b></td>
     </tr>
     <tr>
+      <td style="text-align:left;">Grok-4</td>
+      <td style="text-align:left;">2025-07-09</td>
+      <td style="text-align:left;">unknown</td>
+      <td style="text-align:center;"><b>41.7</b></td>
+    </tr>
+    <tr>
       <td style="text-align:left;">Claude-4-sonnet</td>
       <td style="text-align:left;">2025-05-14</td>
       <td style="text-align:left;">4096</td>
@@ -81,6 +87,12 @@ A list of the models used for generating the baseline suggestions, and example r
       <td style="text-align:left;">2025-04-17</td>
       <td style="text-align:left;"></td>
       <td style="text-align:center;"><b>33.5</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left;">Claude-4-opus-20250514</td>
+      <td style="text-align:left;">2025-05-14</td>
+      <td style="text-align:left;"></td>
+      <td style="text-align:center;"><b>32.8</b></td>
     </tr>
     <tr>
       <td style="text-align:left;">Claude-3.7-sonnet</td>
@@ -239,6 +251,39 @@ weaknesses:
 - **Critical-miss rate:** Even when the format is correct the model frequently overlooks the single most serious bug the diff introduces, instead focusing on stylistic nits or speculative refactors.
 - **Introduces new problems:** Several suggestions add unsupported APIs, undeclared variables, wrong types, or break compilation, hurting trust in the recommendations.
 - **Rule violations:** It often edits lines outside the diff, exceeds the 3-suggestion cap, or labels cosmetic tweaks as “critical”, showing inconsistent guideline compliance.
+
+### Claude-4 Opus
+
+final score: **32.8**
+
+strengths:
+
+- **Format & rule adherence:** Almost always returns valid YAML, stays within the ≤3-suggestion limit, and usually restricts edits to newly-added lines, so its output is easy to apply automatically.
+- **Concise, focused patches:** When it does find a real bug it gives short, well-scoped explanations plus minimal diff snippets, often outperforming verbose baselines in clarity.
+- **Able to catch subtle edge-cases:** In several examples it detected overflow, race-condition or enum-mismatch issues that many other models missed, showing solid code‐analysis capability.
+
+weaknesses:
+
+- **Low recall / narrow coverage:** In a large share of the 399 examples the model produced an empty list or only one minor tip while more serious defects were present, causing it to be rated inferior to most baselines.
+- **Frequent incorrect or no-op fixes:** It sometimes supplies identical “before/after” code, flags non-issues, or suggests changes that would break compilation or logic, reducing reviewer trust.
+- **Shaky guideline consistency:** Although generally compliant, it still occasionally violates rules (touches unchanged lines, offers stylistic advice, adds imports) and duplicates suggestions, indicating unstable internal checks.
+
+### Grok-4
+
+final score: **32.8**
+
+strengths:
+
+- **Focused and concise fixes:** When the model does detect a problem it usually proposes a minimal, well-scoped patch that compiles and directly addresses the defect without unnecessary noise.  
+- **Good critical-bug instinct:** It often prioritises show-stoppers (compile failures, crashes, security issues) over cosmetic matters and occasionally spots subtle issues that all other reviewers miss.  
+- **Clear explanations & snippets:** Explanations are short, readable and paired with ready-to-paste code, making the advice easy to apply.  
+
+weaknesses:
+
+- **High miss rate:** In a large fraction of examples the model returned an empty list or covered only one minor issue while overlooking more serious newly-introduced bugs.  
+- **Inconsistent accuracy:** A noticeable subset of answers contain wrong or even harmful fixes (e.g., removing valid flags, creating compile errors, re-introducing bugs).  
+- **Limited breadth:** Even when it finds a real defect it rarely reports additional related problems that peers catch, leading to partial reviews.  
+- **Occasional guideline slips:** A few replies modify unchanged lines, suggest new imports, or duplicate suggestions, showing imperfect compliance with instructions.
 
 ## Appendix - Example Results
 

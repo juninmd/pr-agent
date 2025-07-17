@@ -32,6 +32,16 @@ OPENAI__API_BASE=https://api.openai.com/v1
 OPENAI__KEY=sk-...
 ```
 
+### OpenAI Flex Processing
+
+To reduce costs for non-urgent/background tasks, enable Flex Processing:
+
+```toml
+[litellm]
+extra_body='{"processing_mode": "flex"}'
+```
+
+See [OpenAI Flex Processing docs](https://platform.openai.com/docs/guides/flex-processing) for details.
 
 ### Azure
 

@@ -169,7 +169,7 @@ class PRDescription:
 
                 # publish description
                 if get_settings().pr_description.publish_description_as_comment:
-                    full_markdown_description = f"## Title\n\n{pr_title}\n\n___\n{pr_body}"
+                    full_markdown_description = f"## Title\n\n{pr_title.strip()}\n\n___\n{pr_body}"
                     if get_settings().pr_description.publish_description_as_comment_persistent:
                         self.git_provider.publish_persistent_comment(full_markdown_description,
                                                                      initial_header="## Title",
@@ -179,7 +179,7 @@ class PRDescription:
                     else:
                         self.git_provider.publish_comment(full_markdown_description)
                 else:
-                    self.git_provider.publish_description(pr_title, pr_body)
+                    self.git_provider.publish_description(pr_title.strip(), pr_body)
 
                     # publish final update message
                     if (get_settings().pr_description.final_update_message and not get_settings().config.get('is_auto_command', False)):
@@ -537,6 +537,11 @@ class PRDescription:
             except Exception as e:
                 get_logger().error(f"Failing to process walkthrough {self.pr_id}: {e}")
                 body = body.replace('pr_agent:walkthrough', "")
+
+        # Add support for pr_agent:diagram marker (plain and HTML comment formats)
+        ai_diagram = self.data.get('changes_diagram')
+        if ai_diagram:
+            body = re.sub(r'<!--\s*pr_agent:diagram\s*-->|pr_agent:diagram', ai_diagram, body)
 
         return title, body, walkthrough_gfm, pr_file_changes
 

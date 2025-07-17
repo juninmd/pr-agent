@@ -12,7 +12,7 @@ To invoke a tool (for example `review`), you can run PR-Agent directly from the 
 - For GitHub:
 
     ```bash
-    docker run --rm -it -e OPENAI.KEY=<your key> -e GITHUB.USER_TOKEN=<your token> codiumai/pr-agent:latest --pr_url <pr_url> review
+    docker run --rm -it -e OPENAI.KEY=<your_openai_key> -e GITHUB.USER_TOKEN=<your_github_token> codiumai/pr-agent:latest --pr_url <pr_url> review
     ```
 
     If you are using GitHub enterprise server, you need to specify the custom url as variable.
