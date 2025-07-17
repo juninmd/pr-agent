@@ -154,9 +154,9 @@ pr-agent-settings/
     │   └── pr_compliance_checklist.yaml
     └── qodo-monorepo/                         # For monorepo-specific compliance
         ├── pr_compliance_checklist.yaml       # Root level monorepo compliance
-        ├── qodo-github/                          # Subproject compliance
+        ├── qodo-github/                       # Subproject compliance
         │   └── pr_compliance_checklist.yaml
-        └── qodo-gitlab/                           # Another subproject
+        └── qodo-gitlab/                       # Another subproject
             └── pr_compliance_checklist.yaml
 ```
 
