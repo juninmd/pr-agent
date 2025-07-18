@@ -1285,14 +1285,35 @@ def process_description(description_full: str) -> Tuple[str, List]:
     if not description_full:
         return "", []
 
-    description_split = description_full.split(PRDescriptionHeader.FILE_WALKTHROUGH.value)
-    base_description_str = description_split[0]
-    changes_walkthrough_str = ""
-    files = []
-    if len(description_split) > 1:
-        changes_walkthrough_str = description_split[1]
+    # description_split = description_full.split(PRDescriptionHeader.FILE_WALKTHROUGH.value)
+    if PRDescriptionHeader.FILE_WALKTHROUGH.value in description_full:
+        try:
+            # FILE_WALKTHROUGH are presented in a collapsible section in the description
+            regex_pattern = r'<details.*?>\s*<summary>\s*<h3>\s*' + re.escape(PRDescriptionHeader.FILE_WALKTHROUGH.value) + r'\s*</h3>\s*</summary>'
+            description_split = re.split(regex_pattern, description_full, maxsplit=1, flags=re.DOTALL)
+
+            # If the regex pattern is not found, fallback to the previous method
+            if len(description_split) == 1:
+                get_logger().debug("Could not find regex pattern for file walkthrough, falling back to simple split")
+                description_split = description_full.split(PRDescriptionHeader.FILE_WALKTHROUGH.value, 1)
+        except Exception as e:
+            get_logger().warning(f"Failed to split description using regex, falling back to simple split: {e}")
+            description_split = description_full.split(PRDescriptionHeader.FILE_WALKTHROUGH.value, 1)
+
+        if len(description_split) < 2:
+            get_logger().error("Failed to split description into base and changes walkthrough", artifact={'description': description_full})
+            return description_full.strip(), []
+
+        base_description_str = description_split[0].strip()
+        changes_walkthrough_str = ""
+        files = []
+        if len(description_split) > 1:
+            changes_walkthrough_str = description_split[1]
+        else:
+            get_logger().debug("No changes walkthrough found")
     else:
-        get_logger().debug("No changes walkthrough found")
+        base_description_str = description_full.strip()
+        return base_description_str, []
 
     try:
         if changes_walkthrough_str:
@@ -1315,18 +1336,20 @@ def process_description(description_full: str) -> Tuple[str, List]:
                 try:
                     if isinstance(file_data, tuple):
                         file_data = file_data[0]
-                    pattern = r'<details>\s*<summary><strong>(.*?)</strong>\s*<dd><code>(.*?)</code>.*?</summary>\s*<hr>\s*(.*?)\s*<li>(.*?)</details>'
+                    pattern = r'<details>\s*<summary><strong>(.*?)</strong>\s*<dd><code>(.*?)</code>.*?</summary>\s*<hr>\s*(.*?)\s*(?:<li>|•)(.*?)</details>'
                     res = re.search(pattern, file_data, re.DOTALL)
                     if not res or res.lastindex != 4:
                         pattern_back = r'<details>\s*<summary><strong>(.*?)</strong><dd><code>(.*?)</code>.*?</summary>\s*<hr>\s*(.*?)\n\n\s*(.*?)</details>'
                         res = re.search(pattern_back, file_data, re.DOTALL)
                     if not res or res.lastindex != 4:
-                        pattern_back = r'<details>\s*<summary><strong>(.*?)</strong>\s*<dd><code>(.*?)</code>.*?</summary>\s*<hr>\s*(.*?)\s*-\s*(.*?)\s*</details>' # looking for hyphen ('- ')
+                        pattern_back = r'<details>\s*<summary><strong>(.*?)</strong>\s*<dd><code>(.*?)</code>.*?</summary>\s*<hr>\s*(.*?)\s*-\s*(.*?)\s*</details>' # looking for hypen ('- ')
                         res = re.search(pattern_back, file_data, re.DOTALL)
                     if res and res.lastindex == 4:
                         short_filename = res.group(1).strip()
                         short_summary = res.group(2).strip()
                         long_filename = res.group(3).strip()
+                        if long_filename.endswith('<ul>'):
+                            long_filename = long_filename[:-4].strip()
                         long_summary =  res.group(4).strip()
                         long_summary = long_summary.replace('<br> *', '\n*').replace('<br>','').replace('\n','<br>')
                         long_summary = h.handle(long_summary).strip()
@@ -1345,7 +1368,7 @@ def process_description(description_full: str) -> Tuple[str, List]:
                         if '<code>...</code>' in file_data:
                             pass # PR with many files. some did not get analyzed
                         else:
-                            get_logger().error(f"Failed to parse description", artifact={'description': file_data})
+                            get_logger().warning(f"Failed to parse description", artifact={'description': file_data})
                 except Exception as e:
                     get_logger().exception(f"Failed to process description: {e}", artifact={'description': file_data})
 

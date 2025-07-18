@@ -51,7 +51,7 @@ class TestConvertToMarkdown:
         input_data = {'review': {
             'estimated_effort_to_review_[1-5]': '1, because the changes are minimal and straightforward, focusing on a single functionality addition.\n',
             'relevant_tests': 'No\n', 'possible_issues': 'No\n', 'security_concerns': 'No\n'}}
-        
+
         expected_output = textwrap.dedent(f"""\
             {PRReviewHeader.REGULAR.value} 🔍
 
@@ -67,12 +67,12 @@ class TestConvertToMarkdown:
         """)
 
         assert convert_to_markdown_v2(input_data).strip() == expected_output.strip()
-    
+
     def test_simple_dictionary_input_without_gfm_supported(self):
         input_data = {'review': {
             'estimated_effort_to_review_[1-5]': '1, because the changes are minimal and straightforward, focusing on a single functionality addition.\n',
             'relevant_tests': 'No\n', 'possible_issues': 'No\n', 'security_concerns': 'No\n'}}
-        
+
         expected_output = textwrap.dedent("""\
             ## PR Reviewer Guide 🔍
 
@@ -89,74 +89,74 @@ class TestConvertToMarkdown:
         """)
 
         assert convert_to_markdown_v2(input_data, gfm_supported=False).strip() == expected_output.strip()
-    
+
     def test_key_issues_to_review(self):
         input_data = {'review': {
             'key_issues_to_review': [
                 {
-                    'relevant_file' : 'src/utils.py',
-                    'issue_header' : 'Code Smell',
-                    'issue_content' : 'The function is too long and complex.',
+                    'relevant_file': 'src/utils.py',
+                    'issue_header': 'Code Smell',
+                    'issue_content': 'The function is too long and complex.',
                     'start_line': 30,
                     'end_line': 50,
                 }
             ]
         }}
         mock_git_provider = Mock()
-        reference_link = 'https://github.com/qodo/pr-agent/pull/1/files#diff-hashvalue-R174' 
+        reference_link = 'https://github.com/qodo/pr-agent/pull/1/files#diff-hashvalue-R174'
         mock_git_provider.get_line_link.return_value = reference_link
 
         expected_output = textwrap.dedent(f"""\
             ## PR Reviewer Guide 🔍
-                                          
+
             Here are some key observations to aid the review process:
-                                          
+
             <table>
             <tr><td>⚡&nbsp;<strong>Recommended focus areas for review</strong><br><br>
-                                                                                    
+
             <a href='{reference_link}'><strong>Code Smell</strong></a><br>The function is too long and complex.
-                                          
+
             </td></tr>
             </table>
         """)
-        
+
         assert convert_to_markdown_v2(input_data, git_provider=mock_git_provider).strip() == expected_output.strip()
         mock_git_provider.get_line_link.assert_called_with('src/utils.py', 30, 50)
-    
+
     def test_ticket_compliance(self):
         input_data = {'review': {
             'ticket_compliance_check': [
                 {
                     'ticket_url': 'https://example.com/ticket/123',
-                    'ticket_requirements': '- Requirement 1\n- Requirement 2\n', 
-                    'fully_compliant_requirements': '- Requirement 1\n- Requirement 2\n', 
+                    'ticket_requirements': '- Requirement 1\n- Requirement 2\n',
+                    'fully_compliant_requirements': '- Requirement 1\n- Requirement 2\n',
                     'not_compliant_requirements': '',
                     'requires_further_human_verification': '',
                 }
             ]
         }}
-        
+
         expected_output = textwrap.dedent("""\
             ## PR Reviewer Guide 🔍
-            
+
             Here are some key observations to aid the review process:
-                                          
+
             <table>
             <tr><td>
-                                          
+
             **🎫 Ticket compliance analysis ✅**
-                                          
-                                          
-                                          
+
+
+
             **[123](https://example.com/ticket/123) - Fully compliant**
-                                          
+
             Compliant requirements:
-                                          
+
             - Requirement 1
             - Requirement 2
-                                          
-                                          
-                                          
+
+
+
             </td></tr>
             </table>
         """)
@@ -179,43 +179,43 @@ class TestConvertToMarkdown:
                     ],
                     'title': 'Bug Fix',
                 }
-             ]
-            }
+            ]
+        }
         }
 
         expected_output = textwrap.dedent("""\
             ## PR Reviewer Guide 🔍
-                                          
+
             Here are some key observations to aid the review process:
 
             <table>
             <tr><td>🔀 <strong>Multiple PR themes</strong><br><br>
-                                          
+
             <details><summary>
             Sub-PR theme: <b>Refactoring</b></summary>
-                                          
+
             ___
-                                          
+
             Relevant files:
-                                          
+
             - src/file1.py
             - src/file2.py
             ___
-                                          
+
             </details>
-                                          
+
             <details><summary>
             Sub-PR theme: <b>Bug Fix</b></summary>
-                                          
+
             ___
-                                          
+
             Relevant files:
-                                          
+
             - src/file3.py
             ___
-                                          
+
             </details>
-                                          
+
             </td></tr>
             </table>
         """)
@@ -228,7 +228,6 @@ class TestConvertToMarkdown:
 
         expected_output = ''
 
-
         assert convert_to_markdown_v2(input_data).strip() == expected_output.strip()
 
     def test_dictionary_with_empty_dictionaries(self):
@@ -236,16 +235,16 @@ class TestConvertToMarkdown:
 
         expected_output = ''
 
-
         assert convert_to_markdown_v2(input_data).strip() == expected_output.strip()
+
 
 class TestBR:
     def test_br1(self):
         file_change_description = '- Imported `FilePatchInfo` and `EDIT_TYPE` from `pr_agent.algo.types` instead of `pr_agent.git_providers.git_provider`.'
         file_change_description_br = insert_br_after_x_chars(file_change_description)
-        expected_output = ('<li>Imported <code>FilePatchInfo</code> and <code>EDIT_TYPE</code> from '
+        expected_output = ('<ul><li>Imported <code>FilePatchInfo</code> and <code>EDIT_TYPE</code> from '
                            '<code>pr_agent.algo.types</code> instead <br>of '
-                           '<code>pr_agent.git_providers.git_provider</code>.')
+                           '<code>pr_agent.git_providers.git_provider</code>.</ul>')
         assert file_change_description_br == expected_output
         # print("-----")
         # print(file_change_description_br)
@@ -255,9 +254,9 @@ class TestBR:
             '- Created a - new -class `ColorPaletteResourcesCollection ColorPaletteResourcesCollection '
             'ColorPaletteResourcesCollection ColorPaletteResourcesCollection`')
         file_change_description_br = insert_br_after_x_chars(file_change_description)
-        expected_output = ('<li>Created a - new -class <code>ColorPaletteResourcesCollection </code><br><code>'
+        expected_output = ('<ul><li>Created a - new -class <code>ColorPaletteResourcesCollection </code><br><code>'
                            'ColorPaletteResourcesCollection ColorPaletteResourcesCollection '
-                           '</code><br><code>ColorPaletteResourcesCollection</code>')
+                           '</code><br><code>ColorPaletteResourcesCollection</code></ul>')
         assert file_change_description_br == expected_output
         # print("-----")
         # print(file_change_description_br)
