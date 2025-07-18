@@ -124,6 +124,9 @@ This option is enabled by default via the `pr_description.enable_pr_diagram` par
         <td><b>enable_semantic_files_types</b></td>
         <td>If set to true, "Changes walkthrough" section will be generated. Default is true.</td>
       </tr>
+       <tr>
+            <td><b>file_table_collapsible_open_by_default</b></td>
+            <td>If set to true, the file list in the "Changes walkthrough" section will be open by default. If set to false, it will be closed by default. Default is false.</td>
       <tr>
         <td><b>collapsible_file_list</b></td>
         <td>If set to true, the file list in the "Changes walkthrough" section will be collapsible. If set to "adaptive", the file list will be collapsible only if there are more than 8 files. Default is "adaptive".</td>
