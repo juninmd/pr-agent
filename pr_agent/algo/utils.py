@@ -70,7 +70,8 @@ class ReasoningEffort(str, Enum):
 
 
 class PRDescriptionHeader(str, Enum):
-    CHANGES_WALKTHROUGH = "### **Changes walkthrough** 📝"
+    DIAGRAM_WALKTHROUGH = "Diagram Walkthrough"
+    FILE_WALKTHROUGH = "File Walkthrough"
 
 
 def get_setting(key: str) -> Any:
@@ -1284,7 +1285,7 @@ def process_description(description_full: str) -> Tuple[str, List]:
     if not description_full:
         return "", []
 
-    description_split = description_full.split(PRDescriptionHeader.CHANGES_WALKTHROUGH.value)
+    description_split = description_full.split(PRDescriptionHeader.FILE_WALKTHROUGH.value)
     base_description_str = description_split[0]
     changes_walkthrough_str = ""
     files = []

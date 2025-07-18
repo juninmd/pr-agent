@@ -128,7 +128,7 @@ class PRDescription:
                 pr_title, pr_body, changes_walkthrough, pr_file_changes = self._prepare_pr_answer()
                 if not self.git_provider.is_supported(
                         "publish_file_comments") or not get_settings().pr_description.inline_file_summary:
-                    pr_body += "\n\n" + changes_walkthrough
+                    pr_body += "\n\n" + changes_walkthrough + "___\n\n"
             get_logger().debug("PR output", artifact={"title": pr_title, "body": pr_body})
 
             # Add help text if gfm_markdown is supported
@@ -331,7 +331,8 @@ class PRDescription:
             else:
                 original_prediction_dict = original_prediction_loaded
             if original_prediction_dict:
-                filenames_predicted = [file.get('filename', '').strip() for file in original_prediction_dict.get('pr_files', [])]
+                files = original_prediction_dict.get('pr_files', [])
+                filenames_predicted = [file.get('filename', '').strip() for file in files if isinstance(file, dict)]
             else:
                 filenames_predicted = []
 
@@ -555,15 +556,11 @@ class PRDescription:
         """
 
         # Iterate over the dictionary items and append the key and value to 'markdown_text' in a markdown format
-        markdown_text = ""
         # Don't display 'PR Labels'
         if 'labels' in self.data and self.git_provider.is_supported("get_labels"):
             self.data.pop('labels')
         if not get_settings().pr_description.enable_pr_type:
             self.data.pop('type')
-        for key, value in self.data.items():
-            markdown_text += f"## **{key}**\n\n"
-            markdown_text += f"{value}\n\n"
 
         # Remove the 'PR Title' key from the dictionary
         ai_title = self.data.pop('title', self.vars["title"])
@@ -579,6 +576,10 @@ class PRDescription:
         pr_body, changes_walkthrough = "", ""
         pr_file_changes = []
         for idx, (key, value) in enumerate(self.data.items()):
+            if key == 'changes_diagram':
+                pr_body += f"### {PRDescriptionHeader.DIAGRAM_WALKTHROUGH.value}\n\n"
+                pr_body += f"{value}\n\n"
+                continue
             if key == 'pr_files':
                 value = self.file_label_dict
             else:
@@ -597,9 +598,15 @@ class PRDescription:
                     pr_body += f'- `{filename}`: {description}\n'
                 if self.git_provider.is_supported("gfm_markdown"):
                     pr_body += "</details>\n"
-            elif 'pr_files' in key.lower() and get_settings().pr_description.enable_semantic_files_types:
-                changes_walkthrough, pr_file_changes = self.process_pr_files_prediction(changes_walkthrough, value)
-                changes_walkthrough = f"{PRDescriptionHeader.CHANGES_WALKTHROUGH.value}\n{changes_walkthrough}"
+            elif 'pr_files' in key.lower() and get_settings().pr_description.enable_semantic_files_types: # 'File Walkthrough' section
+                changes_walkthrough_table, pr_file_changes = self.process_pr_files_prediction(changes_walkthrough, value)
+                if get_settings().pr_description.get('file_table_collapsible_open_by_default', False):
+                    initial_status = " open"
+                else:
+                    initial_status = ""
+                changes_walkthrough = f"<details{initial_status}> <summary><h3> {PRDescriptionHeader.FILE_WALKTHROUGH.value}</h3></summary>\n\n"
+                changes_walkthrough += f"{changes_walkthrough_table}\n\n"
+                changes_walkthrough += "</details>\n\n"
             elif key.lower().strip() == 'description':
                 if isinstance(value, list):
                     value = ', '.join(v.rstrip() for v in value)
@@ -633,14 +640,18 @@ class PRDescription:
                                          artifact={"file": file})
                     continue
                 filename = file['filename'].replace("'", "`").replace('"', '`')
-                changes_summary = file.get('changes_summary', "").strip()
+                changes_summary = file.get('changes_summary', "")
+                if not changes_summary:
+                    get_logger().warning(f"Empty changes summary in file label dict, skipping file",
+                                         artifact={"file": file})
+                changes_summary = changes_summary.strip()
                 changes_title = file['changes_title'].strip()
                 label = file.get('label').strip().lower()
                 if label not in file_label_dict:
                     file_label_dict[label] = []
                 file_label_dict[label].append((filename, changes_title, changes_summary))
             except Exception as e:
-                get_logger().error(f"Error preparing file label dict {self.pr_id}: {e}")
+                get_logger().exception(f"Error preparing file label dict {self.pr_id}")
                 pass
         return file_label_dict
 
@@ -720,7 +731,7 @@ class PRDescription:
             pr_body += """</tr></tbody></table>"""
 
         except Exception as e:
-            get_logger().error(f"Error processing PR files to markdown {self.pr_id}: {str(e)}")
+            get_logger().error(f"Error processing pr files to markdown {self.pr_id}: {str(e)}")
             pass
         return pr_body, pr_comments
 
@@ -776,14 +787,21 @@ def insert_br_after_x_chars(text: str, x=70):
     if count_chars_without_html(text) < x:
         return text
 
+    is_list = text.lstrip().startswith(("- ", "* "))
+
     # replace odd instances of ` with <code> and even instances of ` with </code>
     text = replace_code_tags(text)
 
-    # convert list items to <li>
-    if text.startswith("- ") or text.startswith("* "):
-        text = "<li>" + text[2:]
-    text = text.replace("\n- ", '<br><li> ').replace("\n - ", '<br><li> ')
-    text = text.replace("\n* ", '<br><li> ').replace("\n * ", '<br><li> ')
+    # convert list items to <li> only if the text is identified as a list
+    if is_list:
+        # To handle lists that start with indentation
+        leading_whitespace = text[:len(text) - len(text.lstrip())]
+        body = text.lstrip()
+        body = "<li>" + body[2:]
+        text = leading_whitespace + body
+
+        text = text.replace("\n- ", '<br><li> ').replace("\n - ", '<br><li> ')
+        text = text.replace("\n* ", '<br><li> ').replace("\n * ", '<br><li> ')
 
     # convert new lines to <br>
     text = text.replace("\n", '<br>')
@@ -823,7 +841,13 @@ def insert_br_after_x_chars(text: str, x=70):
             is_inside_code = True
         if "</code>" in word:
             is_inside_code = False
-    return ''.join(new_text).strip()
+
+    processed_text = ''.join(new_text).strip()
+
+    if is_list:
+        processed_text = f"<ul>{processed_text}</ul>"
+
+    return processed_text
 
 
 def replace_code_tags(text):
