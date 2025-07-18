@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `compliance` tool performs comprehensive compliance checks on PR code changes, validating them against security standards, ticket requirements, and custom organizational compliance checklists, thereby helping teams maintain consistent code quality and security practices while ensuring that development work aligns with business requirements.
+The `compliance` tool performs comprehensive compliance checks on PR code changes, validating them against security standards, ticket requirements, and custom organizational compliance checklists, thereby helping teams, enterprises, and agents maintain consistent code quality and security practices while ensuring that development work aligns with business requirements.
 
 === "Fully Compliant"
     ![compliance_overview](https://codium.ai/images/pr_agent/compliance_full.png){width=256}
@@ -67,7 +67,7 @@ Scans for security vulnerabilities and potential exploits in the PR code changes
 
 - **Verified Security Concerns** 🔴: Clear security vulnerabilities that require immediate attention
 - **Possible Security Risks** ⚪: Potential security issues that need human verification
-- **No Security Concerns** 🟢: No security vulnerabilities were detected
+- **No Security Concerns** 🟢: No security vulnerabilities detected
 
 Examples of security issues:
 
@@ -103,7 +103,7 @@ Validates against an organization-specific compliance checklist:
 
 ### Setting Up Custom Compliance
 
-Each compliance is defined in a YAML file, as follows:
+Each compliance is defined in a YAML file as follows:
 - `title`: Used to provide a clear name for the compliance
 - `compliance_label`: Used  to automatically generate labels for non-compliance issues
 - `objective`, `success_criteria`, and `failure_criteria`: These fields are used to clearly define what constitutes compliance
@@ -122,7 +122,7 @@ Each compliance is defined in a YAML file, as follows:
     ...
     ```
 
-???+ tip "Writing effective compliance checklist"
+???+ tip "Writing effective compliance checklists"
     - Avoid overly complex or subjective compliances that are hard to verify
     - Keep compliances focused on security, business requirements, and critical standards
     - Use clear, actionable language that developers can understand
@@ -135,7 +135,7 @@ Qodo Merge supports hierarchical compliance checklists using a dedicated global 
 
 #### Setting up global hierarchical compliance
 
-1\. Create a new repository named `pr-agent-settings` in your organization/workspace.
+1\. Create a new repository named `pr-agent-settings` in your organization or workspace.
 
 2\. Build the folder hierarchy in your `pr-agent-settings` repository:
 
@@ -153,14 +153,14 @@ pr-agent-settings/
     ├── qodo-merge/                            # For standalone repositories
     │   └── pr_compliance_checklist.yaml
     └── qodo-monorepo/                         # For monorepo-specific compliance
-        ├── pr_compliance_checklist.yaml       # Root level monorepo compliance
+        ├── pr_compliance_checklist.yaml       # Root-level monorepo compliance
         ├── qodo-github/                       # Subproject compliance
         │   └── pr_compliance_checklist.yaml
         └── qodo-gitlab/                       # Another subproject
             └── pr_compliance_checklist.yaml
 ```
 
-3\. Define the metadata file `metadata.yaml` in the `pr-agent-settings` root:
+3\. Define the metadata file `metadata.yaml` in the root of `pr-agent-settings`:
 
 ```yaml
 # Standalone repos
@@ -225,7 +225,7 @@ enable_global_pr_compliance = true
     <table>
       <tr>
         <td><b>extra_instructions</b></td>
-        <td>Optional extra instructions for the tool. For example: "focus on the changes in the file X. Ignore changes in ...". Default is empty string.</td>
+        <td>Optional extra instructions for the tool. For example: "Ensure that all error-handling paths in the code contain appropriate logging statements". Default is empty string.</td>
       </tr>
       <tr>
         <td><b>persistent_comment</b></td>
@@ -233,11 +233,11 @@ enable_global_pr_compliance = true
       </tr>
       <tr>
         <td><b>enable_user_defined_compliance_labels</b></td>
-        <td>If set to true, the tool will add labels for custom compliance violations. Default is true.</td>
+        <td>If set to true, the tool will add the label `Failed compliance check` for custom compliance violations. Default is true.</td>
       </tr>
       <tr>
         <td><b>enable_estimate_effort_to_review</b></td>
-        <td>If set to true, the tool will estimate the effort required to review the PR (1-5 scale). Default is true.</td>
+        <td>If set to true, the tool will estimate the effort required to review the PR (1-5 scale) as a label. Default is true.</td>
       </tr>
       <tr>
         <td><b>enable_todo_scan</b></td>
@@ -245,11 +245,11 @@ enable_global_pr_compliance = true
       </tr>
       <tr>
         <td><b>enable_update_pr_compliance_checkbox</b></td>
-        <td>If set to true, the tool will add an update checkbox to refresh compliance status. Default is true.</td>
+        <td>If set to true, the tool will add an update checkbox to refresh compliance status following push events. Default is true.</td>
       </tr>
       <tr>
         <td><b>enable_help_text</b></td>
-        <td>If set to true, the tool will display a help text in the comment. Default is false.</td>
+        <td>If set to true, the tool will display help text in the comment. Default is false.</td>
       </tr>
     </table>
 
@@ -262,7 +262,7 @@ enable_global_pr_compliance = true
       </tr>
       <tr>
         <td><b>enable_compliance_labels_security</b></td>
-        <td>If set to true, the tool will add security-related labels to the PR. Default is true.</td>
+        <td>If set to true, the tool will add a `Possible security concern` label to the PR when security-related concerns are detected. Default is true.</td>
       </tr>
     </table>
 
