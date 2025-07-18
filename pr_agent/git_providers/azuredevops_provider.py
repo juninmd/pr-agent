@@ -380,7 +380,7 @@ class AzureDevopsProvider(GitProvider):
                 pr_body = pr_body[:ind]
 
             if len(pr_body) > MAX_PR_DESCRIPTION_AZURE_LENGTH:
-                changes_walkthrough_text = PRDescriptionHeader.CHANGES_WALKTHROUGH.value
+                changes_walkthrough_text = PRDescriptionHeader.FILE_WALKTHROUGH.value
                 ind = pr_body.find(changes_walkthrough_text)
                 if ind != -1:
                     pr_body = pr_body[:ind]
