@@ -209,7 +209,7 @@ enable_global_pr_compliance = true
     
         1.3 If no mapping exists, it falls back to the global compliance checklists
 
-    2. **Fallback**: Local repository wiki `pr_compliance_checklist.yaml` file:
+    2\. **Fallback**: Local repository wiki `pr_compliance_checklist.yaml` file:
 
         2.1 Used when global compliance checklists are not found or configured
 
