@@ -644,6 +644,7 @@ class PRDescription:
                 if not changes_summary:
                     get_logger().warning(f"Empty changes summary in file label dict, skipping file",
                                          artifact={"file": file})
+                    continue
                 changes_summary = changes_summary.strip()
                 changes_title = file['changes_title'].strip()
                 label = file.get('label').strip().lower()
