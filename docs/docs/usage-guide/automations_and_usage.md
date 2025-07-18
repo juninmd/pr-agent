@@ -202,6 +202,25 @@ publish_labels = false
 
 to prevent Qodo Merge from publishing labels when running the `describe` tool.
 
+#### Quick Reference: Model Configuration in GitHub Actions
+
+For detailed step-by-step examples of configuring different models (Gemini, Claude, Azure OpenAI, etc.) in GitHub Actions, see the [Configuration Examples](../installation/github.md#configuration-examples) section in the installation guide.
+
+**Common Model Configuration Patterns:**
+
+- **OpenAI**: Set `config.model: "gpt-4o"` and `OPENAI_KEY`
+- **Gemini**: Set `config.model: "gemini/gemini-1.5-flash"` and `GOOGLE_AI_STUDIO.GEMINI_API_KEY` (no `OPENAI_KEY` needed)
+- **Claude**: Set `config.model: "anthropic/claude-3-opus-20240229"` and `ANTHROPIC.KEY` (no `OPENAI_KEY` needed)
+- **Azure OpenAI**: Set `OPENAI.API_TYPE: "azure"`, `OPENAI.API_BASE`, and `OPENAI.DEPLOYMENT_ID`
+- **Local Models**: Set `config.model: "ollama/model-name"` and `OLLAMA.API_BASE`
+
+**Environment Variable Format:**
+- Use dots (`.`) to separate sections and keys: `config.model`, `pr_reviewer.extra_instructions`
+- Boolean values as strings: `"true"` or `"false"`
+- Arrays as JSON strings: `'["item1", "item2"]'`
+
+For complete model configuration details, see [Changing a model in PR-Agent](changing_a_model.md).
+
 ### GitLab Webhook
 
 After setting up a GitLab webhook, to control which commands will run automatically when a new MR is opened, you can set the `pr_commands` parameter in the configuration file, similar to the GitHub App:
