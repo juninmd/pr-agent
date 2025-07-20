@@ -104,7 +104,7 @@ Installation steps:
 2. Click on the Connect **Jira Cloud** button to connect the Jira Cloud app
 
 3. Click the `accept` button.<br>
-![Jira Cloud App Installation](https://www.qodo.ai/images/pr_agent/jira_app_installation1.png){width=384}
+![Jira Cloud App Installation](https://www.qodo.ai/images/pr_agent/jira_app_installation2.png){width=384}
 
 4. After installing the app, you will be redirected to the Qodo Merge registration page. and you will see a success message.<br>
 ![Jira Cloud App success message](https://www.qodo.ai/images/pr_agent/jira_app_success.png){width=384}
