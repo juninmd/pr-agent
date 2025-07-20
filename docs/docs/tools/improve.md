@@ -599,6 +599,10 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 line
         <td>Number of code suggestions provided by the 'improve' tool, per chunk. Default is 3.</td>
       </tr>
       <tr>
+        <td><b>num_best_practice_suggestions 💎</b></td>
+        <td>Number of code suggestions provided by the 'improve' tool for best practices. Default is 1.</td>
+      </tr>
+      <tr>
         <td><b>max_number_of_calls</b></td>
         <td>Maximum number of chunks. Default is 3.</td>
       </tr>
