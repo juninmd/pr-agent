@@ -69,8 +69,8 @@ After triggering, the tool will create a ticket and will add/update the `PR Desc
 
     <table>
       <tr>
-        <td><b>default_project_key (required*)</b></td>
-        <td>The default project key to use when creating tickets. This is required for the tool to create tickets in the ticketing system. Example: `SCRUM`.</td>
+        <td><b>default_project_key</b></td>
+        <td>The default project key for your ticketing system (e.g., `SCRUM`). This is required unless `fallback_to_git_provider_issues` is set to `true`.</td>
       </tr>
       <tr>
         <td><b>default_base_url</b></td>
