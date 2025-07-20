@@ -7,7 +7,7 @@ It analyzes the PR's data (code changes, commit messages, and description) to cr
 
 When a ticket is created, it appears in the PR description under an `Auto-created Ticket` section, complete with a link to the generated ticket.
 
-![auto_created_ticket_in_description](https://codium.ai/images/pr_agent/auto_created_ticket_in_description.png){width=256}
+![auto_created_ticket_in_description](https://codium.ai/images/pr_agent/auto_created_ticket_in_description.png){width=512}
 
 !!! info "Pre-requisites"
     - To use this tool you need to integrate your ticketing system with Qodo-merge, follow the [Ticket Compliance Documentation](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/).
@@ -42,12 +42,12 @@ auto_create_ticket = true
 
 The tool can be triggered interactively through a checkbox in the compliance tool. This allows users to create tickets as part of their PR Compliance Review workflow.
 
-![ticket creation via compliance tool](https://codium.ai/images/pr_agent/ticket_creation_from_compliance1.png){width=256}
+![ticket creation via compliance tool](https://codium.ai/images/pr_agent/ticket_creation_from_compliance1.png){width=512}
 
 - After clicking the checkbox, the tool will create a ticket and will add/update the `PR Description` with a section called `Auto-created Ticket` with the link to the created ticket.
 - Then you can click `update` in the `Ticket compliance` section in the `Compliance` tool 
 
-![compliance_auto_created_ticket_final](https://codium.ai/images/pr_agent/compliance_auto_created_ticket_final.png){width=365}
+![compliance_auto_created_ticket_final](https://codium.ai/images/pr_agent/compliance_auto_created_ticket_final.png){width=512}
 
 ### Manual Ticket Creation
 Users can manually trigger the ticket creation process from the PR interface.
