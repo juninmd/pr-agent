@@ -144,6 +144,10 @@ This option is enabled by default via the `pr_description.enable_pr_diagram` par
         <td><b>enable_pr_diagram</b></td>
         <td>If set to true, the tool will generate a horizontal Mermaid flowchart summarizing the main pull request changes. This field remains empty if not applicable. Default is true.</td>
       </tr>
+      <tr>
+        <td><b>auto_create_ticket</b></td>
+        <td>If set to true, this will <a href="https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/">automatically create a ticket</a> in the ticketing system when a PR is opened. Default is false.</td>
+      </tr>
     </table>
 
 ## Inline file summary 💎

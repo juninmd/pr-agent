@@ -83,6 +83,12 @@ Examples of security issues:
 ???+ tip "How to set up ticket compliance"
     Follow the guide on how to set up [ticket compliance](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/) with Qodo Merge.
 
+???+ tip "Auto-create ticket"
+    Follow this [guide](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/) to learn how to enable triggering `create tickets` based on PR content.
+    
+    ![ticket creation via compliance tool](https://codium.ai/images/pr_agent/ticket_creation_from_compliance1.png){width=256}
+ 
+
 Validates that PR changes fulfill the requirements specified in linked tickets:
 
 - **Fully Compliant** 🟢: All ticket requirements are satisfied
