@@ -30,7 +30,7 @@ there are 3 ways to use the `create_ticket` tool:
 The tool can be configured to automatically create tickets when a PR is opened or updated and the PR does not already have a ticket associated with it. 
 This ensures that every code change is documented in the ticketing system without manual intervention.
 
-To configure automatic ticket creation, add the following to `.pr_agnet.toml`:
+To configure automatic ticket creation, add the following to `.pr_agent.toml`:
 
 ```toml
 [pr_description]
