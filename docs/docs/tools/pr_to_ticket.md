@@ -38,6 +38,8 @@ auto_create_ticket = true
 ```
 
 ### Interactive Triggering via Compliance Tool
+`Supported only in Github and Gitlab`
+
 The tool can be triggered interactively through a checkbox in the compliance tool. This allows users to create tickets as part of their PR Compliance Review workflow.
 
 ![ticket creation via compliance tool](https://codium.ai/images/pr_agent/ticket_creation_from_compliance1.png){width=256}
