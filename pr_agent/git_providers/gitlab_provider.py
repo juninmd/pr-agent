@@ -583,7 +583,7 @@ class GitLabProvider(GitProvider):
             get_logger().warning(f"Failed to add eyes reaction, error: {e}")
             return None
 
-    def remove_reaction(self, issue_comment_id: int, reaction_id: int) -> bool:
+    def remove_reaction(self, issue_comment_id: int, reaction_id: str) -> bool:
         try:
             if not self.id_mr:
                 get_logger().warning("Cannot remove reaction: merge request ID is not set.")
@@ -596,13 +596,14 @@ class GitLabProvider(GitProvider):
                 get_logger().warning(f"Comment with ID {issue_comment_id} not found in merge request {self.id_mr}.")
                 return False
             
-            reaction = comment.awardemojis.get(reaction_id)
-            if reaction:
-                reaction.delete()
-                return True
-            else:
-                get_logger().warning(f"Reaction with ID {reaction_id} not found in comment {issue_comment_id}.")
-                return False
+            reactions = comment.awardemojis.list()
+            for reaction in reactions:
+                if reaction.name == reaction_id:
+                    reaction.delete()
+                    return True
+            
+            get_logger().warning(f"Reaction '{reaction_id}' not found in comment {issue_comment_id}.")
+            return False
         except Exception as e:
             get_logger().warning(f"Failed to remove reaction, error: {e}")
             return False
