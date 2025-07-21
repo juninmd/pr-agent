@@ -57,7 +57,7 @@ def filter_ignored(files, platform = 'github'):
                                 continue
                     files = files_o
                 elif platform == 'bitbucket_server':
-                    files = [f for f in files if not r.match(f['path']['toString'])]
+                    files = [f for f in files if f.get('path', {}).get('toString') and not r.match(f['path']['toString'])]
                 elif platform == 'gitlab':
                     # files = [f for f in files if (f['new_path'] and not r.match(f['new_path']))]
                     files_o = []
