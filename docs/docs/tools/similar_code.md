@@ -1,3 +1,5 @@
+`Platforms supported: GitHub`
+
 ## Overview
 
 The similar code tool retrieves the most similar code components from inside the organization's codebase, or from open-source code.
