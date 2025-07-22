@@ -99,11 +99,11 @@ ___
     - The 'File Walkthrough' section is folded by default, as it tends to be verbose
     - Intermediate comments are avoided when creating new PRs (like "Qodo Merge is now reviewing your PR..."), which would generate email noise
     
-    From our experience, especially in large teams or organizations, complaints about "noise" often stem from these issues:
+    From our experience, especially in large teams or organizations, complaints about "noise" sometimes stem from the following issues:
 
-    - **Lack of familiarity with the tool**: When Qodo Merge is installed on a new repo without proper introduction or training, users may not understand its purpose or perceive its feedback as "criticism" rather than constructive assistance and a chance to self-reflection. We recommend reviewing [this guide](https://qodo-merge-docs.qodo.ai/tools/improve/#understanding-ai-code-suggestions) to better align expectations and understand the value of Qodo Merge's feedback.
     - **Feedback from multiple bots**: When multiple bots provide feedback on the same PR, it creates confusion and noise. We recommend using Qodo Merge as the primary feedback tool to streamline the process and reduce redundancy.
-    
+    - **Getting familiar with the tool**: Unlike many tools that provide feedback only on demand, Qodo Merge automatically analyzes and suggests improvements for every code change. While this proactive approach can feel intimidating at first, it's designed to continuously enhance code quality and catch bugs and problems when they occur. We recommend reviewing [this guide](https://qodo-merge-docs.qodo.ai/tools/improve/#understanding-ai-code-suggestions) to help align expectations and maximize the value of Qodo Merge's auto-feedback.
+
     Therefore, at a global configuration level, we recommend using the default configuration, which is designed to reduce noise while providing valuable feedback.
     
     However, if you still find the feedback too noisy, you can adjust the configuration. Since each user and team has different needs, it's definitely possible - and even recommended - to adjust configurations for specific repos as needed.
