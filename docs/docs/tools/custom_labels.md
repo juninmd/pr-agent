@@ -1,3 +1,5 @@
+`Platforms supported: GitHub, GitLab`
+
 ## Overview
 
 The `generate_labels` tool scans the PR code changes, and given a list of labels and their descriptions, it automatically suggests labels that match the PR code changes.
