@@ -512,7 +512,7 @@ Qodo Merge uses a dynamic strategy to generate code suggestions based on the siz
 
 #### 2. Generating suggestions
 
-- For each chunk, Qodo Merge generates up to `pr_code_suggestions.num_code_suggestions_per_chunk` suggestions (default: 4).
+- For each chunk, Qodo Merge generates up to `pr_code_suggestions.num_code_suggestions_per_chunk` suggestions (default: 3).
 
 This approach has two main benefits:
 
@@ -568,7 +568,7 @@ Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 line
       </tr>
       <tr>
         <td><b>enable_help_text</b></td>
-        <td>If set to true, the tool will display a help text in the comment. Default is true.</td>
+        <td>If set to true, the tool will display a help text in the comment. Default is false.</td>
       </tr>
       <tr>
         <td><b>enable_chat_text</b></td>

@@ -68,7 +68,7 @@ extra_instructions = "..."
       </tr>
       <tr>
         <td><b>enable_help_text</b></td>
-        <td>If set to true, the tool will display a help text in the comment. Default is true.</td>
+        <td>If set to true, the tool will display a help text in the comment. Default is false.</td>
       </tr>
       <tr>
         <td><b>num_max_findings</b></td>
