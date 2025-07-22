@@ -125,6 +125,10 @@ This option is enabled by default via the `pr_description.enable_pr_diagram` par
         <td>If set to true, "Changes walkthrough" section will be generated. Default is true.</td>
       </tr>
       <tr>
+            <td><b>file_table_collapsible_open_by_default</b></td>
+            <td>If set to true, the file list in the "Changes walkthrough" section will be open by default. If set to false, it will be closed by default. Default is false.</td>
+      </tr>
+      <tr>
         <td><b>collapsible_file_list</b></td>
         <td>If set to true, the file list in the "Changes walkthrough" section will be collapsible. If set to "adaptive", the file list will be collapsible only if there are more than 8 files. Default is "adaptive".</td>
       </tr>
@@ -139,6 +143,10 @@ This option is enabled by default via the `pr_description.enable_pr_diagram` par
       <tr>
         <td><b>enable_pr_diagram</b></td>
         <td>If set to true, the tool will generate a horizontal Mermaid flowchart summarizing the main pull request changes. This field remains empty if not applicable. Default is true.</td>
+      </tr>
+      <tr>
+        <td><b>auto_create_ticket</b></td>
+        <td>If set to true, this will <a href="https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/">automatically create a ticket</a> in the ticketing system when a PR is opened. Default is false.</td>
       </tr>
     </table>
 
