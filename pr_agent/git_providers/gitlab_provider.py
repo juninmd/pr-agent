@@ -576,9 +576,10 @@ class GitLabProvider(GitProvider):
                 get_logger().warning(f"Comment with ID {issue_comment_id} not found in merge request {self.id_mr}.")
                 return None
             
-            return comment.awardemojis.create({
+            award_emoji = comment.awardemojis.create({
                 'name': 'eyes'
-            }).get_id()
+            })
+            return award_emoji.id
         except Exception as e:
             get_logger().warning(f"Failed to add eyes reaction, error: {e}")
             return None
