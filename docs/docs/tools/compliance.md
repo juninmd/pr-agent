@@ -134,6 +134,11 @@ Each compliance is defined in a YAML file as follows:
     - Use clear, actionable language that developers can understand
     - Focus on meaningful compliance requirements, not style preferences
 
+### Local Compliance Checklists
+
+For basic usage, create a `pr_compliance_checklist.yaml` file in your repository's root directory containing the compliance rules specific to your repository.
+
+The AI model will use this `pr_compliance_checklist.yaml` file as a reference, and if the PR code violates any of the rules, it will be shown in the compliance tool's comment.
 
 ### Global Hierarchical Compliance
 
