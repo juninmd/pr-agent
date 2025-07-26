@@ -235,6 +235,10 @@ For organizations managing multiple repositories with different requirements, Qo
        │   │   └── best_practices.md
        │   ├── backend_repos/
        │   │   └── best_practices.md
+       │   ├── python_repos/
+       │   │   └── best_practices.md
+       │   ├── cpp_repos/
+       │   │   └── best_practices.md
        │   └── ...
        ├── qodo-merge/                   # For standalone repositories
        │   └── best_practices.md
