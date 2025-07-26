@@ -159,16 +159,22 @@ pr-agent-settings/
     ├── groups/                                # For groups of repositories
     │   ├── frontend_repos/
     │   │   └── pr_compliance_checklist.yaml
-    │   └── backend_repos/
-    │       └── pr_compliance_checklist.yaml
+    │   ├── backend_repos/
+    │   │   └── pr_compliance_checklist.yaml
+    │   ├── python_repos/
+    │   │   └── pr_compliance_checklist.yaml
+    │   ├── cpp_repos/
+    │   │   └── pr_compliance_checklist.yaml
+    │   └── ...
     ├── qodo-merge/                            # For standalone repositories
     │   └── pr_compliance_checklist.yaml
-    └── qodo-monorepo/                         # For monorepo-specific compliance
-        ├── pr_compliance_checklist.yaml       # Root-level monorepo compliance
-        ├── qodo-github/                       # Subproject compliance
-        │   └── pr_compliance_checklist.yaml
-        └── qodo-gitlab/                       # Another subproject
-            └── pr_compliance_checklist.yaml
+    ├──  qodo-monorepo/                        # For monorepo-specific compliance
+    │   ├── pr_compliance_checklist.yaml       # Root-level monorepo compliance
+    │   ├── qodo-github/                       # Subproject compliance
+    │   │   └── pr_compliance_checklist.yaml
+    │   └── qodo-gitlab/                       # Another subproject
+    │       └── pr_compliance_checklist.yaml
+    └── ...                                    # More repositories
 ```
 
 3\. Define the metadata file `metadata.yaml` in the root of `pr-agent-settings`:
