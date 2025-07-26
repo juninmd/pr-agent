@@ -227,11 +227,11 @@ For organizations managing multiple repositories with different requirements, Qo
 
    ```bash
    pr-agent-settings/
-   ├── metadata.yaml                     # Maps repos/folders to best practice paths
-   └── codebase_standards/               # Root for all best practice definitions
-       ├── global/                       # Global rules, inherited widely
+   ├── metadata.yaml                    # Maps repos/folders to best practice paths
+   └── codebase_standards/              # Root for all best practice definitions
+       ├── global/                      # Global rules, inherited widely
        │   └── best_practices.md
-       ├── groups/                       # For groups of repositories
+       ├── groups/                      # For groups of repositories
        │   ├── frontend_repos/
        │   │   └── best_practices.md
        │   ├── backend_repos/
@@ -241,18 +241,18 @@ For organizations managing multiple repositories with different requirements, Qo
        │   ├── cpp_repos/
        │   │   └── best_practices.md
        │   └── ...
-       ├── qodo-merge/                   # For standalone repositories
+       ├── qodo-merge/                  # For standalone repositories
        │   └── best_practices.md
-       ├── qodo-monorepo/                # For monorepo-specific rules 
-       │   ├── best_practices.md         # Root level monorepo rules
-       │   ├── qodo-github/              # Subproject best practices
+       ├── qodo-monorepo/               # For monorepo-specific rules 
+       │   ├── best_practices.md        # Root level monorepo rules
+       │   ├── qodo-github/             # Subproject best practices
        │   │   └── best_practices.md
-       │   └── qodo-gitlab/              # Another subproject
+       │   └── qodo-gitlab/             # Another subproject
        │       └── best_practices.md
-       └── ...                           # More repositories
+       └── ...                          # More repositories
    ```
 
-???+ tip "Tip: Groups and files"
+???+ tip "Grouping and categorizing best practices"
     - Each folder (including the global folder) can contain a single `best_practices.md` file
     - Organize repository best practices by creating subfolders within the `groups` folder. Group them by purpose, programming languages, or other categories
 
