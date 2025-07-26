@@ -156,6 +156,7 @@ Qodo Merge supports both simple and hierarchical best practices configurations t
     - Keep each file relatively short, under 800 lines, since:
         - AI models may not process effectively very long documents
         - Long files tend to contain generic guidelines already known to AI
+        - Maximum multiple file accumulated content is limited to 2000 lines.
     - Use pattern-based structure rather than simple bullet points for better clarity
 
 ???- tip "Example of a best practices file"
@@ -250,6 +251,10 @@ For organizations managing multiple repositories with different requirements, Qo
        │       └── best_practices.md
        └── ...                           # More repositories
    ```
+
+???+ tip "Tip: Groups and files"
+    - Each folder (including the global folder) can contain a single `best_practices.md` file
+    - Organize repository best practices by creating subfolders within the `groups` folder. Group them by purpose, programming languages, or other categories
 
 3\. Define the metadata file `metadata.yaml` that maps your repositories to their relevant best practices paths, for example:
 

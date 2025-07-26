@@ -177,6 +177,10 @@ pr-agent-settings/
     └── ...                                    # More repositories
 ```
 
+???+ tip "Tip: Groups and files"
+    - Each folder (including the global folder) can contain a single `pr_compliance_checklist.yaml` file
+    - Organize repository compliance checklists by creating subfolders within the `groups` folder. Group them by purpose, programming languages, or other categories
+
 3\. Define the metadata file `metadata.yaml` in the root of `pr-agent-settings`:
 
 ```yaml
