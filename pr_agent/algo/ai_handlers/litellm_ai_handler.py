@@ -353,9 +353,10 @@ class LiteLLMAIHandler(BaseAiHandler):
             kwargs = _process_litellm_extra_body(kwargs)
 
             # Support for Bedrock custom inference profile via model_id
-            if get_settings().get("LITELLM.MODEL_ID", None) and 'bedrock/' in model:
-                kwargs["model_id"] = get_settings().litellm.model_id
-                get_logger().info(f"Using Bedrock custom inference profile: {get_settings().litellm.model_id}")
+            model_id = get_settings().get("litellm.model_id")
+            if model_id and 'bedrock/' in model:
+                kwargs["model_id"] = model_id
+                get_logger().info(f"Using Bedrock custom inference profile: {model_id}")
 
             get_logger().debug("Prompts", artifact={"system": system, "user": user})
 
