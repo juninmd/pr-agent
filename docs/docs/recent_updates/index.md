@@ -6,7 +6,9 @@ This page summarizes recent enhancements to Qodo Merge (last three months).
 
 It also outlines our development roadmap for the upcoming three months. Please note that the roadmap is subject to change, and features may be adjusted, added, or reprioritized.
 
-=== "Recent Updates"
+=== "Recent Updates" 
+    - **PR to Ticket**: Generates ticket in your tracking systems based on PR content [Learn more](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/).
+    - **Gitlab Issues Support**: Qodo Merge now supports Gitlab issues for ticket context retrieval and ticket creation.
     - **Receiving Qodo Merge feedback locally**: You can receive automatic feedback from Qodo Merge on your local IDE after each commit. ([Learn more](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)).
     - **Mermaid Diagrams**: Qodo Merge now generates by default Mermaid diagrams for PRs, providing a visual representation of code changes. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/describe/#sequence-diagram-support))
     - **Best Practices Hierarchy**: Introducing support for structured best practices, such as for folders in monorepos or a unified best practice file for a group of repositories. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/improve/#global-hierarchical-best-practices))

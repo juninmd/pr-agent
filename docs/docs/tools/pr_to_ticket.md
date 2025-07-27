@@ -1,7 +1,9 @@
 `Platforms supported: GitHub, GitLab, Bitbucket`
 
+`Supported Ticket providers: Jira, Linear, GitHub Issues, Gitlab Issues`
+
 ## Overview
-The `create_ticket` tool automatically generates tickets in ticket tracking systems (`Jira`, `Linear`, or `GitHub Issues`) based on PR content.
+The `create_ticket` tool automatically generates tickets in ticket tracking systems (`Jira`, `Linear`, or `GitHub Issues` and `Gitlab issues`) based on PR content.
 
 It analyzes the PR's data (code changes, commit messages, and description) to create well-structured tickets that capture the essence of the development work, helping teams maintain traceability between code changes and project management systems.
 
@@ -78,7 +80,7 @@ After triggering, the tool will create a ticket and will add/update the `PR Desc
       </tr>
       <tr>
         <td><b>fallback_to_git_provider_issues</b></td>
-        <td>If set to `true`, the tool will create issues in the Git provider's issue tracker (GitHub) if the `default_project_key` is not configured in the repository configuration. Default is `false`.</td>
+        <td>If set to `true`, the tool will create issues in the Git provider's issue tracker (GitHub, Gitlab) if the `default_project_key` is not configured in the repository configuration. Default is `false`.</td>
       </tr>
     </table>
 
