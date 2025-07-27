@@ -219,6 +219,10 @@ Custom labels can be defined in a [configuration file](https://qodo-merge-docs.q
 Make sure to provide proper title, and a detailed and well-phrased description for each label, so the tool will know when to suggest it.
 Each label description should be a **conditional statement**, that indicates if to add the label to the PR or not, according to the PR content.
 
+???+ tip "Auto-remove custom label when no longer relevant"
+    If the custom label is no longer relevant, it will be automatically removed from the PR by running the `generate_labels` tool or the `describe` tool.
+
+
 ### Handle custom labels from a configuration file
 
 Example for a custom labels configuration setup in a configuration file:
