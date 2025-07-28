@@ -1,13 +1,14 @@
 # Recent Updates and Future Roadmap
 
-`Page last updated: 2025-07-01`
+`Page last updated: 2025-07-20`
 
 This page summarizes recent enhancements to Qodo Merge (last three months).
 
 It also outlines our development roadmap for the upcoming three months. Please note that the roadmap is subject to change, and features may be adjusted, added, or reprioritized.
 
-=== "Recent Updates" 
-    - **PR to Ticket**: Generates ticket in your tracking systems based on PR content [Learn more](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/).
+=== "Recent Updates"
+    - [2025-07-20] **PR to Ticket**: Generate tickets in your tracking systems based on PR content [Learn more](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/).
+    - [2025-07-17] **Compliance**: Comprehensive compliance checks for security, ticket requirements, and custom organizational rules [Learn more](https://qodo-merge-docs.qodo.ai/tools/compliance/).
     - **Gitlab Issues Support**: Qodo Merge now supports Gitlab issues for ticket context retrieval and ticket creation.
     - **Receiving Qodo Merge feedback locally**: You can receive automatic feedback from Qodo Merge on your local IDE after each commit. ([Learn more](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)).
     - **Mermaid Diagrams**: Qodo Merge now generates by default Mermaid diagrams for PRs, providing a visual representation of code changes. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/describe/#sequence-diagram-support))
@@ -18,6 +19,6 @@ It also outlines our development roadmap for the upcoming three months. Please n
     - **Smart Update**: Upon PR updates, Qodo Merge will offer tailored code suggestions, addressing both the entire PR and the specific incremental changes since the last feedback  ([Learn more](https://qodo-merge-docs.qodo.ai/core-abilities/incremental_update/))
 
 === "Future Roadmap"
-    - **Enhanced `review` tool**: Enhancing the `review` tool validate compliance across multiple categories including security, tickets, and custom best practices.
+    - **`Compliance` tool to replace `review` as default**: Planning to make the `compliance` tool the default automatic command instead of the current `review` tool.
     - **Smarter context retrieval**: Leverage AST and LSP analysis to gather relevant context from across the entire repository.
     - **Enhanced portal experience**: Improved user experience in the Qodo Merge portal with new options and capabilities.
