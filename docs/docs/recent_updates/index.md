@@ -7,6 +7,7 @@ This page summarizes recent enhancements to Qodo Merge (last three months).
 It also outlines our development roadmap for the upcoming three months. Please note that the roadmap is subject to change, and features may be adjusted, added, or reprioritized.
 
 === "Recent Updates"
+    - [2025-07-29] **High-level Suggestions**: Qodo Merge now offers up to one high-level suggestion to the table of code suggestions. ([Learn more](https://qodo-merge-docs.qodo.ai/core-abilities/high_level_suggestions/))
     - [2025-07-20] **PR to Ticket**: Generate tickets in your tracking systems based on PR content. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/))
     - [2025-07-17] **Compliance**: Comprehensive compliance checks for security, ticket requirements, and custom organizational rules. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/compliance/))
     - **Gitlab Issues Support**: Qodo Merge now supports Gitlab issues for ticket context retrieval and ticket creation.
