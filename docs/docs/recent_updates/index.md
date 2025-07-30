@@ -8,7 +8,7 @@ It also outlines our development roadmap for the upcoming three months. Please n
 === "Recent Updates"
     | Date | Feature | Description |
     |---|---|---|
-    | 2025-07-29 | **High-level Suggestions** | Qodo Merge now offers up to one high-level suggestion to the table of code suggestions. ([Learn more](https://qodo-merge-docs.qodo.ai/core-abilities/high_level_suggestions/)) |
+    | 2025-07-29 | **High-level Suggestions** | Qodo Merge now also provides high-level code suggestion for PRs. ([Learn more](https://qodo-merge-docs.qodo.ai/core-abilities/high_level_suggestions/)) |
     | 2025-07-20 | **PR to Ticket** | Generate tickets in your tracking systems based on PR content. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/)) |
     | 2025-07-17 | **Compliance** | Comprehensive compliance checks for security, ticket requirements, and custom organizational rules. ([Learn more](https://qodo-merge-docs.qodo.ai/tools/compliance/)) |
     | 2025-07-01 | **Receiving Qodo Merge feedback locally** | You can receive automatic feedback from Qodo Merge on your local IDE after each commit. ([Learn more](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)) |
