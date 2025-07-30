@@ -1,6 +1,6 @@
 # High-level Suggestions 💎
 
-`Supported Git Platforms: GitHub, GitLab (Both cloud & server. For server: Version 17 and above)`
+`Supported Git Platforms: GitHub, GitLab`
 
 ## Overview
 High-level Suggestions offer a broad view of the pull request via the improve tool. 
