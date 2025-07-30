@@ -53,6 +53,7 @@ nav:
 #      - Compression strategy: 'core-abilities/compression_strategy.md'
       - Dynamic context: 'core-abilities/dynamic_context.md'
       - Fetching ticket context: 'core-abilities/fetching_ticket_context.md'
+      - High-level Suggestions: 'core-abilities/high_level_suggestions.md'
       - Impact evaluation: 'core-abilities/impact_evaluation.md'
       - Incremental Update: 'core-abilities/incremental_update.md'
       - Interactivity: 'core-abilities/interactivity.md'

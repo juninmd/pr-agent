@@ -7,7 +7,7 @@ High-level Suggestions offer a broad view of the pull request via the improve to
 Rather than local code fixes, they may provide examples of what needs improvement as well as before and after code snippets to illustrate necessary changes and guide implementation.
 ### How it works
 
-=== "Example of a high-level suggestion
+=== "Example of a high-level suggestion"
     ![code_suggestions_update](https://www.qodo.ai/images/pr_agent/high_level_suggestion_closed.png){width=512}
     ![code_suggestions_update](https://www.qodo.ai/images/pr_agent/high_level_suggestion_open.png){width=512}
 
