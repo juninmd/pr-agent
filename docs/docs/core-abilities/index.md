@@ -9,6 +9,7 @@ Qodo Merge utilizes a variety of core abilities to provide a comprehensive and e
 - [Code validation](https://qodo-merge-docs.qodo.ai/core-abilities/code_validation/) <!-- - [Compression strategy](https://qodo-merge-docs.qodo.ai/core-abilities/compression_strategy/) -->
 - [Dynamic context](https://qodo-merge-docs.qodo.ai/core-abilities/dynamic_context/)
 - [Fetching ticket context](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/)
+- [High-level Suggestions](https://qodo-merge-docs.qodo.ai/core-abilities/high_level_suggestions/)
 - [Impact evaluation](https://qodo-merge-docs.qodo.ai/core-abilities/impact_evaluation/)
 - [Incremental Update](https://qodo-merge-docs.qodo.ai/core-abilities/incremental_update/)
 - [Interactivity](https://qodo-merge-docs.qodo.ai/core-abilities/interactivity/)
