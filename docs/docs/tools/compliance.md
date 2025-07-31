@@ -221,23 +221,21 @@ qodo-monorepo:
 enable_global_pr_compliance = true
 ```
 
-???- info "Compliance priority and fallback behavior"
+???- info "Compliance checklist loading strategy"
 
-    1\. **Primary**: Global hierarchical compliance checklists from the `pr-agent-settings` repository:
+    1. **Global Checklists**: Hierarchical compliance from `pr-agent-settings` repository
     
-        1.1 If the repository is mapped in `metadata.yaml`, it uses the specified paths
-    
+        1.1 If the repository is mapped in `metadata.yaml`, it uses the specified paths and the global compliance checklist
+        
         1.2 For monorepos, it automatically collects compliance checklists matching PR file paths
+        
+        1.3 If the repository is not mapped in `metadata.yaml`, global checklists are not loaded
+
+    2. **Local Repository Checklist**: `pr_compliance_checklist.yaml` file in the repository
     
-        1.3 If no mapping exists, it falls back to the global compliance checklists
-
-    2\. **Fallback**: Local repository wiki `pr_compliance_checklist.yaml` file:
-
-        2.1 Used when global compliance checklists are not found or configured
-
-        2.2 Acts as a safety net for repositories not yet configured in the global system
-
-        2.3 Local wiki compliance checklists are completely ignored when compliance checklists are successfully loaded
+        2.1 Loaded if present in the repository
+        
+        2.2 Content is merged with global checklists (if loaded) to create the final compliance checklist
 
 
 ## Configuration Options
