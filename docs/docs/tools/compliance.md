@@ -110,6 +110,7 @@ Validates against an organization-specific compliance checklist:
 ### Setting Up Custom Compliance
 
 Each compliance is defined in a YAML file as follows:
+
 - `title`: Used to provide a clear name for the compliance
 - `compliance_label`: Used  to automatically generate labels for non-compliance issues
 - `objective`, `success_criteria`, and `failure_criteria`: These fields are used to clearly define what constitutes compliance
