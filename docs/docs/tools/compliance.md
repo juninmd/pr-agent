@@ -5,10 +5,10 @@
 The `compliance` tool performs comprehensive compliance checks on PR code changes, validating them against security standards, ticket requirements, and custom organizational compliance checklists, thereby helping teams, enterprises, and agents maintain consistent code quality and security practices while ensuring that development work aligns with business requirements.
 
 === "Fully Compliant"
-    ![compliance_overview](https://codium.ai/images/pr_agent/compliance_full.png){width=256}
+    ![compliance_overview](https://codium.ai/images/pr_agent/compliance_full.png){width=512}
 
 === "Partially Compliant"
-    ![compliance_overview](https://codium.ai/images/pr_agent/compliance_partial.png){width=256}
+    ![compliance_overview](https://codium.ai/images/pr_agent/compliance_partial.png){width=512}
 
 ___
 
