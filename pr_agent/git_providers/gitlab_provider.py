@@ -35,10 +35,20 @@ class GitLabProvider(GitProvider):
         gitlab_access_token = get_settings().get("GITLAB.PERSONAL_ACCESS_TOKEN", None)
         if not gitlab_access_token:
             raise ValueError("GitLab personal access token is not set in the config file")
-        self.gl = gitlab.Gitlab(
-            url=gitlab_url,
-            oauth_token=gitlab_access_token
-        )
+        # Use encapsulated method to determine authentication method
+        auth_method = self._get_auth_method(gitlab_url)
+        
+        # Create GitLab instance based on authentication method
+        if auth_method == "oauth_token":
+            self.gl = gitlab.Gitlab(
+                url=gitlab_url,
+                oauth_token=gitlab_access_token
+            )
+        else:  # private_token
+            self.gl = gitlab.Gitlab(
+                url=gitlab_url,
+                private_token=gitlab_access_token
+            )
         self.max_comment_chars = 65000
         self.id_project = None
         self.id_mr = None
@@ -51,6 +61,26 @@ class GitLabProvider(GitProvider):
         self.RE_HUNK_HEADER = re.compile(
             r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
         self.incremental = incremental
+
+    def _get_auth_method(self, gitlab_url: str) -> str:
+        """
+        Determine the authentication method for a GitLab instance.
+        
+        Args:
+            gitlab_url: URL of the GitLab instance
+            
+        Returns:
+            Authentication method: "oauth_token" or "private_token"
+        """
+        # Check for explicit configuration override first
+        explicit_auth_type = get_settings().get("GITLAB.AUTH_TYPE", None)
+        if explicit_auth_type:
+            return explicit_auth_type
+            
+        # Default strategy: gitlab.com and gitlab.io use oauth_token, others use private_token
+        if "gitlab.com" in gitlab_url or "gitlab.io" in gitlab_url:
+            return "oauth_token"
+        return "private_token"
 
     def is_supported(self, capability: str) -> bool:
         if capability in ['get_issue_comments', 'create_inline_comment', 'publish_inline_comments',
@@ -677,7 +707,7 @@ class GitLabProvider(GitProvider):
             get_logger().error(f"Repo URL: {repo_url_to_clone} is not a valid gitlab URL.")
             return None
         (scheme, base_url) = repo_url_to_clone.split("gitlab.")
-        access_token = self.gl.oauth_token
+        access_token = self.gl.oauth_token or self.gl.private_token
         if not all([scheme, access_token, base_url]):
             get_logger().error(f"Either no access token found, or repo URL: {repo_url_to_clone} "
                                f"is missing prefix: {scheme} and/or base URL: {base_url}.")
