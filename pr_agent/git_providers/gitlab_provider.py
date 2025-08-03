@@ -75,11 +75,23 @@ class GitLabProvider(GitProvider):
         # Check for explicit configuration override first
         explicit_auth_type = get_settings().get("GITLAB.AUTH_TYPE", None)
         if explicit_auth_type:
+            # Validate the explicit authentication type
+            if explicit_auth_type not in ["oauth_token", "private_token"]:
+                raise ValueError(f"Unsupported GITLAB.AUTH_TYPE: '{explicit_auth_type}'. "
+                               f"Must be 'oauth_token' or 'private_token'.")
             return explicit_auth_type
             
-        # Default strategy: gitlab.com and gitlab.io use oauth_token, others use private_token
-        if "gitlab.com" in gitlab_url or "gitlab.io" in gitlab_url:
-            return "oauth_token"
+        # Default strategy: Use precise hostname matching for gitlab.com and gitlab.io
+        try:
+            parsed_url = urlparse(gitlab_url)
+            hostname = parsed_url.hostname
+            if hostname and (hostname == "gitlab.com" or hostname == "gitlab.io" or 
+                           hostname.endswith(".gitlab.com") or hostname.endswith(".gitlab.io")):
+                return "oauth_token"
+        except Exception:
+            # If URL parsing fails, fall back to private_token for safety
+            pass
+            
         return "private_token"
 
     def is_supported(self, capability: str) -> bool:
