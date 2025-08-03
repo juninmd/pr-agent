@@ -111,9 +111,11 @@ Validates against an organization-specific compliance checklist:
 
 Each compliance is defined in a YAML file as follows:
 
-- `title`: Used to provide a clear name for the compliance
-- `compliance_label`: Used  to automatically generate labels for non-compliance issues
-- `objective`, `success_criteria`, and `failure_criteria`: These fields are used to clearly define what constitutes compliance
+- `title` (required): A clear, descriptive title that identifies what is being checked
+- `compliance_label` (required): Determines whether this compliance generates labels for non-compliance issues (set to `true` or `false`)
+- `objective` (required): A detailed description of the goal or purpose this compliance aims to achieve
+- `success_criteria` and `failure_criteria` (at least one required; both recommended): Define the conditions for compliance
+
 
 ???+ tip "Example of a compliance checklist"
 
@@ -137,9 +139,9 @@ Each compliance is defined in a YAML file as follows:
 
 ### Local Compliance Checklists
 
-For basic usage, create a `pr_compliance_checklist.yaml` file in your repository's root directory containing the compliance rules specific to your repository.
+For basic usage, create a `pr_compliance_checklist.yaml` file in your repository's root directory containing the compliance requirements specific to your repository.
 
-The AI model will use this `pr_compliance_checklist.yaml` file as a reference, and if the PR code violates any of the rules, it will be shown in the compliance tool's comment.
+The AI model will use this `pr_compliance_checklist.yaml` file as a reference, and if the PR code violates any of the compliance requirements, it will be shown in the compliance tool's comment.
 
 ### Global Hierarchical Compliance
 
