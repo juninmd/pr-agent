@@ -39,16 +39,20 @@ class GitLabProvider(GitProvider):
         auth_method = self._get_auth_method(gitlab_url)
         
         # Create GitLab instance based on authentication method
-        if auth_method == "oauth_token":
-            self.gl = gitlab.Gitlab(
-                url=gitlab_url,
-                oauth_token=gitlab_access_token
-            )
-        else:  # private_token
-            self.gl = gitlab.Gitlab(
-                url=gitlab_url,
-                private_token=gitlab_access_token
-            )
+        try:
+            if auth_method == "oauth_token":
+                self.gl = gitlab.Gitlab(
+                    url=gitlab_url,
+                    oauth_token=gitlab_access_token
+                )
+            else:  # private_token
+                self.gl = gitlab.Gitlab(
+                    url=gitlab_url,
+                    private_token=gitlab_access_token
+                )
+        except Exception as e:
+            get_logger().error(f"Failed to create GitLab instance: {e}")
+            raise ValueError(f"Unable to authenticate with GitLab: {e}")
         self.max_comment_chars = 65000
         self.id_project = None
         self.id_mr = None
@@ -719,7 +723,7 @@ class GitLabProvider(GitProvider):
             get_logger().error(f"Repo URL: {repo_url_to_clone} is not a valid gitlab URL.")
             return None
         (scheme, base_url) = repo_url_to_clone.split("gitlab.")
-        access_token = self.gl.oauth_token or self.gl.private_token
+        access_token = getattr(self.gl, 'oauth_token', None) or getattr(self.gl, 'private_token', None)
         if not all([scheme, access_token, base_url]):
             get_logger().error(f"Either no access token found, or repo URL: {repo_url_to_clone} "
                                f"is missing prefix: {scheme} and/or base URL: {base_url}.")
