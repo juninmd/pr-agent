@@ -202,6 +202,20 @@ publish_labels = false
 
 to prevent Qodo Merge from publishing labels when running the `describe` tool.
 
+#### Enable using commands in PR
+
+You can configure your GitHub Actions workflow to trigger on `issue_comment` [events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#issue_comment) (`created` and `edited`).
+
+Example GitHub Actions workflow configuration:
+
+```yaml
+on:
+  issue_comment:
+    types: [created, edited]
+```
+
+When this is configured, Qodo merge can be invoked by commenting on the PR.
+
 #### Quick Reference: Model Configuration in GitHub Actions
 
 For detailed step-by-step examples of configuring different models (Gemini, Claude, Azure OpenAI, etc.) in GitHub Actions, see the [Configuration Examples](../installation/github.md#configuration-examples) section in the installation guide.
