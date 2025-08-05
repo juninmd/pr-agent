@@ -202,12 +202,9 @@ publish_labels = false
 
 to prevent Qodo Merge from publishing labels when running the `describe` tool.
 
-#### Interactive Q&A on Review Comments
+#### Enable using commands in PR
 
-PR Agent can also engage in interactive question-and-answer sessions based on its review comments. To enable this feature:
-
-1. Set `PR_CODE_SUGGESTIONS.COMMITABLE_CODE_SUGGESTIONS: true` in your configuration
-2. Configure your GitHub Actions workflow to trigger on `issue_comment` [events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#issue_comment) (`created` and `edited`)
+You can configure your GitHub Actions workflow to trigger on `issue_comment` [events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#issue_comment) (`created` and `edited`).
 
 Example GitHub Actions workflow configuration:
 
@@ -217,7 +214,7 @@ on:
     types: [created, edited]
 ```
 
-When this is configured, users can ask questions about PR Agent's review comments using the `/ask` command, and receive contextual responses based on the review context.
+When this is configured, Qodo merge can be invoked by commenting on the PR.
 
 #### Quick Reference: Model Configuration in GitHub Actions
 
