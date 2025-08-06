@@ -287,7 +287,7 @@ def handle_ask_line(body, data):
         question = body.replace('/ask', '').strip()
         path = data['object_attributes']['position']['new_path']
         side = 'RIGHT'  # if line_range_['start']['type'] == 'new' else 'LEFT'
-        _id = data['object_attributes']["discussion_id"]
+        comment_id = data['object_attributes']["discussion_id"]
         get_logger().info("Handling line ")
         body = f"/ask_line --line_start={start_line} --line_end={end_line} --side={side} --file_name={path} --comment_id={comment_id} {question}"
     except Exception as e:
