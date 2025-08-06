@@ -67,6 +67,7 @@ git clone https://github.com/qodo-ai/pr-agent.git
     2. In the secrets file/variables:
         - Set your AI model key in the respective section
         - In the [gitlab] section, set `personal_access_token` (with token from step 2) and `shared_secret` (with secret from step 3)
+        - **Authentication type**: Set `auth_type` to `"private_token"` for older GitLab versions (e.g., 11.x) or private deployments. Default is `"oauth_token"` for gitlab.com and newer versions.
 
 6. Build a Docker image for the app and optionally push it to a Docker repository. We'll use Dockerhub as an example:
 
@@ -82,6 +83,7 @@ CONFIG__GIT_PROVIDER=gitlab
 GITLAB__PERSONAL_ACCESS_TOKEN=<personal_access_token>
 GITLAB__SHARED_SECRET=<shared_secret>
 GITLAB__URL=https://gitlab.com
+GITLAB__AUTH_TYPE=oauth_token  # Use "private_token" for older GitLab versions
 OPENAI__KEY=<your_openai_api_key>
 ```
 

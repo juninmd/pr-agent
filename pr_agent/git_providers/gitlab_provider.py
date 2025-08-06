@@ -35,8 +35,13 @@ class GitLabProvider(GitProvider):
         gitlab_access_token = get_settings().get("GITLAB.PERSONAL_ACCESS_TOKEN", None)
         if not gitlab_access_token:
             raise ValueError("GitLab personal access token is not set in the config file")
-        # Use encapsulated method to determine authentication method
-        auth_method = self._get_auth_method(gitlab_url)
+        # Authentication method selection via configuration
+        auth_method = get_settings().get("GITLAB.AUTH_TYPE", "oauth_token")
+        
+        # Basic validation of authentication type
+        if auth_method not in ["oauth_token", "private_token"]:
+            raise ValueError(f"Unsupported GITLAB.AUTH_TYPE: '{auth_method}'. "
+                           f"Must be 'oauth_token' or 'private_token'.")
         
         # Create GitLab instance based on authentication method
         try:
@@ -66,37 +71,6 @@ class GitLabProvider(GitProvider):
             r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
         self.incremental = incremental
 
-    def _get_auth_method(self, gitlab_url: str) -> str:
-        """
-        Determine the authentication method for a GitLab instance.
-        
-        Args:
-            gitlab_url: URL of the GitLab instance
-            
-        Returns:
-            Authentication method: "oauth_token" or "private_token"
-        """
-        # Check for explicit configuration override first
-        explicit_auth_type = get_settings().get("GITLAB.AUTH_TYPE", None)
-        if explicit_auth_type:
-            # Validate the explicit authentication type
-            if explicit_auth_type not in ["oauth_token", "private_token"]:
-                raise ValueError(f"Unsupported GITLAB.AUTH_TYPE: '{explicit_auth_type}'. "
-                               f"Must be 'oauth_token' or 'private_token'.")
-            return explicit_auth_type
-            
-        # Default strategy: Use precise hostname matching for gitlab.com and gitlab.io
-        try:
-            parsed_url = urlparse(gitlab_url)
-            hostname = parsed_url.hostname
-            if hostname and (hostname == "gitlab.com" or hostname == "gitlab.io" or 
-                           hostname.endswith(".gitlab.com") or hostname.endswith(".gitlab.io")):
-                return "oauth_token"
-        except Exception:
-            # If URL parsing fails, fall back to private_token for safety
-            pass
-            
-        return "private_token"
 
     def is_supported(self, capability: str) -> bool:
         if capability in ['get_issue_comments', 'create_inline_comment', 'publish_inline_comments',
