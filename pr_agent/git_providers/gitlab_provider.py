@@ -49,7 +49,7 @@ class GitLabProvider(GitProvider):
             if auth_method == "oauth_token":
                 self.gl = gitlab.Gitlab(
                     url=gitlab_url,
-                    oauth_token=gitlab_access_token
+                    oauth_token=gitlab_access_token,
                     ssl_verify=ssl_verify
                 )
             else:  # private_token
