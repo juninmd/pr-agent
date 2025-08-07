@@ -33,7 +33,7 @@ To use Qodo Merge on your private GitHub Enterprise Server, you will need to [co
 
 ### GitHub Open Source Projects
 
-For open-source projects, Qodo Merge is available for free usage. To install Qodo Merge for your open-source repositories, use the following marketplace [link](https://github.com/apps/qodo-merge-pro-for-open-source).
+For open-source projects, Qodo Merge is available for free usage. To install Qodo Merge for your open-source repositories, use the following marketplace [link](https://github.com/marketplace/qodo-merge-pro-for-open-source).
 
 ## Install Qodo Merge for Bitbucket
 
