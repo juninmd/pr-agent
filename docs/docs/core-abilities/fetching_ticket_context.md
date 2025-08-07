@@ -485,8 +485,7 @@ Qodo Merge automatically detects Monday items from:
 ### Configuration Setup (Optional)
 If you want to extract Monday item references from branch names or use standalone item IDs, you need to set the `monday_base_url` in your configuration file:
 
-Branch Names: Item IDs (6-12 digits) in branch names - requires monday_base_url configuration
-
+To support Monday ticket referencing from branch names, item IDs (6-12 digits) should be part of the branch names and you need to configure `monday_base_url`:
 ```toml
 [monday]
 monday_base_url = "https://your_monday_workspace.monday.com"
