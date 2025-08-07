@@ -466,7 +466,7 @@ Installation steps:
 5. Once connected, Qodo Merge will be able to fetch Monday ticket context for your PRs
 
 ### Monday Ticket Context
-`Ticket Context and Ticket Compliance is supported for Monday items, but not yet available in "PR to Ticket" feature.`
+`Ticket Context and Ticket Compliance are supported for Monday items, but not yet available in the "PR to Ticket" feature.`
 
 When Qodo Merge processes your PRs, it extracts the following information from Monday items:
 
