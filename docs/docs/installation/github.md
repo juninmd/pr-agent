@@ -435,13 +435,16 @@ If you encounter rate limiting:
   ```
 
 **Error: "Invalid JSON format"**
+
 - **Solution**: Check that arrays are properly formatted as JSON strings:
-  ```yaml
-  # Correct
+
+```yaml
+
+Correct:
 config.fallback_models: '["model1", "model2"]'
-# Incorrect (interpreted as a YAML list, not a string)
+Incorrect (interpreted as a YAML list, not a string):
 config.fallback_models: ["model1", "model2"]
-  ```
+```
 
 #### Debugging Tips
 
@@ -611,9 +614,10 @@ For example: `GITHUB.WEBHOOK_SECRET` --> `GITHUB__WEBHOOK_SECRET`
 2. Build a docker image that can be used as a lambda function
 
     ```shell
-    # Note: --target github_lambda is optional as it's the default target
     docker buildx build --platform=linux/amd64 . -t codiumai/pr-agent:github_lambda --target github_lambda -f docker/Dockerfile.lambda
    ```
+   (Note: --target github_lambda is optional as it's the default target)
+
 
 3. Push image to ECR
 
