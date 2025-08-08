@@ -208,7 +208,7 @@ ___
 
 ## Try It Now
 
-Try the Claude Sonnet powered PR-Agent instantly on _your public GitHub repository_. Just mention `@CodiumAI-Agent` and add the desired command in any PR comment. The agent will generate a response based on your command.
+Try the GPT-5 powered PR-Agent instantly on _your public GitHub repository_. Just mention `@CodiumAI-Agent` and add the desired command in any PR comment. The agent will generate a response based on your command.
 For example, add a comment to any pull request with the following text:
 
 ```
