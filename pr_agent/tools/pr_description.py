@@ -641,7 +641,7 @@ class PRDescription:
                     continue
                 filename = file['filename'].replace("'", "`").replace('"', '`')
                 changes_summary = file.get('changes_summary', "")
-                if not changes_summary:
+                if not changes_summary and self.vars.get('include_file_summary_changes', True):
                     get_logger().warning(f"Empty changes summary in file label dict, skipping file",
                                          artifact={"file": file})
                     continue
