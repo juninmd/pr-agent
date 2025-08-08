@@ -325,15 +325,15 @@ class LiteLLMAIHandler(BaseAiHandler):
                     "api_base": self.api_base,
                 }
 
-            if thinking_kwargs_gpt5:
-                kwargs.update(thinking_kwargs_gpt5)
-                if 'temperature' in kwargs:
-                    del kwargs['temperature']
-
             # Add temperature only if model supports it
             if model not in self.no_support_temperature_models and not get_settings().config.custom_reasoning_model:
                 # get_logger().info(f"Adding temperature with value {temperature} to model {model}.")
                 kwargs["temperature"] = temperature
+
+            if thinking_kwargs_gpt5:
+                kwargs.update(thinking_kwargs_gpt5)
+                if 'temperature' in kwargs:
+                    del kwargs['temperature']
 
             # Add reasoning_effort if model supports it
             if (model in self.support_reasoning_models):
