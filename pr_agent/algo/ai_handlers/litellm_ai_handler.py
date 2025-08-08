@@ -300,7 +300,7 @@ class LiteLLMAIHandler(BaseAiHandler):
                         "reasoning_effort": 'minimal',
                         "allowed_openai_params": ["reasoning_effort"],
                     }
-                model = model.replace('_thinking', '')  # remove _thinking suffix
+                model = 'openai/'+model.replace('_thinking', '')  # remove _thinking suffix
 
 
             # Currently, some models do not support a separate system and user prompts

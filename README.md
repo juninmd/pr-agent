@@ -72,6 +72,10 @@ You can receive automatic feedback from Qodo Merge on your local IDE after each 
 
 ## News and Updates
 
+## Aug 8, 2025
+
+Added full support for GPT-5 models. View the [benchmark results](https://qodo-merge-docs.qodo.ai/pr_benchmark/#pr-benchmark-results) for details on the performance of GPT-5 models in PR-Agent.
+
 ## Jul 1, 2025
 You can now receive automatic feedback from Qodo Merge in your local IDE after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
 
