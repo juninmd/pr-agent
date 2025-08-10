@@ -38,22 +38,31 @@ class BitbucketServerProvider(GitProvider):
         self.diff_files = None
         self.bitbucket_pull_request_api_url = pr_url
         self.bearer_token = get_settings().get("BITBUCKET_SERVER.BEARER_TOKEN", None)
-        #get username and password from settings
+        #Get username and password from settings
         self.username = get_settings().get("BITBUCKET_SERVER.USERNAME", None)
         self.password = get_settings().get("BITBUCKET_SERVER.PASSWORD", None)
+        if not self.bitbucket_server_url:
+            raise ValueError("Invalid or missing Bitbucket Server URL parsed from PR URL.")
         self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url)
-        #if bearer token is provided, use it to authenticate, otherwise use username and password
-        if self.bearer_token:
-            self.bitbucket_client = bitbucket_client or Bitbucket(
-                url=self.bitbucket_server_url,
-                token=self.bearer_token
-            )
-        else:
-            self.bitbucket_client = bitbucket_client or Bitbucket(
-                url=self.bitbucket_server_url,
-                username=self.username,
-                password=self.password
-            )
+        #If bearer token is provided, use it to authenticate, otherwise use username and password
+        try:
+            if self.bearer_token:
+                self.bitbucket_client = bitbucket_client or Bitbucket(
+                    url=self.bitbucket_server_url,
+                    token=self.bearer_token
+                )
+            else:
+                if not self.username or not self.password:
+                    raise ValueError("Bitbucket authentication requires either 'BITBUCKET_SERVER.BEARER_TOKEN' or both 'BITBUCKET_SERVER.USERNAME' and 'BITBUCKET_SERVER.PASSWORD'.")
+
+                self.bitbucket_client = bitbucket_client or Bitbucket(
+                    url=self.bitbucket_server_url,
+                    username=self.username,
+                    password=self.password
+                )
+        except Exception as e:
+            get_logger().error(f"Failed to initialize Bitbucket client for {self.bitbucket_server_url}: {e}")
+            raise
         try:
             self.bitbucket_api_version = parse_version(self.bitbucket_client.get("rest/api/1.0/application-properties").get('version'))
         except Exception:
