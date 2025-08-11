@@ -41,9 +41,9 @@ class BitbucketServerProvider(GitProvider):
         # Get username and password from settings
         self.username = get_settings().get("BITBUCKET_SERVER.USERNAME", None)
         self.password = get_settings().get("BITBUCKET_SERVER.PASSWORD", None)
+        self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url)
         if not self.bitbucket_server_url:
             raise ValueError("Invalid or missing Bitbucket Server URL parsed from PR URL.")
-        self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url)
         # If bearer token is provided, use it to authenticate, otherwise use username and password
         try:
             if self.bearer_token:
