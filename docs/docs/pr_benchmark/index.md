@@ -35,6 +35,24 @@ A list of the models used for generating the baseline suggestions, and example r
   </thead>
   <tbody>
     <tr>
+      <td style="text-align:left;">GPT-5</td>
+      <td style="text-align:left;">2025-08-07</td>
+      <td style="text-align:left;">medium</td>
+      <td style="text-align:center;"><b>72.2</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left;">GPT-5</td>
+      <td style="text-align:left;">2025-08-07</td>
+      <td style="text-align:left;">low</td>
+      <td style="text-align:center;"><b>67.8</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:left;">GPT-5</td>
+      <td style="text-align:left;">2025-08-07</td>
+      <td style="text-align:left;">minimal</td>
+      <td style="text-align:center;"><b>62.7</b></td>
+    </tr>
+    <tr>
       <td style="text-align:left;">o3</td>
       <td style="text-align:left;">2025-04-16</td>
       <td style="text-align:left;">'medium' (<a href="https://ai.google.dev/gemini-api/docs/openai">8000</a>)</td>

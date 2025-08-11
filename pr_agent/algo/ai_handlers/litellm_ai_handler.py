@@ -288,6 +288,21 @@ class LiteLLMAIHandler(BaseAiHandler):
                 messages[1]["content"] = [{"type": "text", "text": messages[1]["content"]},
                                           {"type": "image_url", "image_url": {"url": img_path}}]
 
+            thinking_kwargs_gpt5 = None
+            if model.startswith('gpt-5'):
+                if model.endswith('_thinking'):
+                    thinking_kwargs_gpt5 = {
+                        "reasoning_effort": 'low',
+                        "allowed_openai_params": ["reasoning_effort"],
+                    }
+                else:
+                    thinking_kwargs_gpt5 = {
+                        "reasoning_effort": 'minimal',
+                        "allowed_openai_params": ["reasoning_effort"],
+                    }
+                model = 'openai/'+model.replace('_thinking', '')  # remove _thinking suffix
+
+
             # Currently, some models do not support a separate system and user prompts
             if model in self.user_message_only_models or get_settings().config.custom_reasoning_model:
                 user = f"{system}\n\n\n{user}"
@@ -314,6 +329,11 @@ class LiteLLMAIHandler(BaseAiHandler):
             if model not in self.no_support_temperature_models and not get_settings().config.custom_reasoning_model:
                 # get_logger().info(f"Adding temperature with value {temperature} to model {model}.")
                 kwargs["temperature"] = temperature
+
+            if thinking_kwargs_gpt5:
+                kwargs.update(thinking_kwargs_gpt5)
+                if 'temperature' in kwargs:
+                    del kwargs['temperature']
 
             # Add reasoning_effort if model supports it
             if (model in self.support_reasoning_models):
