@@ -38,7 +38,7 @@ class BitbucketServerProvider(GitProvider):
         self.diff_files = None
         self.bitbucket_pull_request_api_url = pr_url
         self.bearer_token = get_settings().get("BITBUCKET_SERVER.BEARER_TOKEN", None)
-        #Get username and password from settings
+        # Get username and password from settings
         self.username = get_settings().get("BITBUCKET_SERVER.USERNAME", None)
         self.password = get_settings().get("BITBUCKET_SERVER.PASSWORD", None)
         if not self.bitbucket_server_url:
