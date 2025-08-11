@@ -39,8 +39,8 @@ class BitbucketServerProvider(GitProvider):
         self.bitbucket_pull_request_api_url = pr_url
         self.bearer_token = get_settings().get("BITBUCKET_SERVER.BEARER_TOKEN", None)
         # Get username and password from settings
-        self.username = get_settings().get("BITBUCKET_SERVER.USERNAME", None)
-        self.password = get_settings().get("BITBUCKET_SERVER.PASSWORD", None)
+        username = get_settings().get("BITBUCKET_SERVER.USERNAME", None)
+        password = get_settings().get("BITBUCKET_SERVER.PASSWORD", None)
         self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url)
         if not self.bitbucket_server_url:
             raise ValueError("Invalid or missing Bitbucket Server URL parsed from PR URL.")
@@ -52,13 +52,13 @@ class BitbucketServerProvider(GitProvider):
                     token=self.bearer_token
                 )
             else:
-                if not self.username or not self.password:
+                if not username or not password:
                     raise ValueError("Bitbucket authentication requires either 'BITBUCKET_SERVER.BEARER_TOKEN' or both 'BITBUCKET_SERVER.USERNAME' and 'BITBUCKET_SERVER.PASSWORD'.")
 
                 self.bitbucket_client = bitbucket_client or Bitbucket(
                     url=self.bitbucket_server_url,
-                    username=self.username,
-                    password=self.password
+                    username=username,
+                    password=password
                 )
         except Exception as e:
             get_logger().error(f"Failed to initialize Bitbucket client for {self.bitbucket_server_url}: {e}")
