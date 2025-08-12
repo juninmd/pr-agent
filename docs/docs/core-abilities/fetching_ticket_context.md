@@ -459,6 +459,7 @@ Name your branch with the ticket ID as a prefix (e.g., `ABC-123-feature-descript
 The recommended way to authenticate with Monday is to connect the Monday app through the Qodo Merge portal.
 
 Installation steps:
+
 1. Go to the [Qodo Merge integrations page](https://app.qodo.ai/qodo-merge/integrations)
 2. Navigate to the **Integrations** tab
 3. Click on the **Monday** button to connect the Monday app
