@@ -97,7 +97,19 @@ Validates that PR changes fulfill the requirements specified in linked tickets:
 - **Requires Verification** ⚪: Requirements that need human review
 
 
-### 3. Custom Compliance
+### 3. RAG Code Duplication Compliance
+
+???+ tip "Learn more about RAG"
+    For detailed information about RAG context enrichment, see the [RAG Context Enrichment guide](../core-abilities/rag_context_enrichment.md).
+
+Analyzes code changes using RAG endpoint to detect potential code duplication from the codebase:
+
+- **Fully Compliant** 🟢: No code duplication found
+- **Not Compliant** 🔴: Full code duplication found
+- **Requires Verification** ⚪: Near code duplication 
+
+
+### 4. Custom Compliance
 
 Validates against an organization-specific compliance checklist:
 
