@@ -944,6 +944,7 @@ class PRCodeSuggestions:
             with get_logger().contextualize(command="self_reflect_on_suggestions"):
                 response_reflect, finish_reason_reflect = await self.ai_handler.chat_completion(model=model,
                                                                                                 system=system_prompt_reflect,
+                                                                                                temperature=get_settings().config.temperature,
                                                                                                 user=user_prompt_reflect)
         except Exception as e:
             get_logger().info(f"Could not reflect on suggestions, error: {e}")
