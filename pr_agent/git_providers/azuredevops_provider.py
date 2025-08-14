@@ -352,9 +352,7 @@ class AzureDevopsProvider(GitProvider):
             return None
         comment = Comment(content=pr_comment)
 
-        status = get_settings().azure_devops.default_comment_status
-        if status is None:
-            status = "closed"
+        status = get_settings().azure_devops.get("default_comment_status", "closed")
         thread = CommentThread(comments=[comment], thread_context=thread_context, status=status)
         thread_response = self.azure_devops_client.create_thread(
             comment_thread=thread,
