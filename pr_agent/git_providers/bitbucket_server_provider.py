@@ -41,31 +41,20 @@ class BitbucketServerProvider(GitProvider):
         # Get username and password from settings
         username = get_settings().get("BITBUCKET_SERVER.USERNAME", None)
         password = get_settings().get("BITBUCKET_SERVER.PASSWORD", None)
-        # If bitbucket_client is provided, try to extract the server URL from its configuration
-        if bitbucket_client:
+        if bitbucket_client: # if Bitbucket client is provided, use it
             self.bitbucket_client = bitbucket_client
-            try:
-                # Get the base URL from the existing client
-                self.bitbucket_server_url = bitbucket_client.url
-            except AttributeError:
-                # If we can't get the URL from the client, try parsing it from PR URL
-                self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url) if pr_url else None
+            self.bitbucket_server_url = getattr(bitbucket_client, 'url', None) or self._parse_bitbucket_server(pr_url)
         else:
-            # Parse server URL from PR URL
-            self.bitbucket_server_url = self._parse_bitbucket_server(url=pr_url) if pr_url else None
-
-        # Validate the server URL unless we have a pre-configured client
-        if not bitbucket_client and not self.bitbucket_server_url:
-            raise ValueError("Invalid or missing Bitbucket Server URL parsed from PR URL.")
-
-        # If no client provided, create one with the appropriate authentication
-        if not bitbucket_client:
-            if self.bearer_token:
+            self.bitbucket_server_url = self._parse_bitbucket_server(pr_url)
+            if not self.bitbucket_server_url:
+                raise ValueError("Invalid or missing Bitbucket Server URL parsed from PR URL.")
+            
+            if self.bearer_token:  # if bearer token is provided, use it
                 self.bitbucket_client = Bitbucket(
                     url=self.bitbucket_server_url,
                     token=self.bearer_token
                 )
-            else:
+            else:  # otherwise use username and password
                 self.bitbucket_client = Bitbucket(
                     url=self.bitbucket_server_url,
                     username=username,
