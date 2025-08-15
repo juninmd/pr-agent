@@ -52,5 +52,5 @@ Since this is under the [github_app] section, it only applies when using the Qod
 - `extra_instructions`: Optional extra instructions to the tool. For example: "focus on the changes in the file X. Ignore change in ...".
 
 !!! note "Notes"
-    - The following languages are currently supported: Python, Java, C++, JavaScript, TypeScript, C#.
+    - The following languages are currently supported: `Python, Java, C++, JavaScript, TypeScript, C#, Go, Ruby, PHP, Rust, Kotlin, Scala`
     - This tool can also be triggered interactively by using the [`analyze`](./analyze.md) tool.
