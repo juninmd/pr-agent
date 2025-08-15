@@ -8,7 +8,7 @@ class TestAzureDevopsProviderPublishComment(unittest.TestCase):
     def test_publish_comment_default_closed(self, mock_get_settings):
         # Simulate config with no default_comment_status
         mock_settings = MagicMock()
-        mock_settings.azure_devops.default_comment_status = None
+        mock_settings.azure_devops.get.return_value = "closed"
         mock_settings.config.publish_output_progress = True
         mock_get_settings.return_value = mock_settings
 
@@ -32,7 +32,7 @@ class TestAzureDevopsProviderPublishComment(unittest.TestCase):
     def test_publish_comment_active(self, mock_get_settings):
         # Simulate config with default_comment_status = "active"
         mock_settings = MagicMock()
-        mock_settings.azure_devops.default_comment_status = "active"
+        mock_settings.azure_devops.get.return_value = "active"
         mock_settings.config.publish_output_progress = True
         mock_get_settings.return_value = mock_settings
 
