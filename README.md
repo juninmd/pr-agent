@@ -76,8 +76,19 @@ You can receive automatic feedback from Qodo Merge on your local IDE after each 
 
 Added full support for GPT-5 models. View the [benchmark results](https://qodo-merge-docs.qodo.ai/pr_benchmark/#pr-benchmark-results) for details on the performance of GPT-5 models in PR-Agent.
 
+
+## Jul 17, 2025
+
+Introducing `/Compliance`, a new Qodo Merge 💎 tool that runs comprehensive checks for security, ticket requirements, codebase duplication, and custom organizational rules. 
+
+<img width="384" alt="compliance-image" src="https://codium.ai/images/pr_agent/compliance_partial.png"/>
+
+Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/compliance/)
+
+
 ## Jul 1, 2025
 You can now receive automatic feedback from Qodo Merge in your local IDE after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
+
 
 ## Jun 21, 2025
 
@@ -97,6 +108,7 @@ A new feature is now available in the `/improve` tool for Qodo Merge 💎 - Chat
 <img width="512" alt="image" src="https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_ask.png" />
 
 Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/improve/#chat-on-code-suggestions).
+
 
 ## Apr 16, 2025
 
