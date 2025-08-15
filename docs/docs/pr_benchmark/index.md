@@ -3,7 +3,7 @@
 ## Methodology
 
 Qodo Merge PR Benchmark evaluates and compares the performance of Large Language Models (LLMs) in analyzing pull request code and providing meaningful code suggestions.
-Our diverse dataset contains 400 pull requests from over 100 repositories, spanning various programming languages and frameworks to reflect real-world scenarios.
+Our diverse dataset contains 400 pull requests from over 100 repositories, spanning multiple [programming languages](#programming-languages) to reflect real-world scenarios.
 
 - For each pull request, we have pre-generated suggestions from eleven different top-performing models using the Qodo Merge `improve` tool. The prompt for response generation can be found [here](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/code_suggestions/pr_code_suggestions_prompts_not_decoupled.toml). 
 
@@ -339,4 +339,16 @@ The following models were used for generating the benchmark baseline:
 
 (11) o4-mini_medium
 ```
+
+### Programming Languages
+
+The PR benchmark dataset includes pull requests containing code in the following programming languages:
+
+```markdown
+["Python", "JavaScript", "TypeScript", "Java", "CSharp", "PHP", "C++", "Go", "Rust", "Swift", "Kotlin", "Ruby", "Dart", "Scala"
+```
+
+Pull requests may also include non-code files such as `YAML`, `JSON`, `Markdown`, `Dockerfile` ,`Shell`, etc. 
+The benchmarked models should also analyze these files, as they commonly appear in real-world pull requests.
+
 
