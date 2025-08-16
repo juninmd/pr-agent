@@ -79,7 +79,7 @@ Added full support for GPT-5 models. View the [benchmark results](https://qodo-m
 
 ## Jul 17, 2025
 
-Introducing `/Compliance`, a new Qodo Merge 💎 tool that runs comprehensive checks for security, ticket requirements, codebase duplication, and custom organizational rules. 
+Introducing `/compliance`, a new Qodo Merge 💎 tool that runs comprehensive checks for security, ticket requirements, codebase duplication, and custom organizational rules. 
 
 <img width="384" alt="compliance-image" src="https://codium.ai/images/pr_agent/compliance_partial.png"/>
 
