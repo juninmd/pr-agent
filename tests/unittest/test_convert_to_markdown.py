@@ -222,6 +222,40 @@ class TestConvertToMarkdown:
 
         assert convert_to_markdown_v2(input_data).strip() == expected_output.strip()
 
+    def test_contribution_time_cost_estimate(self):
+        input_data = {
+            'review': {
+                'contribution_time_cost_estimate': {
+                    'best_case': '1h',
+                    'average_case': '2h',
+                    'worst_case': '30m',
+                }
+            }
+        }
+
+        expected_output = textwrap.dedent(f"""
+            {PRReviewHeader.REGULAR.value} 🔍
+
+            Here are some key observations to aid the review process:
+
+            <table>
+            <tr><td>⏳&nbsp;<strong>Contribution time estimate</strong> (best, average, worst case): 1h | 2h | 30 minutes</td></tr>
+            </table>
+        """)
+        assert convert_to_markdown_v2(input_data).strip() == expected_output.strip()
+
+        # Non-GFM branch
+        expected_output_no_gfm = textwrap.dedent(f"""
+        {PRReviewHeader.REGULAR.value} 🔍
+
+        Here are some key observations to aid the review process:
+
+        ### ⏳ Contribution time estimate (best, average, worst case): 1h | 2h | 30 minutes
+
+        """)
+        assert convert_to_markdown_v2(input_data, gfm_supported=False).strip() == expected_output_no_gfm.strip()
+
+
     # Tests that the function works correctly with an empty dictionary input
     def test_empty_dictionary_input(self):
         input_data = {}

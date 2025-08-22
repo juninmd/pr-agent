@@ -89,12 +89,23 @@ class TicketCompliance(BaseModel):
     requires_further_human_verification: str = Field(description="Bullet-point list of items from the 'ticket_requirements' section above that cannot be assessed through code review alone, are unclear, or need further human review (e.g., browser testing, UI checks). Leave empty if all 'ticket_requirements' were marked as fully compliant or not compliant")
 {%- endif %}
 
+{%- if require_estimate_contribution_time_cost %}
+
+class ContributionTimeCostEstimate(BaseModel):
+    best_case: str = Field(description="An expert in the relevant technology stack, with no unforeseen issues or bugs during the work.", examples=["45m", "5h", "30h"])
+    average_case: str = Field(description="A senior developer with only brief familiarity with this specific technology stack, and no major unforeseen issues.", examples=["45m", "5h", "30h"])
+    worst_case: str = Field(description="A senior developer with no prior experience in this specific technology stack, requiring significant time for research, debugging, or resolving unexpected errors.", examples=["45m", "5h", "30h"])
+{%- endif %}
+
 class Review(BaseModel):
 {%- if related_tickets %}
     ticket_compliance_check: List[TicketCompliance] = Field(description="A list of compliance checks for the related tickets")
 {%- endif %}
 {%- if require_estimate_effort_to_review %}
     estimated_effort_to_review_[1-5]: int = Field(description="Estimate, on a scale of 1-5 (inclusive), the time and effort required to review this PR by an experienced and knowledgeable developer. 1 means short and easy review , 5 means long and hard review. Take into account the size, complexity, quality, and the needed changes of the PR code diff.")
+{%- endif %}
+{%- if require_estimate_contribution_time_cost %}
+    contribution_time_cost_estimate: ContributionTimeCostEstimate = Field(description="An estimate of the time required to implement the changes, based on the quantity, quality, and complexity of the contribution, as well as the context from the PR description and commit messages.")
 {%- endif %}
 {%- if require_score %}
     score: str = Field(description="Rate this PR on a scale of 0-100 (inclusive), where 0 means the worst possible PR code, and 100 means PR code of the highest quality, without any bugs or performance issues, that is ready to be merged immediately and run in production at scale.")
@@ -169,6 +180,15 @@ review:
     - ...
     title: ...
   - ...
+{%- endif %}
+{%- if require_estimate_contribution_time_cost %}
+  contribution_time_cost_estimate:
+    best_case: |
+      ...
+    average_case: |
+      ...
+    worst_case: |
+      ...
 {%- endif %}
 ```
 
@@ -298,6 +318,15 @@ review:
     - ...
     title: ...
   - ...
+{%- endif %}
+{%- if require_estimate_contribution_time_cost %}
+  contribution_time_cost_estimate:
+    best_case: |
+      ...
+    average_case: |
+      ...
+    worst_case: |
+      ...
 {%- endif %}
 ```
 (replace '...' with the actual values)
