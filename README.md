@@ -44,7 +44,6 @@
 
 - [PR-Agent vs Qodo Merge](#pr-agent-vs-qodo-merge)
 - [Getting Started](#getting-started)
-- [News and Updates](#news-and-updates)
 - [Why Use PR-Agent?](#why-use-pr-agent)
 - [Features](#features)
 - [See It in Action](#see-it-in-action)
@@ -146,53 +145,74 @@ If you prefer a hosted solution without managing infrastructure:
 Receive automatic feedback in your IDE after each commit: [Qodo Merge post-commit agent](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit)
 
 
-## News and Updates
+[//]: # (## News and Updates)
 
-## Aug 8, 2025
+[//]: # ()
+[//]: # (## Aug 8, 2025)
 
-Added full support for GPT-5 models. View the [benchmark results](https://qodo-merge-docs.qodo.ai/pr_benchmark/#pr-benchmark-results) for details on the performance of GPT-5 models in PR-Agent.
+[//]: # ()
+[//]: # (Added full support for GPT-5 models. View the [benchmark results]&#40;https://qodo-merge-docs.qodo.ai/pr_benchmark/#pr-benchmark-results&#41; for details on the performance of GPT-5 models in PR-Agent.)
 
+[//]: # ()
+[//]: # ()
+[//]: # (## Jul 17, 2025)
 
-## Jul 17, 2025
+[//]: # ()
+[//]: # (Introducing `/compliance`, a new Qodo Merge 💎 tool that runs comprehensive checks for security, ticket requirements, codebase duplication, and custom organizational rules. )
 
-Introducing `/compliance`, a new Qodo Merge 💎 tool that runs comprehensive checks for security, ticket requirements, codebase duplication, and custom organizational rules. 
+[//]: # ()
+[//]: # (<img width="384" alt="compliance-image" src="https://codium.ai/images/pr_agent/compliance_partial.png"/>)
 
-<img width="384" alt="compliance-image" src="https://codium.ai/images/pr_agent/compliance_partial.png"/>
+[//]: # ()
+[//]: # (Read more about it [here]&#40;https://qodo-merge-docs.qodo.ai/tools/compliance/&#41;)
 
-Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/compliance/)
+[//]: # ()
+[//]: # ()
+[//]: # (## Jul 1, 2025)
 
+[//]: # (You can now receive automatic feedback from Qodo Merge in your local IDE after each commit. Read more about it [here]&#40;https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit&#41;.)
 
-## Jul 1, 2025
-You can now receive automatic feedback from Qodo Merge in your local IDE after each commit. Read more about it [here](https://github.com/qodo-ai/agents/tree/main/agents/qodo-merge-post-commit).
+[//]: # ()
+[//]: # ()
+[//]: # (## Jun 21, 2025)
 
+[//]: # ()
+[//]: # (v0.30 was [released]&#40;https://github.com/qodo-ai/pr-agent/releases&#41;)
 
-## Jun 21, 2025
+[//]: # ()
+[//]: # ()
+[//]: # (## Jun 3, 2025)
 
-v0.30 was [released](https://github.com/qodo-ai/pr-agent/releases)
+[//]: # ()
+[//]: # (Qodo Merge now offers a simplified free tier 💎.)
 
+[//]: # (Organizations can use Qodo Merge at no cost, with a [monthly limit]&#40;https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users&#41; of 75 PR reviews per organization.)
 
-## Jun 3, 2025
+[//]: # ()
+[//]: # ()
+[//]: # (## Apr 30, 2025)
 
-Qodo Merge now offers a simplified free tier 💎.
-Organizations can use Qodo Merge at no cost, with a [monthly limit](https://qodo-merge-docs.qodo.ai/installation/qodo_merge/#cloud-users) of 75 PR reviews per organization.
+[//]: # ()
+[//]: # (A new feature is now available in the `/improve` tool for Qodo Merge 💎 - Chat on code suggestions.)
 
+[//]: # ()
+[//]: # (<img width="512" alt="image" src="https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_ask.png" />)
 
-## Apr 30, 2025
+[//]: # ()
+[//]: # (Read more about it [here]&#40;https://qodo-merge-docs.qodo.ai/tools/improve/#chat-on-code-suggestions&#41;.)
 
-A new feature is now available in the `/improve` tool for Qodo Merge 💎 - Chat on code suggestions.
+[//]: # ()
+[//]: # ()
+[//]: # (## Apr 16, 2025)
 
-<img width="512" alt="image" src="https://codium.ai/images/pr_agent/improve_chat_on_code_suggestions_ask.png" />
+[//]: # ()
+[//]: # (New tool for Qodo Merge 💎 - `/scan_repo_discussions`.)
 
-Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/improve/#chat-on-code-suggestions).
+[//]: # ()
+[//]: # (<img width="635" alt="image" src="https://codium.ai/images/pr_agent/scan_repo_discussions_2.png" />)
 
-
-## Apr 16, 2025
-
-New tool for Qodo Merge 💎 - `/scan_repo_discussions`.
-
-<img width="635" alt="image" src="https://codium.ai/images/pr_agent/scan_repo_discussions_2.png" />
-
-Read more about it [here](https://qodo-merge-docs.qodo.ai/tools/scan_repo_discussions/).
+[//]: # ()
+[//]: # (Read more about it [here]&#40;https://qodo-merge-docs.qodo.ai/tools/scan_repo_discussions/&#41;.)
 
 ## Why Use PR-Agent?
 
