@@ -183,7 +183,7 @@ pr-agent-settings/
     │   └── ...
     ├── repo_a/                                # For standalone repositories
     │   └── pr_compliance_checklist.yaml
-    ├──  monorepo-name/                        # For monorepo-specific compliance
+    ├── monorepo-name/                         # For monorepo-specific compliance
     │   ├── pr_compliance_checklist.yaml       # Root-level monorepo compliance
     │   ├── service-a/                         # Subproject compliance
     │   │   └── pr_compliance_checklist.yaml
