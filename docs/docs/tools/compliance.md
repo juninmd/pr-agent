@@ -168,7 +168,7 @@ Qodo Merge supports hierarchical compliance checklists using a dedicated global 
 ```bash
 pr-agent-settings/
 ├── metadata.yaml                              # Maps repos/folders to compliance paths
-└── compliance_standards/                      # Root for all compliance definitions
+└── codebase_standards/                        # Root for all compliance definitions
     ├── global/                                # Global compliance, inherited widely
     │   └── pr_compliance_checklist.yaml
     ├── groups/                                # For groups of repositories
@@ -222,10 +222,10 @@ monorepo-name:
   pr_compliance_checklist_paths:
     - "monorepo-name"
   monorepo_subprojects:
-    frontend:
+    service-a:
       pr_compliance_checklist_paths:
         - "monorepo-name/service-a"
-    backend:
+    service-b:
       pr_compliance_checklist_paths:
         - "monorepo-name/service-b"
 ```
