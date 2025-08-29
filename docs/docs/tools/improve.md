@@ -241,16 +241,18 @@ For organizations managing multiple repositories with different requirements, Qo
        │   ├── cpp_repos/
        │   │   └── best_practices.md
        │   └── ...
-       ├── qodo-merge/                  # For standalone repositories
+       ├── repo_a/                      # For standalone repositories
        │   └── best_practices.md
-       ├── qodo-monorepo/               # For monorepo-specific rules 
+       ├── monorepo-name/               # For monorepo-specific rules 
        │   ├── best_practices.md        # Root level monorepo rules
-       │   ├── qodo-github/             # Subproject best practices
+       │   ├── service-a/               # Subproject best practices
        │   │   └── best_practices.md
-       │   └── qodo-gitlab/             # Another subproject
+       │   └── service-b/               # Another subproject
        │       └── best_practices.md
        └── ...                          # More repositories
    ```
+
+> **Note:** In this structure, `pr-agent-settings`, `codebase_standards`, `global`, `groups`, `metadata.yaml`, and `best_practices.md` are hardcoded names that must be used exactly as shown. All other names (such as `frontend_repos`, `backend_repos`, `repo_a`, `monorepo-name`, `service-a`, etc.) are examples and should be replaced with your actual repository and service names.
 
 ???+ tip "Grouping and categorizing best practices"
     - Each folder (including the global folder) can contain a single `best_practices.md` file
@@ -260,9 +262,9 @@ For organizations managing multiple repositories with different requirements, Qo
 
    ```yaml
    # Standalone repos
-   qodo-merge:
+   repo_a:
      best_practices_paths:
-       - "qodo-merge"
+       - "repo_a"
 
    # Group-associated repos
    repo_b:
@@ -276,16 +278,16 @@ For organizations managing multiple repositories with different requirements, Qo
        - "groups/backend_repos"
 
    # Monorepo with subprojects
-   qodo-monorepo:
+   monorepo-name:
      best_practices_paths:
-       - "qodo-monorepo"
+       - "monorepo-name"
      monorepo_subprojects:
-       qodo-github:
+       service-a:
          best_practices_paths:
-           - "qodo-monorepo/qodo-github"
-       qodo-gitlab:
+           - "monorepo-name/service-a"
+       service-b:
          best_practices_paths:
-           - "qodo-monorepo/qodo-gitlab"
+           - "monorepo-name/service-b"
    ```
 
 4\. Set the following configuration in your global configuration file:
