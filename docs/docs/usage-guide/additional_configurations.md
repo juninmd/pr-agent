@@ -133,7 +133,7 @@ LANGSMITH_BASE_URL=<url>
 
 ## Bringing additional repository metadata to Qodo Merge 💎
 
-To provide Qodo Merge with additional context about your project, you can enable automatic repository metadata detection. 
+To provide Qodo Merge tools with additional context about your project, you can enable automatic repository metadata detection. 
 
 If you set
 
@@ -142,8 +142,8 @@ If you set
 add_repo_metadata = true
 ```
 
-Qodo Merge will attempt to fetch repository metadata from the root directory of your PR's head branch, looking for common metadata files such as:
-[AGENTS.MD](https://agents.md/), [QODO.MD](https://docs.qodo.ai/qodo-documentation/qodo-command/getting-started/setup-and-quickstart), [CLAUDE.MD](https://www.anthropic.com/engineering/claude-code-best-practices), etc.
+Qodo Merge automatically searches for repository metadata files in your PR's head branch root directory. By default, it looks for:
+[AGENTS.MD](https://agents.md/), [QODO.MD](https://docs.qodo.ai/qodo-documentation/qodo-command/getting-started/setup-and-quickstart), [CLAUDE.MD](https://www.anthropic.com/engineering/claude-code-best-practices).
 
 You can also specify custom filenames to search for:
 
