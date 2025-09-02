@@ -143,7 +143,7 @@ add_repo_metadata = true
 ```
 
 Qodo Merge will attempt to fetch repository metadata from the root directory of your PR's head branch, looking for common metadata files such as:
-[AGENT.MD](https://agents.md/), [QODO.MD](https://docs.qodo.ai/qodo-documentation/qodo-command/getting-started/setup-and-quickstart), [CLAUDE.MD](https://www.anthropic.com/engineering/claude-code-best-practices), etc.
+[AGENTS.MD](https://agents.md/), [QODO.MD](https://docs.qodo.ai/qodo-documentation/qodo-command/getting-started/setup-and-quickstart), [CLAUDE.MD](https://www.anthropic.com/engineering/claude-code-best-practices), etc.
 
 You can also specify custom filenames to search for:
 
