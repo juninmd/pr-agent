@@ -80,7 +80,7 @@ Qodo Merge supports two modes for presenting code suggestions:
 The table format offers several key advantages:
 
 - **Reduced noise**: Creates a cleaner PR experience with less clutter
-- **Quick overview and prioritization**: Enables quick review of one-liner summaries, severity levels, and easy prioritization
+- **Quick overview and prioritization**: Enables quick review of one-liner summaries, impact levels, and easy prioritization
 - **High-level suggestions**: High-level suggestions that aren't tied to specific code chunks are presented only in the table mode
 - **Interactive features**: Provides 'more' and 'update' functionality via clickable buttons
 - **Centralized tracking**: Shows suggestion implementation status in one place
