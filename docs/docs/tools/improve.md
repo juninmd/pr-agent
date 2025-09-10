@@ -87,7 +87,11 @@ The table format offers several key advantages:
 - **IDE integration**: Allows direct application in your IDE via [Qodo Command](https://github.com/qodo-ai/agents)
 
 Table mode is the default of Qodo Merge, and is recommended approach for most users due to these benefits. 
+
+![code_suggestions_as_comment_closed.png](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png){width=512}
+
 Teams with specific preferences can enable committable code comments mode in their local configuration, or use [dual publishing mode](#dual-publishing-mode).
+
 
 ### Assessing Impact
 
