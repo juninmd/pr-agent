@@ -84,7 +84,7 @@ The table format offers several key advantages:
 - **High-level suggestions**: High-level suggestions that aren't tied to specific code chunks are presented only in the table mode
 - **Interactive features**: Provides 'more' and 'update' functionality via clickable buttons
 - **Centralized tracking**: Shows suggestion implementation status in one place
-- **IDE integration**: Allows direct application in your IDE via [Qodo Command](https://github.com/qodo-ai/agents)
+- **IDE integration**: Allows applying suggestions directly in your IDE via [Qodo Command](https://github.com/qodo-ai/agents)
 
 Table mode is the default of Qodo Merge, and is recommended approach for most users due to these benefits. 
 
