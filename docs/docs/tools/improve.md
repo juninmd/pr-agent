@@ -24,6 +24,25 @@ ___
 
 ## Example usage
 
+### Table vs Committable code comments
+
+Qodo Merge supports two modes for presenting code suggestions: 
+
+1) [Table](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png) mode 
+
+2) [Committable](https://codium.ai/images/pr_agent/improve.png) code comments mode.
+
+
+
+Both modes are useful and depend on your preferences and workflow. We recommend using table mode, since it provides the following advantages:
+
+- The table format creates significantly less noise in the PR
+- It enables quick review of one-liner summaries, severity levels, and easy prioritization of important suggestions
+- High-level suggestions that aren't tied to specific code chunks are presented only in the table mode
+- The table provides 'more' and 'update' functionality through clickable buttons
+- The table makes it easy to track in a single place which suggestions have already been applied
+- Suggestion from the table can be applied in your IDE environment via [Qodo Command](https://github.com/qodo-ai/agents)
+
 ### Manual triggering
 
 Invoke the tool manually by commenting `/improve` on any PR. The code suggestions by default are presented as a single comment:
@@ -42,8 +61,6 @@ For example, you can choose to present all the suggestions as committable code c
 
 ![improve](https://codium.ai/images/pr_agent/improve.png){width=512}
 
-As can be seen, a single table comment has a significantly smaller PR footprint. We recommend this mode for most cases.
-Also note that collapsible are not supported in _Bitbucket_. Hence, the suggestions can only be presented in Bitbucket as code comments.
 
 #### Manual more suggestions
 To generate more suggestions (distinct from the ones already generated), for git-providers that don't support interactive checkbox option, you can manually run:
