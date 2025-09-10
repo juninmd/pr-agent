@@ -24,25 +24,6 @@ ___
 
 ## Example usage
 
-### Table vs Committable code comments
-
-Qodo Merge supports two modes for presenting code suggestions: 
-
-1) [Table](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png) mode 
-
-2) [Committable](https://codium.ai/images/pr_agent/improve.png) code comments mode.
-
-
-
-Both modes are useful and depend on your preferences and workflow. We recommend using table mode, since it provides the following advantages:
-
-- The table format creates significantly less noise in the PR
-- It enables quick review of one-liner summaries, severity levels, and easy prioritization of important suggestions
-- High-level suggestions that aren't tied to specific code chunks are presented only in the table mode
-- The table provides 'more' and 'update' functionality through clickable buttons
-- The table makes it easy to track in a single place which suggestions have already been applied
-- Suggestion from the table can be applied in your IDE environment via [Qodo Command](https://github.com/qodo-ai/agents)
-
 ### Manual triggering
 
 Invoke the tool manually by commenting `/improve` on any PR. The code suggestions by default are presented as a single comment:
@@ -87,6 +68,26 @@ num_code_suggestions_per_chunk = ...
 
 - The `pr_commands` lists commands that will be executed automatically when a PR is opened.
 - The `[pr_code_suggestions]` section contains the configurations for the `improve` tool you want to edit (if any)
+
+### Table vs Committable code comments
+
+Qodo Merge supports two modes for presenting code suggestions: 
+
+1) [Table](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png) mode 
+
+2) [Inline Committable](https://codium.ai/images/pr_agent/improve.png) code comments mode.
+
+The table format offers several key advantages:
+
+- **Reduced noise**: Creates a cleaner PR experience with less clutter
+- **Quick overview and prioritization**: Enables quick review of one-liner summaries, severity levels, and easy prioritization
+- **High-level suggestions**: High-level suggestions that aren't tied to specific code chunks are presented only in the table mode
+- **Interactive features**: Provides 'more' and 'update' functionality via clickable buttons
+- **Centralized tracking**: Shows suggestion implementation status in one place
+- **IDE integration**: Allows direct application in your IDE via [Qodo Command](https://github.com/qodo-ai/agents)
+
+Table mode is the default of Qodo Merge, and is recommended approach for most users due to these benefits. 
+Teams with specific preferences can enable committable code comments mode in their local configuration, or use [dual publishing mode](#dual-publishing-mode).
 
 ### Assessing Impact
 
