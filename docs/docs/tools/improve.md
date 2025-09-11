@@ -92,6 +92,8 @@ Table mode is the default of Qodo Merge, and is recommended approach for most us
 
 Teams with specific preferences can enable committable code comments mode in their local configuration, or use [dual publishing mode](#dual-publishing-mode).
 
+> `Note - due to platform limitations, Bitbucket cloud and server supports only committable code comments mode.`
+
 
 ### Assessing Impact
 
