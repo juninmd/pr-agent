@@ -11,7 +11,7 @@ The CLI can bridge the gap between Qodo Merge feedback and code implementation i
 
 - **Seamlessly generating and managing PR suggestions** without context switching
     - Remote Suggestions: Fetches Qodo Merge suggestions from your Git Environment
-    - Local Suggestions: Get real-time suggestion against your local changes
+    - Local Suggestions: Get real-time suggestions against your local changes
 - **Interactive review and implementation** of AI feedback directly in your terminal
 - **Tracking implementation status** of each suggestion (pending/implemented/declined)
 

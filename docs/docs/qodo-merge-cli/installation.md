@@ -21,8 +21,8 @@ To start using Qodo Command, you need to log in first:
 qodo login
 ```
 
-Once login is completed you'll receive an API key in the terminal.
-The API key is also saved locally in the .qodo folder in your home dir, and can be reuused (e.g., in CI).
+Once login is completed, you'll receive an API key in the terminal.
+The API key is also saved locally in the .qodo folder in your home directory, and can be reused (e.g., in CI).
 The key is tied to your user account and subject to the same usage limits.
 
 [//]: # (## API Key Management)

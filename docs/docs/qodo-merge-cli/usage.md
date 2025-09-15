@@ -17,7 +17,7 @@ This consistent user-friendly structure streamlines the review process, reducing
 
 
 
-### Navigation instructions
+### Navigation Instructions
 Use `↑`/`↓` to navigate suggestions, `Enter` to implement, `Space` for multi-select, and `ESC` to exit.
 
 The table includes:
@@ -67,7 +67,7 @@ You can view the proposed code changes in a diff format, jump to the relevant co
 
         === "Side-by-Side View (`S`)"
 
-            ![Side by Side Diff](https://www.qodo.ai/images/pr_agent/qm_cli_side_by_side_diffview.png){width=768}
+            ![Side-by-Side Diff](https://www.qodo.ai/images/pr_agent/qm_cli_side_by_side_diffview.png){width=768}
             
             - Press `S` for side-by-side diff view
             - Enhanced layout for complex changes
@@ -114,7 +114,7 @@ You can implement a single suggestion, multiple selected suggestions, or all sug
         
         **Select multiple related suggestions**
         
-        1. Use Space to select specific suggestions (◉)
+        1. Use `Space` to select specific suggestions (◉)
         2. Navigate and select multiple related suggestions
         3. Press `Enter` on any selected suggestion to start implementation
         4. AI implements selected suggestions together
@@ -135,7 +135,7 @@ You can implement a single suggestion, multiple selected suggestions, or all sug
     
         **Discuss then implement**
     
-        1. Press C on any suggestion to start chat
+        1. Press `C` on any suggestion to start a chat
         2. Ask questions, request modifications, get clarifications
         3. Once satisfied, request implementation via chat
         4. AI implements based on your discussion
@@ -177,9 +177,9 @@ After implementing the suggestions, you have several options to proceed:
         Discuss the implementation details:
         
         - Review changes made by the AI
-          - Request refinements or modifications  
-          - Get explanations of implementation approach
-          - Continuous improvement cycle
+        - Request refinements or modifications
+        - Get explanations of implementation approach
+        - Continuous improvement cycle
     
     === "Commit Changes (`M`)"
     
@@ -188,18 +188,18 @@ After implementing the suggestions, you have several options to proceed:
         Auto-generate commit messages:
         
         - AI-generated commit messages based on changes
-          - Editable before committing
-          - Standard git conventions
-          - Seamless workflow integration
+        - Editable before committing
+        - Standard git conventions
+        - Seamless workflow integration
     
     === "Open Edited File (`O`)"
     
         Open the implemented code directly in your IDE:
         
         - View the exact changes made
-          - See implementation in full context
-          - Continue development seamlessly
-          - Integrated with your existing workflow
+        - See implementation in full context
+        - Continue development seamlessly
+        - Integrated with your existing workflow
 
 ## Tips for Success
 
