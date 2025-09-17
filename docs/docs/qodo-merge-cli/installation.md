@@ -1,6 +1,6 @@
 # Installation
 
-> Currently for remote suggestions, Qodo Merge has to be installed and active on your Git repository (GitHub / GitLab), and provide code suggestions in a table format for your Pull Requests (PRs).
+> For remote suggestions, Qodo Merge needs to be installed and active on your Git repository (GitHub / GitLab), and provide code suggestions in a table format for your Pull Requests (PRs).
 
 ## Install Qodo Command
 
