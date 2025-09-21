@@ -556,7 +556,7 @@ This approach has two main benefits:
 Note: Chunking is primarily relevant for large PRs. For most PRs (up to 600 lines of code), Qodo Merge will be able to process the entire code in a single call.
 
 #### Maximum coverage configuration
-> `💎 feature
+> `💎 feature`
 
 For critical code reviews requiring maximum coverage, you can combine several settings to achieve a "super exhaustive" analysis. This is not a built-in mode, but a configuration recipe for advanced use cases.
 
