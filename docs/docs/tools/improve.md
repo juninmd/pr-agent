@@ -488,6 +488,37 @@ Available options:
 
 We recommend starting with `regular` mode, then exploring `exhaustive` mode, which can provide more comprehensive suggestions and enhanced bug detection.
 
+### Super exhaustive mode
+
+> `💎 feature`
+
+For maximum suggestion comprehensiveness and thorough code analysis, you can enable the super exhaustive mode. This configuration combines the exhaustive suggestions depth with significantly increased suggestion limits to provide the most thorough code review possible.
+
+```toml
+[pr_code_suggestions]
+suggestions_depth = "exhaustive"
+enable_suggestion_type_reuse = true
+num_code_suggestions_per_chunk = 100
+num_best_practice_suggestions = 100
+```
+
+This mode is recommended for:
+
+- Critical code reviews requiring maximum coverage
+- Final reviews before major releases
+- Code quality audits
+
+???- warning "Performance considerations"
+
+    Super exhaustive mode will significantly increase:
+
+    - Analysis time and API costs
+
+    - Number of suggestions generated (potentially overwhelming)
+
+    - Comment volume in your PR
+    
+    Use this mode judiciously and consider your team's review capacity.
 
 ### Self-review
 
