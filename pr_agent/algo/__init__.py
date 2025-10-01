@@ -119,6 +119,7 @@ MAX_TOKENS = {
     "bedrock/apac.anthropic.claude-3-5-sonnet-20241022-v2:0": 100000,
     "bedrock/apac.anthropic.claude-3-7-sonnet-20250219-v1:0": 200000,
     "bedrock/apac.anthropic.claude-sonnet-4-20250514-v1:0": 200000,
+    "bedrock/jp.anthropic.claude-sonnet-4-5-20250929-v1:0": 200000,
     "bedrock/global.anthropic.claude-sonnet-4-5-20250929-v1:0": 200000,
     'claude-3-5-sonnet': 100000,
     'bedrock/us.meta.llama4-scout-17b-instruct-v1:0': 128000,
