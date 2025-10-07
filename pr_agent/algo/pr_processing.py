@@ -334,7 +334,7 @@ async def retry_with_fallback_models(f: Callable, model_type: ModelType = ModelT
                 f"Failed to generate prediction with {model}: {e}",
             )
             if i == len(all_models) - 1:  # If it's the last iteration
-                raise Exception(f"Failed to generate prediction with any model of {all_models}")
+                raise Exception(f"Failed to generate prediction with any model of {all_models}") from e
 
 
 def _get_all_models(model_type: ModelType = ModelType.REGULAR) -> List[str]:
