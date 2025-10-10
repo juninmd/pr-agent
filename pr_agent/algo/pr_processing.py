@@ -331,7 +331,8 @@ async def retry_with_fallback_models(f: Callable, model_type: ModelType = ModelT
             return await f(model)
         except Exception as e:
             get_logger().warning(
-                f"Failed to generate prediction with {model}: {e}",
+                f"Failed to generate prediction with {model}",
+                artifact={"error": e},
             )
             if i == len(all_models) - 1:  # If it's the last iteration
                 raise Exception(f"Failed to generate prediction with any model of {all_models}") from e
