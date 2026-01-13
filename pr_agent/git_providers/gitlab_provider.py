@@ -430,11 +430,15 @@ class GitLabProvider(GitProvider):
 
             # allow only a limited number of files to be fully loaded. We can manage the rest with diffs only
             counter_valid += 1
-            if counter_valid < MAX_FILES_ALLOWED_FULL or not diff['diff']:
+            max_files_allowed = MAX_FILES_ALLOWED_FULL
+            if get_settings().config.get("token_economy_mode", False):
+                max_files_allowed = 10
+
+            if counter_valid < max_files_allowed or not diff['diff']:
                 original_file_content_str = self.get_pr_file_content(diff['old_path'], self.mr.diff_refs['base_sha'])
                 new_file_content_str = self.get_pr_file_content(diff['new_path'], self.mr.diff_refs['head_sha'])
             else:
-                if counter_valid == MAX_FILES_ALLOWED_FULL:
+                if counter_valid == max_files_allowed:
                     get_logger().info(f"Too many files in PR, will avoid loading full content for rest of files")
                 original_file_content_str = ''
                 new_file_content_str = ''

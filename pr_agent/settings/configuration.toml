@@ -27,6 +27,7 @@ ai_timeout=120 # 2minutes
 skip_keys = []
 custom_reasoning_model = false # when true, disables system messages and temperature controls for models that don't support chat-style inputs
 response_language="en-US" # Language locales code for PR responses in ISO 3166 and ISO 639 format (e.g., "en-US", "it-IT", "zh-CN", ...)
+token_economy_mode=false # if true, the agent will use less tokens (e.g. less context, less files)
 # token limits
 max_description_tokens = 500
 max_commits_tokens = 500
@@ -74,6 +75,8 @@ enable_claude_extended_thinking = false # Set to true to enable extended thinkin
 extended_thinking_budget_tokens = 2048
 extended_thinking_max_output_tokens = 4096
 
+[google_ai_studio]
+# gemini_api_key = "..."
 
 [pr_reviewer] # /review #
 # enable/disable features
