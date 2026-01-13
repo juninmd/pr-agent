@@ -44,6 +44,9 @@ def get_pr_diff(git_provider: GitProvider, token_handler: TokenHandler,
     if disable_extra_lines:
         PATCH_EXTRA_LINES_BEFORE = 0
         PATCH_EXTRA_LINES_AFTER = 0
+    elif get_settings().config.get("token_economy_mode", False):
+        PATCH_EXTRA_LINES_BEFORE = 1
+        PATCH_EXTRA_LINES_AFTER = 1
     else:
         PATCH_EXTRA_LINES_BEFORE = get_settings().config.patch_extra_lines_before
         PATCH_EXTRA_LINES_AFTER = get_settings().config.patch_extra_lines_after
@@ -400,10 +403,14 @@ def get_pr_multi_diffs(git_provider: GitProvider,
     pr_languages = sort_files_by_main_languages(git_provider.get_languages(), diff_files)
 
     # Get the maximum number of extra lines before and after the patch
-    PATCH_EXTRA_LINES_BEFORE = get_settings().config.patch_extra_lines_before
-    PATCH_EXTRA_LINES_AFTER = get_settings().config.patch_extra_lines_after
-    PATCH_EXTRA_LINES_BEFORE = cap_and_log_extra_lines(PATCH_EXTRA_LINES_BEFORE, "before")
-    PATCH_EXTRA_LINES_AFTER = cap_and_log_extra_lines(PATCH_EXTRA_LINES_AFTER, "after")
+    if get_settings().config.get("token_economy_mode", False):
+        PATCH_EXTRA_LINES_BEFORE = 1
+        PATCH_EXTRA_LINES_AFTER = 1
+    else:
+        PATCH_EXTRA_LINES_BEFORE = get_settings().config.patch_extra_lines_before
+        PATCH_EXTRA_LINES_AFTER = get_settings().config.patch_extra_lines_after
+        PATCH_EXTRA_LINES_BEFORE = cap_and_log_extra_lines(PATCH_EXTRA_LINES_BEFORE, "before")
+        PATCH_EXTRA_LINES_AFTER = cap_and_log_extra_lines(PATCH_EXTRA_LINES_AFTER, "after")
 
     # try first a single run with standard diff string, with patch extension, and no deletions
     patches_extended, total_tokens, patches_extended_tokens = pr_generate_extended_diff(
