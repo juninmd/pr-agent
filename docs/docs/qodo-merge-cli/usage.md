@@ -59,7 +59,7 @@ You can view the proposed code changes in a diff format, jump to the relevant co
         === "Unified Diff View (`D`)"
 
             ![Unified Diff](https://www.qodo.ai/images/pr_agent/qm_cli_unified_diffview.png){width=768}
-            
+
             - Press `D` to view proposed code changes
             - Standard unified diff format with line numbers
             - Syntax highlighting for additions/removals
@@ -68,7 +68,7 @@ You can view the proposed code changes in a diff format, jump to the relevant co
         === "Side-by-Side View (`S`)"
 
             ![Side-by-Side Diff](https://www.qodo.ai/images/pr_agent/qm_cli_side_by_side_diffview.png){width=768}
-            
+
             - Press `S` for side-by-side diff view
             - Enhanced layout for complex changes
             - Better context understanding
@@ -77,7 +77,7 @@ You can view the proposed code changes in a diff format, jump to the relevant co
     === "Jump to Code (`O`)"
 
         **IDE Integration**
-        
+
         - Press `O` to open the suggestion's source file in your IDE
         - Supports all major IDEs when terminal is running inside them
         - Direct navigation to relevant code location
@@ -86,9 +86,9 @@ You can view the proposed code changes in a diff format, jump to the relevant co
     === "Chat (`C`)"
 
         **Suggestion-Specific Discussion**
-        
+
         ![Chat Interface](https://www.qodo.ai/images/pr_agent/qm_cli_suggestion_chat_pre_impl.png){width=768}
-        
+
         - Press `C` to discuss the current suggestion
         - Context automatically included (files, lines, description)
         - Ask questions, request modifications
@@ -103,38 +103,38 @@ You can implement a single suggestion, multiple selected suggestions, or all sug
 
     === "1. Single Suggestion"
         ![Main Table](https://www.qodo.ai/images/pr_agent/qm_cli_tabl_detail_view.png){width=768}
-        
+
         **Direct individual implementation**
-    
+
         1. Navigate to any specific suggestion
         2. Press `Enter` to implement just that suggestion
 
     === "2. Multi-Select"
         ![Multi-Selection](https://www.qodo.ai/images/pr_agent/qm_cli_multi_select.png){width=768}
-        
+
         **Select multiple related suggestions**
-        
+
         1. Use `Space` to select specific suggestions (◉)
         2. Navigate and select multiple related suggestions
         3. Press `Enter` on any selected suggestion to start implementation
         4. AI implements selected suggestions together
-    
+
     === "3. Address All"
         ![Fix All Mode](https://www.qodo.ai/images/pr_agent/qm_cli_main_table_fix_all.png){width=768}
-        
+
         **Reflect and address all suggestions (Always available as first row)**
-        
+
         1. Press `Enter` on the first row "Reflect and address all suggestions"
         2. AI implements all suggestions simultaneously and intelligently
         3. Handles conflicts and dependencies automatically
         4. Review the comprehensive summary
-    
+
     === "4. Chat then Implement"
-    
+
         ![Chat Interface](https://www.qodo.ai/images/pr_agent/qm_cli_suggestion_chat_pre_impl.png){width=768}
-    
+
         **Discuss then implement**
-    
+
         1. Press `C` on any suggestion to start a chat
         2. Ask questions, request modifications, get clarifications
         3. Once satisfied, request implementation via chat
@@ -161,41 +161,41 @@ After implementing the suggestions, you have several options to proceed:
 
 !!! note "Post Implementation Actions"
     === "Return to Table (`ESC`)"
-    
+
         ![Status Updates](https://www.qodo.ai/images/pr_agent/qm_cli_suggestion_status_update_add_v_sign.png){width=768}
-        
+
         The first option returns you to the main table where you can see:
-        
+
         - **Updated Status**: Implemented suggestions now show `✓` green checkmark
           - **Real-time Updates**: Status changes reflect immediately
           - **Continue Workflow**: Handle remaining pending suggestions
-    
+
     === "Continue Chatting (`C`)"
-    
+
         ![Continue Chat](https://www.qodo.ai/images/pr_agent/qm_cli_continue_chat.png){width=768}
-        
+
         Discuss the implementation details:
-        
+
         - Review changes made by the AI
         - Request refinements or modifications
         - Get explanations of implementation approach
         - Continuous improvement cycle
-    
+
     === "Commit Changes (`M`)"
-    
+
         ![Commit Message](https://www.qodo.ai/images/pr_agent/qm_cli_commit_message.png){width=512}
-        
+
         Auto-generate commit messages:
-        
+
         - AI-generated commit messages based on changes
         - Editable before committing
         - Standard git conventions
         - Seamless workflow integration
-    
+
     === "Open Edited File (`O`)"
-    
+
         Open the implemented code directly in your IDE:
-        
+
         - View the exact changes made
         - See implementation in full context
         - Continue development seamlessly

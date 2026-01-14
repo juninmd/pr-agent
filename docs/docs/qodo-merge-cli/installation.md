@@ -67,4 +67,3 @@ Then the tool will automatically fetch the suggestions from the PR and display t
 ## Next Steps
 
 **[Usage](usage.md)** - Navigate, explore, and implement suggestions
-

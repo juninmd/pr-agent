@@ -50,14 +50,14 @@ We recommend utilizing both auto and custom best practices to get the most compr
 ```toml
 [auto_best_practices]
 # Disable all auto best practices usage or generation
-enable_auto_best_practices = true  
+enable_auto_best_practices = true
 
 # Disable usage of auto best practices file in the 'improve' tool
-utilize_auto_best_practices = true 
+utilize_auto_best_practices = true
 
 # Extra instructions to the auto best practices generation prompt
-extra_instructions = ""            
+extra_instructions = ""
 
 # Max number of patterns to be detected
-max_patterns = 5                   
+max_patterns = 5
 ```

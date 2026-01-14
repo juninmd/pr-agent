@@ -142,7 +142,7 @@ pr-agent --pr_url https://github.com/owner/repo/pull/123 review
 
 **Highly Customizable**: JSON-based prompting allows easy customization of review categories and behavior via [configuration files](pr_agent/settings/configuration.toml)
 
-**Platform Agnostic**: 
+**Platform Agnostic**:
 - **Git Providers**: GitHub, GitLab, BitBucket, Azure DevOps, Gitea
 - **Deployment**: CLI, GitHub Actions, Docker, self-hosted, webhooks
 - **AI Models**: OpenAI GPT, Claude, Deepseek, and more
