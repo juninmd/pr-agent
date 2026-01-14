@@ -5,11 +5,11 @@
 Qodo Merge PR Benchmark evaluates and compares the performance of Large Language Models (LLMs) in analyzing pull request code and providing meaningful code suggestions.
 Our diverse dataset contains 400 pull requests from over 100 repositories, spanning multiple [programming languages](#programming-languages) to reflect real-world scenarios.
 
-- For each pull request, we have pre-generated suggestions from eleven different top-performing models using the Qodo Merge `improve` tool. The prompt for response generation can be found [here](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/code_suggestions/pr_code_suggestions_prompts_not_decoupled.toml). 
+- For each pull request, we have pre-generated suggestions from eleven different top-performing models using the Qodo Merge `improve` tool. The prompt for response generation can be found [here](https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/code_suggestions/pr_code_suggestions_prompts_not_decoupled.toml).
 
 - To benchmark a model, we generate its suggestions for the same pull requests and ask a high-performing judge model to **rank** the new model's output against the pre-generated baseline suggestions. We utilize OpenAI's `o3` model as the judge, though other models have yielded consistent results. The prompt for this ranking judgment is available [here](https://github.com/Codium-ai/pr-agent-settings/tree/main/benchmark).
 
-- We aggregate ranking outcomes across all pull requests, calculating performance metrics for the evaluated model. 
+- We aggregate ranking outcomes across all pull requests, calculating performance metrics for the evaluated model.
 
 - We also analyze the qualitative feedback from the judge to identify the model's comparative strengths and weaknesses against the established baselines.
 This approach provides not just a quantitative score but also a detailed analysis of each model's strengths and weaknesses.
@@ -395,16 +395,16 @@ Final score: **33.5**
 
 Strengths:
 
-- **High precision / low false-positive rate:** The model often stays silent or gives a single, well-justified fix, so when it does speak the suggestion is usually correct and seldom touches unchanged lines, keeping guideline compliance high.  
-- **Good guideline awareness:** YAML structure is consistently valid; suggestions rarely exceed the 3-item limit and generally restrict themselves to newly-added lines.  
-- **Clear, concise patches:** When a defect is found, the model produces short rationales and tidy “improved_code” blocks that reviewers can apply directly.  
+- **High precision / low false-positive rate:** The model often stays silent or gives a single, well-justified fix, so when it does speak the suggestion is usually correct and seldom touches unchanged lines, keeping guideline compliance high.
+- **Good guideline awareness:** YAML structure is consistently valid; suggestions rarely exceed the 3-item limit and generally restrict themselves to newly-added lines.
+- **Clear, concise patches:** When a defect is found, the model produces short rationales and tidy “improved_code” blocks that reviewers can apply directly.
 - **Risk-averse behaviour pays off in “no-bug” PRs:** In examples where the diff truly contained no critical issue, the model’s empty output ranked above peers that offered speculative or stylistic advice.
 
 Weaknesses:
 
-- **Very low recall / shallow coverage:** In a large majority of cases it gives 0-1 suggestions and misses other evident, critical bugs highlighted by peer models, leading to inferior rankings.  
-- **Occasional incorrect or harmful fixes:** A noticeable subset of answers propose changes that break functionality or misunderstand the code (e.g. bad constant, wrong header logic, speculative rollbacks).  
-- **Non-actionable placeholders:** Some “improved_code” sections contain comments or “…” rather than real patches, reducing practical value.  
+- **Very low recall / shallow coverage:** In a large majority of cases it gives 0-1 suggestions and misses other evident, critical bugs highlighted by peer models, leading to inferior rankings.
+- **Occasional incorrect or harmful fixes:** A noticeable subset of answers propose changes that break functionality or misunderstand the code (e.g. bad constant, wrong header logic, speculative rollbacks).
+- **Non-actionable placeholders:** Some “improved_code” sections contain comments or “…” rather than real patches, reducing practical value.
 
 ### Claude-4 Opus
 
@@ -501,5 +501,5 @@ The PR benchmark dataset includes pull requests containing code in the following
 ["Python", "JavaScript", "TypeScript", "Java", "CSharp", "PHP", "C++", "Go", "Rust", "Swift", "Kotlin", "Ruby", "Dart", "Scala"
 ```
 
-Pull requests may also include non-code files such as `YAML`, `JSON`, `Markdown`, `Dockerfile` ,`Shell`, etc. 
+Pull requests may also include non-code files such as `YAML`, `JSON`, `Markdown`, `Dockerfile` ,`Shell`, etc.
 The benchmarked models should also analyze these files, as they commonly appear in real-world pull requests.

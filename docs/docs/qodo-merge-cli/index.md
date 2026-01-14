@@ -15,7 +15,7 @@ The CLI can bridge the gap between Qodo Merge feedback and code implementation i
 - **Interactive review and implementation** of AI feedback directly in your terminal
 - **Track implementation status** of each suggestion (pending/implemented/declined)
 
-## Remote Suggestions Flow 
+## Remote Suggestions Flow
 1. Open a Pull Request on your Git environment and receive Qodo Merge feedback
 2. Pull the remote suggestions into your terminal with Qodo Merge CLI
 3. Explore, Review, and implement suggestions interactively

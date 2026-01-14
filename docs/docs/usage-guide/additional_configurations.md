@@ -144,7 +144,7 @@ LANGSMITH_BASE_URL=<url>
 
 ## Bringing additional repository metadata to Qodo Merge 💎
 
-To provide Qodo Merge tools with additional context about your project, you can enable automatic repository metadata detection. 
+To provide Qodo Merge tools with additional context about your project, you can enable automatic repository metadata detection.
 
 If you set:
 

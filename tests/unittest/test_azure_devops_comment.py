@@ -1,7 +1,9 @@
 import unittest
+from unittest.mock import MagicMock, patch
+
 from pr_agent.config_loader import get_settings
-from unittest.mock import patch, MagicMock
 from pr_agent.git_providers import AzureDevopsProvider
+
 
 class TestAzureDevopsProviderPublishComment(unittest.TestCase):
     @patch("pr_agent.git_providers.azuredevops_provider.get_settings")
@@ -56,4 +58,4 @@ class TestAzureDevopsProviderPublishComment(unittest.TestCase):
         # Import get_settings directly to read from configuration.toml
         status = get_settings().azure_devops.default_comment_status
         # The expected value should match what's in your configuration.toml
-        self.assertEqual(status, "closed")        
+        self.assertEqual(status, "closed")

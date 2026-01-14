@@ -71,9 +71,9 @@ num_code_suggestions_per_chunk = ...
 
 ### Table vs Committable code comments
 
-Qodo Merge supports two modes for presenting code suggestions: 
+Qodo Merge supports two modes for presenting code suggestions:
 
-1) [Table](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png) mode 
+1) [Table](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png) mode
 
 2) [Inline Committable](https://codium.ai/images/pr_agent/improve.png) code comments mode.
 
@@ -86,7 +86,7 @@ The table format offers several key advantages:
 - **Centralized tracking**: Shows suggestion implementation status in one place
 - **IDE integration**: Allows applying suggestions directly in your IDE via [Qodo Command](https://github.com/qodo-ai/agents)
 
-Table mode is the default of Qodo Merge, and is recommended approach for most users due to these benefits. 
+Table mode is the default of Qodo Merge, and is recommended approach for most users due to these benefits.
 
 ![code_suggestions_as_comment_closed.png](https://codium.ai/images/pr_agent/code_suggestions_as_comment_closed.png){width=512}
 
@@ -171,9 +171,9 @@ Use triple quotes to write multi-line instructions. Use bullet points or numbers
 Qodo Merge supports both simple and hierarchical best practices configurations to provide guidance to the AI model for generating relevant code suggestions.
 
 ???- tip "Writing effective best practices files"
-    
+
     The following guidelines apply to all best practices files:
-    
+
     - Write clearly and concisely
     - Include brief code examples when helpful with before/after patterns
     - Focus on project-specific guidelines that will result in relevant suggestions you actually want to get
@@ -184,9 +184,9 @@ Qodo Merge supports both simple and hierarchical best practices configurations t
     - Use pattern-based structure rather than simple bullet points for better clarity
 
 ???- tip "Example of a best practices file"
- 
+
     Pattern 1: Add proper error handling with try-except blocks around external function calls.
-    
+
     Example code before:
 
     ```python
@@ -205,7 +205,7 @@ Qodo Merge supports both simple and hierarchical best practices configurations t
     ```
 
     Pattern 2: Add defensive null/empty checks before accessing object properties or performing operations on potentially null variables to prevent runtime errors.
-    
+
     Example code before:
 
     ```python
@@ -244,7 +244,7 @@ For organizations managing multiple repositories with different requirements, Qo
 3. **Monorepos with subprojects**: Large monorepos can have both repository-level and subproject-level best practices, with automatic path-based matching
 
 #### Setting up global hierarchical best practices
-    
+
 1\. Create a new repository named `pr-agent-settings` in your organization/workspace.
 
 2\. Build the folder hierarchy in your `pr-agent-settings` repository, for example:
@@ -267,7 +267,7 @@ For organizations managing multiple repositories with different requirements, Qo
        │   └── ...
        ├── repo_a/                      # For standalone repositories
        │   └── best_practices.md
-       ├── monorepo-name/               # For monorepo-specific rules 
+       ├── monorepo-name/               # For monorepo-specific rules
        │   ├── best_practices.md        # Root level monorepo rules
        │   ├── service-a/               # Subproject best practices
        │   │   └── best_practices.md
@@ -324,13 +324,13 @@ For organizations managing multiple repositories with different requirements, Qo
 ???- info "Best practices priority and fallback behavior"
 
     When global best practices are enabled, Qodo Merge follows this priority order:
-    
+
     1\. **Primary**: Global hierarchical best practices from `pr-agent-settings` repository:
-    
+
         1.1 If the repository is mapped in `metadata.yaml`, it uses the specified paths
-    
+
         1.2 For monorepos, it automatically collects best practices matching PR file paths
-    
+
         1.3 If no mapping exists, it falls back to the global best practices
 
     2\. **Fallback**: Local repository `best_practices.md` file:
@@ -378,16 +378,16 @@ For organizations managing multiple repositories with different requirements, Qo
 
     Best practice suggestions are labeled as `Organization best practice` by default.
     To customize this label, modify it in your configuration file:
-    
+
     ```toml
     [best_practices]
     organization_name = "..."
     ```
-    
+
     And the label will be: `{organization_name} best practice`.
-    
+
     #### Example results
-    
+
     ![best_practice](https://codium.ai/images/pr_agent/org_best_practice.png){width=512}
 
 ### Auto best practices
@@ -414,16 +414,16 @@ Learn more about utilizing 'auto best practices' in our [detailed guide](https:/
 ```toml
 [auto_best_practices]
 # Disable all auto best practices usage or generation
-enable_auto_best_practices = true  
+enable_auto_best_practices = true
 
 # Disable usage of auto best practices file in the 'improve' tool
-utilize_auto_best_practices = true 
+utilize_auto_best_practices = true
 
 # Extra instructions to the auto best practices generation prompt
-extra_instructions = ""            
+extra_instructions = ""
 
 # Max number of patterns to be detected
-max_patterns = 5                   
+max_patterns = 5
 ```
 
 ### Multiple best practices sources
@@ -481,7 +481,7 @@ You can control the depth and comprehensiveness of the code suggestions by using
 Available options:
 
 - `selective` - Shows only suggestions above a score threshold of 6
-- `regular` - Default mode with balanced suggestion coverage  
+- `regular` - Default mode with balanced suggestion coverage
 - `exhaustive` - Provides maximum suggestion comprehensiveness
 
 (Alternatively, use numeric values: 1, 2, or 3 respectively)
@@ -582,7 +582,7 @@ This configuration is recommended for:
     - Analysis time and API costs
     - Number of suggestions generated (potentially overwhelming)
     - Comment volume in your PR
-    
+
     Use this configuration judiciously and consider your team's review capacity.
 
 ## Configuration options
@@ -612,7 +612,7 @@ This configuration is recommended for:
       </tr>
       <tr>
         <td><b>focus_only_on_problems</b></td>
-        <td>If set to true, suggestions will focus primarily on identifying and fixing code problems, and less on style considerations like best practices, maintainability, or readability. Default is true.</td> 
+        <td>If set to true, suggestions will focus primarily on identifying and fixing code problems, and less on style considerations like best practices, maintainability, or readability. Default is true.</td>
       </tr>
       <tr>
         <td><b>persistent_comment</b></td>

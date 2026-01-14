@@ -253,8 +253,8 @@ This following steps will help you check if the basic auth is working correctly,
 
     ```python
     from jira import JIRA
-    
-    
+
+
     if __name__ == "__main__":
         try:
             # Jira server URL
@@ -264,7 +264,7 @@ This following steps will help you check if the basic auth is working correctly,
             password = "..."
             # Jira ticket code (e.g. "PROJ-123")
             ticket_id = "..."
-    
+
             print("Initializing JiraServerTicketProvider with JIRA server")
             # Initialize JIRA client
             jira = JIRA(
@@ -276,11 +276,11 @@ This following steps will help you check if the basic auth is working correctly,
                 print(f"JIRA client initialized successfully")
             else:
                 print("Error initializing JIRA client")
-    
+
             # Fetch ticket details
             ticket = jira.issue(ticket_id)
             print(f"Ticket title: {ticket.fields.summary}")
-    
+
         except Exception as e:
             print(f"Error fetching JIRA ticket details: {e}")
     ```
@@ -309,8 +309,8 @@ This following steps will help you check if the token is working correctly, and 
 
     ```python
     from jira import JIRA
-    
-    
+
+
     if __name__ == "__main__":
         try:
             # Jira server URL
@@ -319,7 +319,7 @@ This following steps will help you check if the token is working correctly, and 
             token_auth = "..."
             # Jira ticket code (e.g. "PROJ-123")
             ticket_id = "..."
-    
+
             print("Initializing JiraServerTicketProvider with JIRA server")
             # Initialize JIRA client
             jira = JIRA(
@@ -331,11 +331,11 @@ This following steps will help you check if the token is working correctly, and 
                 print(f"JIRA client initialized successfully")
             else:
                 print("Error initializing JIRA client")
-    
+
             # Fetch ticket details
             ticket = jira.issue(ticket_id)
             print(f"Ticket title: {ticket.fields.summary}")
-    
+
         except Exception as e:
             print(f"Error fetching JIRA ticket details: {e}")
     ```
@@ -472,12 +472,12 @@ Name your branch with the ticket ID as a prefix (e.g., `ABC-123-feature-descript
 
 !!! note "Linear Base URL"
     For shortened ticket IDs or branch detection (method 2), you must configure the Linear base URL in your configuration file under the [linear] section:
-    
+
     ```toml
     [linear]
     linear_base_url = "https://linear.app/[ORG_ID]"
     ```
-    
+
     Replace `[ORG_ID]` with your Linear organization identifier.
 
 ## Monday Integration 💎
