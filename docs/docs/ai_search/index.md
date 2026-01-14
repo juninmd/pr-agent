@@ -298,7 +298,7 @@ window.addEventListener('load', function() {
             if (!response.ok) {
                 throw new Error(`An error (${response.status}) occurred during search: "${msg}"`);
             }
- 
+
             displayResults(msg);
         } catch (error) {
             spinner.style.display = 'none';

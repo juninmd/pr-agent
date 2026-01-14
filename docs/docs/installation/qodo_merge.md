@@ -5,7 +5,7 @@ See [here](https://qodo-merge-docs.qodo.ai/overview/pr_agent_pro/) for more deta
 
 ### Cloud Users
 
-Non-paying users will enjoy feedback on up to 75 PRs per git organization per month. Above this limit, PRs will not receive feedback until a new month begins. 
+Non-paying users will enjoy feedback on up to 75 PRs per git organization per month. Above this limit, PRs will not receive feedback until a new month begins.
 
 For unlimited access, user licenses (seats) are required. Each user requires an individual seat license.
 After purchasing seats, the team owner can assign them to specific users through the management portal.
@@ -65,7 +65,7 @@ Create a new OAuth 2.0 application in your GitLab instance:
    - **Redirect URI**: `https://register.oauth.app.gitlab.merge.qodo.ai/oauth/callback`
    - **Confidential**: Check this checkbox
    - **Scopes**: Check the "api" scope
-   
+
     <figure markdown="1">
     ![Step 1](https://www.codium.ai/images/pr_agent/gitlab_pro_oauth_app_creation_image.png){width=750}
     </figure>
@@ -79,8 +79,8 @@ Create a new OAuth 2.0 application in your GitLab instance:
 2. Fill in the registration form:
    - **Host Address**: Leave empty if using gitlab.com ([for self-hosted GitLab servers](#gitlab-server), enter your GitLab base URL including scheme (e.g., https://gitlab.mycorp-inc.com) without trailing slash. Do not include paths or query strings.
    - **OAuth Application ID**: Enter the Application ID from Step 1
-   - **OAuth Application Secret**: Enter the Secret from Step 1 
-   
+   - **OAuth Application Secret**: Enter the Secret from Step 1
+
     <figure markdown="1">
     ![Step 2](https://www.codium.ai/images/pr_agent/gitlab_pro_registration_form_image.png){width=750}
     </figure>

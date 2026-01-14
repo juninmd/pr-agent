@@ -85,9 +85,9 @@ Examples of security issues:
 
 ???+ tip "Auto-create ticket"
     Follow this [guide](https://qodo-merge-docs.qodo.ai/tools/pr_to_ticket/) to learn how to enable triggering `create tickets` based on PR content.
-    
+
     ![ticket creation via compliance tool](https://codium.ai/images/pr_agent/ticket_creation_from_compliance1.png){width=256}
- 
+
 
 Validates that PR changes fulfill the requirements specified in linked tickets:
 
@@ -106,7 +106,7 @@ Analyzes code changes using RAG endpoint to detect potential code duplication fr
 
 - **Fully Compliant** 🟢: No code duplication found
 - **Not Compliant** 🔴: Full code duplication found
-- **Requires Verification** ⚪: Near code duplication 
+- **Requires Verification** ⚪: Near code duplication
 
 
 ### 4. Custom Compliance
@@ -139,7 +139,7 @@ Each compliance is defined in a YAML file as follows:
         objective: "All external API calls must have proper error handling"
         success_criteria: "Try-catch blocks around external calls with appropriate logging"
         failure_criteria: "External API calls without error handling or logging"
-      
+
     ...
     ```
 
@@ -243,17 +243,17 @@ enable_global_pr_compliance = true
 ???- info "Compliance checklist loading strategy"
 
     1. **Global Checklists**: Hierarchical compliance from `pr-agent-settings` repository
-    
+
         1.1 If the repository is mapped in `metadata.yaml`, it uses the specified paths and the global compliance checklist
-        
+
         1.2 For monorepos, it automatically collects compliance checklists matching PR file paths
-        
+
         1.3 If the repository is not mapped in `metadata.yaml`, global checklists are not loaded
 
     2. **Local Repository Checklist**: `pr_compliance_checklist.yaml` file in the repository
-    
+
         2.1 Loaded if present in the repository
-        
+
         2.2 Content is merged with global checklists (if loaded) to create the final compliance checklist
 
 
@@ -367,9 +367,8 @@ enable_global_pr_compliance = true
 
 !!! tip ""
     You can configure CI/CD Actions to prevent merging PRs with specific compliance labels:
-    
+
     - `Possible security concern` - Block PRs with potential security issues
     - `Failed compliance check` - Block PRs that violate custom compliance checklists
-    
-    Implement a dedicated [GitHub Action](https://medium.com/sequra-tech/quick-tip-block-pull-request-merge-using-labels-6cc326936221) to enforce these checklists.
 
+    Implement a dedicated [GitHub Action](https://medium.com/sequra-tech/quick-tip-block-pull-request-merge-using-labels-6cc326936221) to enforce these checklists.
