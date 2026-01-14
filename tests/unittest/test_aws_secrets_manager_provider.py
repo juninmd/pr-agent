@@ -1,9 +1,11 @@
 import json
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 from botocore.exceptions import ClientError
 
-from pr_agent.secret_providers.aws_secrets_manager_provider import AWSSecretsManagerProvider
+from pr_agent.secret_providers.aws_secrets_manager_provider import \
+    AWSSecretsManagerProvider
 
 
 class TestAWSSecretsManagerProvider:
@@ -86,4 +88,4 @@ class TestAWSSecretsManagerProvider:
         mock_client.put_secret_value.side_effect = Exception("AWS error")
 
         with pytest.raises(Exception):
-            provider.store_secret('test-secret', 'test-value') 
+            provider.store_secret('test-secret', 'test-value')

@@ -54,19 +54,19 @@ There are two possible paths leading to this auto-approval - one via the `review
     enable_auto_approval = true
     auto_approve_for_low_review_effort = X # X is a number between 1 and 5
     ```
-    
+
     When the [review effort score](https://www.qodo.ai/images/pr_agent/review3.png) is lower than or equal to X, the PR will be auto-approved (unless ticket compliance is enabled and fails, see below).
 
 - **Ticket compliance criteria**
-    
+
     ```toml
     [config]
     enable_auto_approval = true
     ensure_ticket_compliance = true # Default is false
     ```
-    
+
     If `ensure_ticket_compliance` is set to `true`, auto-approval for the `review` toll path will be disabled if no ticket is linked to the PR, or if the PR is not fully compliant with a linked ticket. This ensures that PRs are only auto-approved if their associated tickets are properly resolved.
-    
+
     You can also prevent auto-approval if the PR exceeds the ticket's scope (see [here](https://qodo-merge-docs.qodo.ai/core-abilities/fetching_ticket_context/#configuration-options)).
 
 
@@ -80,4 +80,3 @@ To enable this feature, set the following in the configuration file:
 enable_auto_approval = true
 auto_approve_for_no_suggestions = true
 ```
-

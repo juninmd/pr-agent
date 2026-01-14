@@ -29,7 +29,7 @@ there are 3 ways to use the `create_ticket` tool:
 3. [**Manual Ticket Creation**](#manual-ticket-creation)
 
 ### Automatic Ticket Creation
-The tool can be configured to automatically create tickets when a PR is opened or updated and the PR does not already have a ticket associated with it. 
+The tool can be configured to automatically create tickets when a PR is opened or updated and the PR does not already have a ticket associated with it.
 This ensures that every code change is documented in the ticketing system without manual intervention.
 
 To configure automatic ticket creation, add the following to `.pr_agent.toml`:
@@ -47,7 +47,7 @@ The tool can be triggered interactively through a checkbox in the compliance too
 ![ticket creation via compliance tool](https://codium.ai/images/pr_agent/ticket_creation_from_compliance1.png){width=512}
 
 - After clicking the checkbox, the tool will create a ticket and will add/update the `PR Description` with a section called `Auto-created Ticket` with the link to the created ticket.
-- Then you can click `update` in the `Ticket compliance` section in the `Compliance` tool 
+- Then you can click `update` in the `Ticket compliance` section in the `Compliance` tool
 
 ![compliance_auto_created_ticket_final](https://codium.ai/images/pr_agent/compliance_auto_created_ticket_final.png){width=512}
 
