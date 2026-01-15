@@ -6,12 +6,12 @@
 
 [config]
 # models
-model="gpt-5.2-2025-12-11"
+model="gemini/gemini-1.5-pro"
 fallback_models=["o4-mini"]
 #model_reasoning="o4-mini" # dedicated reasoning model for self-reflection
 #model_weak="gpt-4o" # optional, a weaker model to use for some easier tasks
 # CLI
-git_provider="github"
+git_provider="gitlab"
 publish_output=true
 publish_output_progress=true
 verbosity_level=0 # 0,1,2
@@ -27,7 +27,7 @@ ai_timeout=120 # 2minutes
 skip_keys = []
 custom_reasoning_model = false # when true, disables system messages and temperature controls for models that don't support chat-style inputs
 response_language="en-US" # Language locales code for PR responses in ISO 3166 and ISO 639 format (e.g., "en-US", "it-IT", "zh-CN", ...)
-token_economy_mode=false # if true, the agent will use less tokens (e.g. less context, less files)
+token_economy_mode=true # if true, the agent will use less tokens (e.g. less context, less files)
 # token limits
 max_description_tokens = 500
 max_commits_tokens = 500
