@@ -3,6 +3,7 @@ import pytest
 from gitlab import Gitlab
 from pr_agent.git_providers.gitlab_provider import GitLabProvider
 from pr_agent.algo.utils import get_max_tokens
+from pr_agent.algo.pr_processing import get_pr_diff
 
 class TestGitLabGeminiConfig:
     @pytest.fixture
@@ -108,3 +109,25 @@ class TestGitLabGeminiConfig:
             max_tokens = get_max_tokens("gemini/gemini-1.5-flash")
             # Should be capped at 32000 by config.max_model_tokens
             assert max_tokens == 32000
+
+    def test_token_economy_minimizes_context(self, gitlab_provider, mock_settings):
+        """Test that token economy mode minimizes patch context in get_pr_diff."""
+        # Need to patch get_settings in pr_processing as well
+        with patch('pr_agent.algo.pr_processing.get_settings', mock_settings):
+            gitlab_provider.get_diff_files = MagicMock(return_value=[])
+            gitlab_provider.get_languages = MagicMock(return_value={})
+
+            token_handler = MagicMock()
+            token_handler.prompt_tokens = 0
+
+            # Mock pr_generate_extended_diff to capture arguments
+            with patch('pr_agent.algo.pr_processing.pr_generate_extended_diff') as mock_generate:
+                mock_generate.return_value = ([], 0, [])
+
+                get_pr_diff(gitlab_provider, token_handler, "gemini/gemini-1.5-flash")
+
+                # Check that patch_extra_lines_before and _after were passed as 1 (economy mode)
+                # instead of default (which would be higher if not in economy mode)
+                args, kwargs = mock_generate.call_args
+                assert kwargs['patch_extra_lines_before'] == 1
+                assert kwargs['patch_extra_lines_after'] == 1
