@@ -190,3 +190,32 @@ class LocalGitProvider(GitProvider):
 
     def get_pr_labels(self, update=False):
         raise NotImplementedError('Getting labels is not implemented for the local git provider')
+
+    def get_pr_file_content(self, file_path: str, branch: str) -> str:
+        """
+        Retrieves the content of a file from the local repository.
+        """
+        try:
+            full_path = self.repo_path / file_path
+            if full_path.exists():
+                return full_path.read_text(encoding='utf-8')
+            return ""
+        except Exception as e:
+            get_logger().error(f"Failed to read file {file_path}: {e}")
+            return ""
+
+    def create_or_update_pr_file(self, file_path: str, branch: str, contents="", message="") -> None:
+        """
+        Creates or updates a file in the local repository.
+        """
+        try:
+            full_path = self.repo_path / file_path
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+            full_path.write_text(contents, encoding='utf-8')
+            # In a real scenario, we might want to commit this, but for LocalGitProvider
+            # we might just modify the working directory.
+            # If we want to simulate a commit:
+            self.repo.index.add([str(full_path)])
+            self.repo.index.commit(message)
+        except Exception as e:
+            get_logger().error(f"Failed to write file {file_path}: {e}")
