@@ -9,7 +9,9 @@ class TestPRCodeAgent(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         # Manually set settings for testing since they might not be loaded correctly in isolation
         get_settings().set("pr_code_agent.system_prompt", "System Prompt")
-        get_settings().set("pr_code_agent.user_prompt", "Task: {task}\nRelevant files: {relevant_files}\nHistory: {history}")
+        get_settings().set("pr_code_agent.user_prompt", "Task: {{ task }}\nHistory: {{ history }}")
+        get_settings().set("config.model", "gpt-4")
+        get_settings().set("pr_code_agent.max_steps", 15)
 
     async def test_run_success(self):
         # Mock GitProvider
@@ -23,10 +25,10 @@ class TestPRCodeAgent(unittest.IsolatedAsyncioTestCase):
         mock_ai_handler.return_value = mock_ai_handler_instance
 
         # Mock responses from AI
-        # 1. read_files
+        # 1. read_file (NOT read_files)
         # 2. edit_file
         # 3. finish
-        response_1 = '```json\n{"action": "read_files", "args": {"file_paths": ["file1.py"]}}\n```'
+        response_1 = '```json\n{"action": "read_file", "args": {"file_path": "file1.py"}}\n```'
         response_2 = '```json\n{"action": "edit_file", "args": {"file_path": "file1.py", "content": "new content"}}\n```'
         response_3 = '```json\n{"action": "finish", "args": {"message": "Done"}}\n```'
 
@@ -66,5 +68,5 @@ class TestPRCodeAgent(unittest.IsolatedAsyncioTestCase):
             agent = PRCodeAgent("https://github.com/org/repo/pull/1", args=["fix bug"], ai_handler=mock_ai_handler)
             await agent.run()
 
-        # Should stop after one attempt
-        self.assertEqual(mock_ai_handler_instance.chat_completion.call_count, 1)
+        # Should continue for max_steps attempts (default 15)
+        self.assertEqual(mock_ai_handler_instance.chat_completion.call_count, 15)
