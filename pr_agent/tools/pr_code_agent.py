@@ -1,110 +1,67 @@
-import json
-from functools import partial
-
 from pr_agent.algo.ai_handlers.base_ai_handler import BaseAiHandler
 from pr_agent.algo.ai_handlers.litellm_ai_handler import LiteLLMAIHandler
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import get_git_provider_with_context
 from pr_agent.log import get_logger
+from pr_agent.tools.code_agent.tool_registry import ToolRegistry
+from pr_agent.tools.code_agent.tools import AgentTools
 
 class PRCodeAgent:
-    def __init__(self, pr_url: str, args: list = None,
-                 ai_handler: partial[BaseAiHandler] = LiteLLMAIHandler):
+    def __init__(self, pr_url: str, args: list = None, ai_handler=LiteLLMAIHandler):
         self.git_provider = get_git_provider_with_context(pr_url)
         self.ai_handler = ai_handler()
         self.args = args
-        self.max_steps = get_settings().get("pr_code_agent.max_steps", 10)
-        self.history = []
+        self.max_steps = get_settings().get("pr_code_agent.max_steps", 15)
+        self.tools = AgentTools(self.git_provider)
+        self.registry = ToolRegistry(self.git_provider)
+        self._register_tools()
+
+    def _register_tools(self):
+        self.registry.register_tool("list_files", "List files", self.tools.list_files)
+        self.registry.register_tool("read_file", "Read file content", self.tools.read_file)
+        self.registry.register_tool("edit_file", "Edit file content", self.tools.edit_file)
+        self.registry.register_tool("set_plan", "Set the plan", self.tools.set_plan)
+        self.registry.register_tool("plan_step_complete", "Mark step complete", self.tools.plan_step_complete)
+        self.registry.register_tool("run_in_bash_session", "Run bash command", self.tools.run_in_bash_session)
+        self.registry.register_tool("finish", "Finish task", self.tools.finish)
 
     async def run(self):
-        get_logger().info("Starting PRCodeAgent")
+        get_logger().info("Starting PRCodeAgent (Jules-like)")
         task = " ".join(self.args) if self.args else "No task provided."
-
+        history = []
         for _ in range(self.max_steps):
-            prompt = self._build_prompt(task)
+            system_prompt = self._build_system_prompt()
+            user_prompt = self._build_user_prompt(task, history)
             response = await self.ai_handler.chat_completion(
                 model=get_settings().config.model,
-                system=get_settings().pr_code_agent.system_prompt,
-                user=prompt
+                system=system_prompt,
+                user=user_prompt
             )
-
             action_data = self._parse_response(response[0])
             if not action_data:
+                get_logger().warning(f"Failed to parse response: {response[0]}")
+                continue # Retry or skip to next iteration
+            result = await self.registry.execute(action_data.get("action"), action_data.get("args", {}))
+            history.append({"action": action_data.get("action"), "result": result})
+            if action_data.get("action") == "finish":
+                self.git_provider.publish_comment(f"Task completed: {action_data.get('args', {}).get('message')}")
                 break
 
-            action = action_data.get("action")
-            args = action_data.get("args", {})
-
-            result = await self._execute_action(action, args)
-            self.history.append({"action": action, "args": args, "result": result})
-
-            if action == "finish":
-                get_logger().info(f"Task finished: {result}")
-                self.git_provider.publish_comment(f"Task completed: {result}")
-                break
-
-    def _build_prompt(self, task):
+    def _build_system_prompt(self):
         from jinja2 import Template
-        template = Template(get_settings().pr_code_agent.user_prompt)
-        return template.render(
-            task=task,
-            relevant_files=self._get_relevant_files_context(),
-            history=json.dumps(self.history, indent=2)
+        return Template(get_settings().pr_code_agent.system_prompt).render(
+            tools=self.registry.get_tool_definitions()
+        )
+
+    def _build_user_prompt(self, task, history):
+        from jinja2 import Template
+        return Template(get_settings().pr_code_agent.user_prompt).render(
+            task=task, history=history
         )
 
     def _parse_response(self, response):
-        import re
+        import json, re
         try:
-            # Try to find JSON block
             match = re.search(r"```json\s*(.*?)\s*```", response, re.DOTALL)
-            if match:
-                json_str = match.group(1)
-            else:
-                # If no code block, try to find the first JSON object
-                match = re.search(r"\{.*\}", response, re.DOTALL)
-                if match:
-                    json_str = match.group(0)
-                else:
-                    json_str = response
-            return json.loads(json_str)
-        except Exception:
-            get_logger().error(f"Failed to parse JSON response: {response}")
-            return None
-
-    async def _execute_action(self, action, args):
-        if action == "read_files":
-            return self._read_files(args.get("file_paths", []))
-        elif action == "edit_file":
-            return self._edit_file(args.get("file_path"), args.get("content"))
-        elif action == "finish":
-            return args.get("message")
-        return "Unknown action"
-
-    def _read_files(self, file_paths):
-        content = {}
-        for path in file_paths:
-            content[path] = self.git_provider.get_pr_file_content(path, self.git_provider.get_pr_branch())
-        return content
-
-    def _edit_file(self, file_path, content):
-        self.git_provider.create_or_update_pr_file(
-            file_path, self.git_provider.get_pr_branch(), content, "Agent edit"
-        )
-        return f"Edited {file_path}"
-
-    def _get_relevant_files_context(self):
-        try:
-            files = self.git_provider.get_files()
-            if not files:
-                return "No files found in the repository."
-            # files can be objects or strings depending on provider
-            file_list = []
-            for f in files:
-                if hasattr(f, 'filename'):
-                    file_list.append(f.filename)
-                else:
-                    file_list.append(str(f))
-            return "\n".join(file_list[:50]) # Limit to 50 files to avoid context overflow
-        except Exception as e:
-            get_logger().error(f"Failed to get file list: {e}")
-            return "Error fetching file list."
+            return json.loads(match.group(1)) if match else json.loads(response)
+        except: return None
