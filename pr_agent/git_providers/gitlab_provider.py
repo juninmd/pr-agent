@@ -76,6 +76,12 @@ class GitLabProvider(GitProvider):
             r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
         self.incremental = incremental
 
+        # Check for token economy mode and adjust settings
+        if get_settings().config.get("token_economy_mode", False):
+            get_settings().set("config.patch_extra_lines_before", 0)
+            get_settings().set("config.patch_extra_lines_after", 0)
+            get_logger().info("Token economy mode enabled: reduced patch extra lines to 0")
+
     # --- submodule expansion helpers (opt-in) ---
     def _get_gitmodules_map(self) -> dict[str, str]:
         """
