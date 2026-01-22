@@ -50,7 +50,7 @@ class TestPRCodeAgent(unittest.IsolatedAsyncioTestCase):
         mock_git_provider.create_or_update_pr_file.assert_called_with(
             "file1.py", "feature-branch", "new content", "Agent edit"
         )
-        mock_git_provider.publish_comment.assert_called_with("Task completed: Done")
+        mock_git_provider.publish_comment.assert_called_with("Task Done: Done")
 
     async def test_run_invalid_json(self):
         # Mock GitProvider

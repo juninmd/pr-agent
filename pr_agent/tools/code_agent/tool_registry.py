@@ -6,16 +6,21 @@ class ToolRegistry:
         self.git_provider = git_provider
         self.tools = {}
 
-    def register_tool(self, name, description, func):
+    def register_tool(self, name, description, func, args_structure=None):
         self.tools[name] = {
             "description": description,
-            "func": func
+            "func": func,
+            "args_structure": args_structure
         }
 
     def get_tool_definitions(self):
         definitions = []
         for name, info in self.tools.items():
-            definitions.append(f"- `{name}`: {info['description']}")
+            args = info.get("args_structure")
+            if args:
+                definitions.append(f"- `{name}({args})`: {info['description']}")
+            else:
+                definitions.append(f"- `{name}`: {info['description']}")
         return "\n".join(definitions)
 
     async def execute(self, action, args):
