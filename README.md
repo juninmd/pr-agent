@@ -57,7 +57,20 @@ pr-agent --pr_url https://github.com/owner/repo/pull/123 review
 ```
 [Guia completo de configuração da CLI](https://qodo-merge-docs.qodo.ai/usage-guide/automations_and_usage/#local-repo-cli)
 
-#### 4. Outras Plataformas
+#### 4. Configuração Avançada: GitLab + Gemini (Economia de Tokens) 💎
+
+Para utilizar o PR-Agent com GitLab e o modelo Gemini (Google), economizando tokens e custos, adicione as seguintes configurações ao seu arquivo `configuration.toml` ou variáveis de ambiente:
+
+```toml
+[config]
+model="gemini/gemini-1.5-flash"
+token_economy_mode=true
+max_files_in_economy_mode=6 # Limita a análise a 6 arquivos para economizar tokens
+```
+
+Certifique-se de configurar sua chave de API do Gemini (Google AI Studio) e o token do GitLab corretamente.
+
+#### 5. Outras Plataformas
 - [Configuração de webhook do GitLab](https://qodo-merge-docs.qodo.ai/installation/gitlab/)
 - [Instalação do aplicativo BitBucket](https://qodo-merge-docs.qodo.ai/installation/bitbucket/)
 - [Configuração do Azure DevOps](https://qodo-merge-docs.qodo.ai/installation/azure/)
