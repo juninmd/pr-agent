@@ -22,14 +22,14 @@ class PRCodeAgent:
     def _register_tools(self):
         t = self.tools
         r = self.registry
-        r.register_tool("list_files", "List files in repo", t.list_files)
-        r.register_tool("read_file", "Read file content", t.read_file)
-        r.register_tool("edit_file", "Edit file content", t.edit_file)
-        r.register_tool("delete_file", "Delete file", t.delete_file)
-        r.register_tool("set_plan", "Set the plan", t.set_plan)
-        r.register_tool("plan_step_complete", "Mark step complete", t.plan_step_complete)
-        r.register_tool("run_in_bash_session", "Run bash command", t.run_in_bash_session)
-        r.register_tool("finish", "Finish task", t.finish)
+        r.register_tool("list_files", "List files in repo", t.list_files, "path: str = '.'")
+        r.register_tool("read_file", "Read file content", t.read_file, "file_path: str")
+        r.register_tool("edit_file", "Edit file content", t.edit_file, "file_path: str, content: str")
+        r.register_tool("delete_file", "Delete file", t.delete_file, "file_path: str")
+        r.register_tool("set_plan", "Set the plan", t.set_plan, "plan: list")
+        r.register_tool("plan_step_complete", "Mark step complete", t.plan_step_complete, "message: str")
+        r.register_tool("run_in_bash_session", "Run bash command", t.run_in_bash_session, "command: str")
+        r.register_tool("finish", "Finish task", t.finish, "message: str")
 
     async def run(self):
         get_logger().info("Starting Autonomous PRCodeAgent")
