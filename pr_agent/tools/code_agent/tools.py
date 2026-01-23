@@ -24,12 +24,21 @@ class AgentTools:
         self.git_provider.create_or_update_pr_file(
             file_path, self.git_provider.get_pr_branch(), content, "Agent edit"
         )
+        # Update local file if it exists or we are in a repo
+        if os.path.exists(file_path) or os.path.exists(".git"):
+            try:
+                if os.path.dirname(file_path):
+                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                with open(file_path, "w") as f:
+                    f.write(content)
+            except Exception:
+                pass  # Fail silently on local write if permission issues
         return f"Edited {file_path}"
 
     async def delete_file(self, file_path):
         try:
             if os.path.exists(file_path):
-                os.remove(file_path) # Local delete for tests
+                os.remove(file_path)  # Local delete
             # Note: Provider API usually doesn't support delete yet via common interface
             return f"Deleted {file_path} (locally if present)"
         except Exception as e:
