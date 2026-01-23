@@ -1,6 +1,9 @@
 import os
 import subprocess
+from pr_agent.config_loader import get_settings
 from pr_agent.git_providers.git_provider import GitProvider
+
+TOKEN_ECONOMY_MAX_FILE_CHARS = 10000
 
 class AgentTools:
     def __init__(self, git_provider: GitProvider):
@@ -18,7 +21,12 @@ class AgentTools:
         return "\n".join([f.filename for f in self.git_provider.get_files()])
 
     async def read_file(self, file_path):
-        return self.git_provider.get_pr_file_content(file_path, self.git_provider.get_pr_branch())
+        content = self.git_provider.get_pr_file_content(file_path, self.git_provider.get_pr_branch())
+        if get_settings().config.get("token_economy_mode", False):
+            limit = TOKEN_ECONOMY_MAX_FILE_CHARS
+            if len(content) > limit:
+                content = content[:limit] + f"\n...(truncated, content > {limit} chars due to token_economy_mode)"
+        return content
 
     async def edit_file(self, file_path, content):
         self.git_provider.create_or_update_pr_file(
