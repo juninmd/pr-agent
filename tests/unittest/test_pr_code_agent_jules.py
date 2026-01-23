@@ -24,7 +24,9 @@ async def test_pr_code_agent_jules_persona_flow():
 
     with patch('pr_agent.tools.pr_code_agent.get_git_provider_with_context', return_value=mock_provider):
         # We need to mock subprocess for list_files to avoid actual shell call, or let it fail and fallback
-        with patch('subprocess.run', side_effect=Exception("No shell")):
+        # We also mock open to prevent overwriting local files during test
+        with patch('subprocess.run', side_effect=Exception("No shell")), \
+             patch('builtins.open', new_callable=MagicMock):
              agent = PRCodeAgent("https://github.com/org/repo/pull/1", args=["Improve README"], ai_handler=lambda: mock_ai_handler)
              await agent.run()
 
