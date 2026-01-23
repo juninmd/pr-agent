@@ -78,6 +78,7 @@ class GitLabProvider(GitProvider):
 
         # Check for token economy mode and adjust settings
         if get_settings().config.get("token_economy_mode", False):
+            # Limit context lines for token economy to 0
             get_settings().set("config.patch_extra_lines_before", 0)
             get_settings().set("config.patch_extra_lines_after", 0)
             get_logger().info("Token economy mode enabled: reduced patch extra lines to 0")
