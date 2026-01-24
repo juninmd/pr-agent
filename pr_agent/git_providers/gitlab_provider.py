@@ -398,6 +398,16 @@ class GitLabProvider(GitProvider):
             get_logger().exception(f"Unexpected error creating/updating file {file_path} in branch {branch}: {e}")
             raise
 
+    def delete_file(self, file_path: str, branch: str, message: str = "Delete file") -> None:
+        """Delete a file in the GitLab repository."""
+        try:
+            project = self.gl.projects.get(self.id_project)
+            project.files.delete(file_path=file_path, branch=branch, commit_message=message)
+            get_logger().debug(f"Deleted file {file_path} in branch {branch}")
+        except Exception as e:
+            get_logger().error(f"Failed to delete file {file_path}: {e}")
+            raise
+
     def get_diff_files(self) -> list[FilePatchInfo]:
         """
         Retrieves the list of files that have been modified, added, deleted, or renamed in a pull request in GitLab,

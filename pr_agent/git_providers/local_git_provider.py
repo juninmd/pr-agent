@@ -219,3 +219,18 @@ class LocalGitProvider(GitProvider):
             self.repo.index.commit(message)
         except Exception as e:
             get_logger().error(f"Failed to write file {file_path}: {e}")
+
+    def delete_file(self, file_path: str, branch: str, message: str = "Delete file") -> None:
+        """
+        Deletes a file from the local repository.
+        """
+        try:
+            full_path = self.repo_path / file_path
+            if full_path.exists():
+                full_path.unlink()
+                self.repo.index.remove([str(full_path)])
+                self.repo.index.commit(message)
+            else:
+                get_logger().warning(f"File {file_path} does not exist locally.")
+        except Exception as e:
+            get_logger().error(f"Failed to delete file {file_path}: {e}")

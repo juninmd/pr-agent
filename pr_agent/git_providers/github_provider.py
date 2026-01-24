@@ -891,6 +891,19 @@ class GithubProvider(GitProvider):
             branch=branch,
         )
 
+    def delete_file(self, file_path: str, branch: str, message: str = "Delete file") -> None:
+        try:
+            file_obj = self._get_repo().get_contents(file_path, ref=branch)
+            self.repo_obj.delete_file(
+                path=file_path,
+                message=message,
+                sha=file_obj.sha,
+                branch=branch,
+            )
+        except Exception as e:
+            get_logger().error(f"Failed to delete file {file_path}: {e}")
+            raise
+
     def _get_pr_file_content(self, file: FilePatchInfo, sha: str) -> str:
         return self.get_pr_file_content(file.filename, sha)
 
