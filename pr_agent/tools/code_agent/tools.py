@@ -45,12 +45,16 @@ class AgentTools:
 
     async def delete_file(self, file_path):
         try:
-            if os.path.exists(file_path):
-                os.remove(file_path)  # Local delete
-            # Note: Provider API usually doesn't support delete yet via common interface
-            return f"Deleted {file_path} (locally if present)"
+            self.git_provider.delete_file(file_path, self.git_provider.get_pr_branch(), "Agent deleted file")
         except Exception as e:
-            return f"Error deleting: {e}"
+            return f"Error deleting {file_path} from remote: {e}"
+
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)  # Local delete
+            except Exception:
+                pass
+        return f"Deleted {file_path}"
 
     async def run_in_bash_session(self, command):
         try:
