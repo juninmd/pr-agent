@@ -395,6 +395,10 @@ class GitProvider(ABC):
     def calc_pr_statistics(self, pull_request_data: dict):
         return {}
 
+    def delete_file(self, file_path: str, branch: str, message: str = "Delete file") -> None:
+        get_logger().warning(f"Delete file not implemented for {self.__class__.__name__}")
+        raise NotImplementedError(f"Delete file not implemented for {self.__class__.__name__}")
+
     def get_num_of_files(self):
         try:
             return len(self.get_diff_files())
