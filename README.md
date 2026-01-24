@@ -59,7 +59,7 @@ pr-agent --pr_url https://github.com/owner/repo/pull/123 review
 
 #### 4. Configuração Avançada: GitLab + Gemini (Economia de Tokens) 💎
 
-Para utilizar o PR-Agent com GitLab e o modelo Gemini (Google), economizando tokens e custos, adicione as seguintes configurações ao seu arquivo `configuration.toml` ou variáveis de ambiente:
+Para utilizar o PR-Agent com GitLab e o modelo Gemini (Google), economizando tokens e custos, adicione as seguintes configurações ao seu arquivo [`configuration.toml`](pr_agent/settings/configuration.toml) ou variáveis de ambiente:
 
 ```toml
 [config]
