@@ -26,6 +26,11 @@ class PRCodeAgent:
         r.register_tool("read_file", "Read file content", t.read_file, "file_path: str")
         r.register_tool("edit_file", "Edit file content", t.edit_file, "file_path: str, content: str")
         r.register_tool("delete_file", "Delete file", t.delete_file, "file_path: str")
+        r.register_tool("rename_file", "Rename a file", t.rename_file, "filepath: str, new_filepath: str")
+        r.register_tool("replace_with_git_merge_diff", "Apply git merge diff", t.replace_with_git_merge_diff, "filepath: str, merge_diff: str")
+        r.register_tool("request_plan_review", "Request review for plan", t.request_plan_review, "plan: str")
+        r.register_tool("request_code_review", "Request code review", t.request_code_review, "")
+        r.register_tool("view_image", "View image", t.view_image, "url: str")
         r.register_tool("set_plan", "Set the plan", t.set_plan, "plan: list")
         r.register_tool("plan_step_complete", "Mark step complete", t.plan_step_complete, "message: str")
         r.register_tool("run_in_bash_session", "Run bash command", t.run_in_bash_session, "command: str")
@@ -35,11 +40,12 @@ class PRCodeAgent:
         get_logger().info("Starting Autonomous PRCodeAgent")
         task = " ".join(self.args) if self.args else "Perform task."
         history = []
+        img_path = None
         for i in range(self.max_steps):
             sys_p = self.prompts.build_system_prompt()
             usr_p = self.prompts.build_user_prompt(task, history)
             resp = await self.ai_handler.chat_completion(
-                model=get_settings().config.model, system=sys_p, user=usr_p
+                model=get_settings().config.model, system=sys_p, user=usr_p, img_path=img_path
             )
             action = self._parse_response(resp[0])
             if not action:
@@ -47,7 +53,15 @@ class PRCodeAgent:
                 continue
 
             res = await self.registry.execute(action.get("action"), action.get("args", {}))
-            history.append({"action": action.get("action"), "result": str(res)})
+            history.append({
+                "action": action.get("action"),
+                "args": action.get("args", {}),
+                "result": str(res)
+            })
+
+            img_path = None
+            if action.get("action") == "view_image":
+                img_path = action.get("args", {}).get("url")
 
             if action.get("action") == "finish":
                 msg = action.get("args", {}).get("message", "Done")
