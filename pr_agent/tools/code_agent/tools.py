@@ -2,6 +2,7 @@ import os
 import subprocess
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers.git_provider import GitProvider
+from pr_agent.tools.code_agent.diff_utils import apply_git_merge_diff
 
 TOKEN_ECONOMY_MAX_FILE_CHARS = 10000
 
@@ -32,7 +33,6 @@ class AgentTools:
         self.git_provider.create_or_update_pr_file(
             file_path, self.git_provider.get_pr_branch(), content, "Agent edit"
         )
-        # Update local file if it exists or we are in a repo
         if os.path.exists(file_path) or os.path.exists(".git"):
             try:
                 if os.path.dirname(file_path):
@@ -40,7 +40,7 @@ class AgentTools:
                 with open(file_path, "w") as f:
                     f.write(content)
             except Exception:
-                pass  # Fail silently on local write if permission issues
+                pass
         return f"Edited {file_path}"
 
     async def delete_file(self, file_path):
@@ -48,13 +48,24 @@ class AgentTools:
             self.git_provider.delete_file(file_path, self.git_provider.get_pr_branch(), "Agent deleted file")
         except Exception as e:
             return f"Error deleting {file_path} from remote: {e}"
-
         if os.path.exists(file_path):
             try:
-                os.remove(file_path)  # Local delete
+                os.remove(file_path)
             except Exception:
                 pass
         return f"Deleted {file_path}"
+
+    async def rename_file(self, filepath, new_filepath):
+        content = await self.read_file(filepath)
+        await self.edit_file(new_filepath, content)
+        await self.delete_file(filepath)
+        return f"Renamed {filepath} to {new_filepath}"
+
+    async def replace_with_git_merge_diff(self, filepath, merge_diff):
+        content = await self.read_file(filepath)
+        new_content = apply_git_merge_diff(content, merge_diff)
+        await self.edit_file(filepath, new_content)
+        return f"Applied diff to {filepath}"
 
     async def run_in_bash_session(self, command):
         try:
@@ -69,6 +80,15 @@ class AgentTools:
 
     async def plan_step_complete(self, message):
         return f"Step completed: {message}"
+
+    async def request_plan_review(self, plan):
+        return "Plan review requested. (Simulated auto-approval)"
+
+    async def request_code_review(self):
+        return "Code review requested. (Simulated auto-approval)"
+
+    async def view_image(self, url):
+        return f"Image viewed: {url}"
 
     async def finish(self, message):
         return f"Task completed: {message}"
