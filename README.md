@@ -109,6 +109,7 @@ O PR-Agent oferece funcionalidades abrangentes de pull request integradas com v�
 | [FERRAMENTAS](https://qodo-merge-docs.qodo.ai/tools/)   | [Describe (Descrever)](https://qodo-merge-docs.qodo.ai/tools/describe/)               |   ✅   |   ✅   |    ✅     |      ✅      |  ✅   |
 |                                                         | [Review (Revisar)](https://qodo-merge-docs.qodo.ai/tools/review/)                      |   ✅   |   ✅   |    ✅     |      ✅      |  ✅   |
 |                                                         | [Improve (Melhorar)](https://qodo-merge-docs.qodo.ai/tools/improve/)                   |   ✅   |   ✅   |    ✅     |      ✅      |  ✅   |
+|                                                         | [Code (Código)](https://qodo-merge-docs.qodo.ai/tools/code/)                           |   ✅   |   ✅   |    ✅     |      ✅      |  ✅   |
 |                                                         | [Ask (Perguntar)](https://qodo-merge-docs.qodo.ai/tools/ask/)                          |   ✅   |   ✅   |    ✅     |      ✅      |       |
 |                                                         | ⮑ [Perguntar nas linhas de código](https://qodo-merge-docs.qodo.ai/tools/ask/#ask-lines)|   ✅   |   ✅   |           |              |       |
 |                                                         | [Help Docs](https://qodo-merge-docs.qodo.ai/tools/help_docs/?h=auto#auto-approval)     |   ✅   |   ✅   |    ✅     |              |       |
@@ -160,6 +161,18 @@ ___
 <kbd>
 <img src="https://www.codium.ai/images/pr_agent/improve_new_short_main.png" width="512">
 </kbd>
+</p>
+</div>
+
+<hr>
+
+<h4><a href="#">/code (Agente Autônomo)</a></h4>
+<div align="center">
+<p float="center">
+O comando <code>/code</code> (ou <code>/edit</code>) ativa o agente "Jules", um engenheiro de software autônomo.
+Ele segue um fluxo de <b>Planejar -> Agir -> Verificar</b> para realizar tarefas complexas diretamente no seu PR.
+<br>
+<b>Exemplo:</b> <code>@CodiumAI-Agent /code implemente testes unitários para a classe User</code>
 </p>
 </div>
 
