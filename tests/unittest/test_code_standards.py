@@ -24,3 +24,21 @@ def test_file_line_count(filepath):
 
     line_count = get_line_count(filepath)
     assert line_count < MAX_LINES, f"{filepath} has {line_count} lines, exceeding the limit of {MAX_LINES}"
+
+
+def test_agent_prompts_content():
+    """
+    Verify that the 'Jules' agent system prompt contains the specific
+    constraints regarding Clean Code, DRY, SRP, KISS, and the 150-line limit.
+    """
+    from pr_agent.config_loader import get_settings
+
+    system_prompt = get_settings().get("pr_code_agent.system_prompt", "")
+
+    assert "Jules" in system_prompt, "System prompt should mention 'Jules'"
+    assert "Clean Code" in system_prompt, "System prompt should mention 'Clean Code'"
+    assert "DRY" in system_prompt, "System prompt should mention 'DRY'"
+    assert "SRP" in system_prompt, "System prompt should mention 'SRP'"
+    assert "KISS" in system_prompt, "System prompt should mention 'KISS'"
+    assert "150 lines" in system_prompt, "System prompt should mention the 150-line limit"
+    assert "GitLab and GitHub" in system_prompt, "System prompt should mention integration with GitLab and GitHub"
