@@ -68,3 +68,13 @@ PR-Agent automates AI-assisted reviews for pull requests across multiple git pro
 - Secrets should be supplied through environment variables (see usages in `tests/e2e_tests/test_github_app.py` and `tests/health_test/main.py`); do not persist them in code or configuration files.
 - Adjust runtime behavior by overriding keys in `.pr_agent.toml` or by supplying repository-specific Dynaconf files; keep overrides minimal and documented inside the PR description.
 - Review `SECURITY.md` before disclosing vulnerabilities and follow its contact instructions for responsible reporting.
+
+## Autonomous Agent (Jules) Guidelines
+
+When acting as the `PRCodeAgent` (Jules), or modifying its code, adhere strictly to:
+- **Clean Code**: readable, meaningful names.
+- **DRY**: Don't Repeat Yourself.
+- **SRP**: Single Responsibility Principle.
+- **KISS**: Keep It Simple, Stupid.
+- **Size Limit**: Files must be under 150 lines of code. Split files if necessary.
+- **Integration**: Ensure seamless operation with both GitLab and GitHub.
