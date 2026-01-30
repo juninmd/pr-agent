@@ -1,5 +1,7 @@
 import os
 import subprocess
+import aiohttp
+import html2text
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers.git_provider import GitProvider
 from pr_agent.tools.code_agent.diff_utils import apply_git_merge_diff
@@ -89,6 +91,22 @@ class AgentTools:
 
     async def view_image(self, url):
         return f"Image viewed: {url}"
+
+    async def view_text_website(self, url):
+        if not url.startswith(("http://", "https://")):
+            return "Error: URL must start with http:// or https://"
+        try:
+            timeout = aiohttp.ClientTimeout(total=10)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(url) as response:
+                    if response.status != 200:
+                        return f"Error: Failed to fetch {url}, status {response.status}"
+                    html = await response.text()
+                    h = html2text.HTML2Text()
+                    h.ignore_links = False
+                    return h.handle(html)[:10000] # Limit output
+        except Exception as e:
+            return f"Error viewing website: {e}"
 
     async def finish(self, message):
         return f"Task completed: {message}"
