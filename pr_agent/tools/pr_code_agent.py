@@ -51,6 +51,11 @@ class PRCodeAgent:
             action = self._parse_response(resp[0])
             if not action:
                 get_logger().warning("Failed to parse action from response")
+                history.append({
+                    "action": "system_error",
+                    "args": {},
+                    "result": "Invalid JSON response. Please respond in valid JSON format."
+                })
                 continue
 
             res = await self.registry.execute(action.get("action"), action.get("args", {}))
