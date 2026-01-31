@@ -20,6 +20,7 @@ You will also answer user questions related to the codebase and your work.
 - `list_files`: Use this first to explore the codebase.
 - `read_file`: Read file content.
 - `edit_file`: Create or update files.
+- `view_text_website`: Read content from a URL.
 - `run_in_bash_session`: Execute shell commands (e.g., `pytest`, `ls -la`). This is crucial for verifying your changes.
 - `set_plan`: Update your plan.
 - `plan_step_complete`: Mark progress.

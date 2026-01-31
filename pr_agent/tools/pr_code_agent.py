@@ -31,6 +31,7 @@ class PRCodeAgent:
         r.register_tool("request_plan_review", "Request review for plan", t.request_plan_review, "plan: str")
         r.register_tool("request_code_review", "Request code review", t.request_code_review, "")
         r.register_tool("view_image", "View image", t.view_image, "url: str")
+        r.register_tool("view_text_website", "View website content", t.view_text_website, "url: str")
         r.register_tool("set_plan", "Set the plan", t.set_plan, "plan: list")
         r.register_tool("plan_step_complete", "Mark step complete", t.plan_step_complete, "message: str")
         r.register_tool("run_in_bash_session", "Run bash command", t.run_in_bash_session, "command: str")
