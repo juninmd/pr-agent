@@ -13,6 +13,7 @@ def get_line_count(filepath):
     "pr_agent/tools/code_agent/tool_registry.py",
     "pr_agent/tools/code_agent/prompts.py",
     "pr_agent/tools/code_agent/diff_utils.py",
+    "pr_agent/tools/code_agent/utils.py",
 ])
 def test_file_line_count(filepath):
     """
