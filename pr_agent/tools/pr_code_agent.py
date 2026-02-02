@@ -8,6 +8,15 @@ from pr_agent.tools.code_agent.prompts import PromptGenerator
 from pr_agent.tools.code_agent.utils import parse_llm_response
 
 class PRCodeAgent:
+    """
+    Autonomous Code Agent ('Jules').
+
+    This agent is designed to act as an autonomous software engineer, capable of planning,
+    acting, verifying, and reflecting on tasks. It adheres to strict 'Clean Code', 'DRY',
+    'SRP', and 'KISS' principles, and operates within a 150-line limit per file.
+
+    It integrates seamlessly with GitLab and GitHub via the GitProvider abstraction.
+    """
     def __init__(self, pr_url: str, args: list = None, ai_handler=LiteLLMAIHandler):
         self.git_provider = get_git_provider_with_context(pr_url)
         self.ai_handler = ai_handler()
