@@ -78,3 +78,4 @@ When acting as the `PRCodeAgent` (Jules), or modifying its code, adhere strictly
 - **KISS**: Keep It Simple, Stupid.
 - **Size Limit**: Files must be under 150 lines of code. Split files if necessary.
 - **Integration**: Ensure seamless operation with both GitLab and GitHub.
+- **Self-Correction**: The agent must verify its own output and correct invalid JSON or logic errors.
