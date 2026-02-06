@@ -169,6 +169,7 @@ ___
 <p float="center">
 O comando <code>/code</code> (ou <code>/edit</code>) ativa o agente "Jules", um engenheiro de software autônomo.
 Ele segue um fluxo de <b>Planejar -> Agir -> Verificar</b> para realizar tarefas complexas diretamente no seu PR.
+Ele adere estritamente aos princípios de <b>Clean Code, DRY, SRP, KISS</b> e garante que todos os arquivos gerados ou editados tenham menos de 150 linhas.
 <br>
 <b>Exemplo:</b> <code>@CodiumAI-Agent /code implemente testes unitários para a classe User</code>
 </p>
