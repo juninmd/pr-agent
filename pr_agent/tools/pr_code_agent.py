@@ -22,6 +22,7 @@ class PRCodeAgent:
     - File system manipulation (read, edit, delete, rename).
     - Web browsing and image viewing.
     - Self-correction and reflection.
+    - Adherence to strict coding standards ('Clean Code', 'DRY', 'SRP', 'KISS', <150 lines per file).
 
     (Verified compliance: Jules Standards v1.1 - Verified by Agent Session)
     """
