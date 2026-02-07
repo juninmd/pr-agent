@@ -49,7 +49,13 @@ class AgentTools:
                     f.write(content)
             except Exception:
                 pass
-        return f"Edited {file_path}"
+
+        warning = ""
+        line_count = len(content.splitlines())
+        if line_count > 150:
+            warning = f"\nWARNING: File has {line_count} lines, exceeding the strict 150-line limit. Please refactor."
+
+        return f"Edited {file_path}{warning}"
 
     async def delete_file(self, file_path):
         """Deletes a file from the PR branch."""
