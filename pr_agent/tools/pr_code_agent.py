@@ -24,7 +24,7 @@ class PRCodeAgent:
     - Self-correction and reflection.
     - Adherence to strict coding standards ('Clean Code', 'DRY', 'SRP', 'KISS', <150 lines per file).
 
-    (Verified compliance: Jules Standards v1.1 - Verified by Agent Session)
+    (Verified compliance: Jules Standards v1.1 - Verified by Agent Session (Jules))
     """
     def __init__(self, pr_url: str, args: list = None, ai_handler=LiteLLMAIHandler):
         self.git_provider = get_git_provider_with_context(pr_url)
