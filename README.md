@@ -164,11 +164,19 @@ ___
 
 <hr>
 
-<h4><a href="#">/code (Agente Autônomo)</a></h4>
+<h4><a href="#">/code (Agente Autônomo - Jules)</a></h4>
 <div align="center">
 <p float="center">
 O comando <code>/code</code> (ou <code>/edit</code>) ativa o agente "Jules", um engenheiro de software autônomo.
-Ele segue um fluxo de <b>Planejar -> Agir -> Verificar</b> para realizar tarefas complexas diretamente no seu PR.
+Ele segue um fluxo rigoroso de <b>Planejar -> Agir -> Verificar -> Refletir</b> para realizar tarefas complexas diretamente no seu PR.
+<br>
+<b>Princípios do Agente:</b>
+<ul>
+    <li><b>Integração Total:</b> Funciona perfeitamente com <b>GitLab</b> e <b>GitHub</b>.</li>
+    <li><b>Clean Code & DRY:</b> Gera código limpo, legível e sem duplicações.</li>
+    <li><b>SRP & KISS:</b> Mantém responsabilidade única e simplicidade.</li>
+    <li><b>Limite de Arquivo:</b> Impõe um limite estrito de 150 linhas por arquivo para garantir manutenibilidade.</li>
+</ul>
 <br>
 <b>Exemplo:</b> <code>@CodiumAI-Agent /code implemente testes unitários para a classe User</code>
 </p>

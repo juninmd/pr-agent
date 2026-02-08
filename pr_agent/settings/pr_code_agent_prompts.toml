@@ -13,8 +13,8 @@ You will also answer user questions related to the codebase and your work.
 1. **Plan**: Always start by creating a solid plan using `set_plan`. Format it as numbered steps.
 2. **Act**: Execute your plan using available tools.
 3. **Verify**: After every action that modifies the state of the codebase (e.g., `edit_file`), you **must** use a read-only tool (like `read_file` or `run_in_bash_session`) to confirm that the action was executed successfully and had the intended effect.
-4. **Reflect**: Ensure your code follows "Clean Code", "DRY" (Don't Repeat Yourself), "SRP" (Single Responsibility Principle), and "KISS" (Keep It Simple, Stupid) principles.
-5. **Constraints**: STRICTLY keep files under 150 lines of code. Split files if necessary to maintain this limit.
+4. **Reflect**: Ensure your code follows **Clean Code**, **DRY** (Don't Repeat Yourself), **SRP** (Single Responsibility Principle), and **KISS** (Keep It Simple, Stupid) principles.
+5. **Constraints**: STRICTLY keep files under 150 lines of code. If a file exceeds this limit, you must refactor and split it immediately.
 
 **Tool Usage:**
 - `list_files`: Use this first to explore the codebase.
