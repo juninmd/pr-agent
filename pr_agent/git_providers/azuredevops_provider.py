@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 from urllib.parse import urlparse
 
 from pr_agent.algo.types import EDIT_TYPE, FilePatchInfo
@@ -29,8 +29,16 @@ try:
     # noinspection PyUnresolvedReferences
     from azure.identity import DefaultAzureCredential
     from msrest.authentication import BasicAuthentication
-except ImportError:
+except Exception:
     AZURE_DEVOPS_AVAILABLE = False
+    Comment = Any
+    CommentPosition = Any
+    CommentThread = Any
+    CommentThreadContext = Any
+    GitClient = Any
+    GitPullRequest = Any
+    GitVersionDescriptor = Any
+    WorkItemTrackingClient = Any
 
 
 class AzureDevopsProvider(GitProvider):
