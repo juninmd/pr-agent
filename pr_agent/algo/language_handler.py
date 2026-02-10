@@ -1,7 +1,9 @@
 # Language Selection, source: https://github.com/bigcode-project/bigcode-dataset/blob/main/language_selection/programming-languages-to-file-extensions.json  # noqa E501
-from typing import Dict
+from typing import Dict, List
 
+from pr_agent.algo.types import FilePatchInfo
 from pr_agent.config_loader import get_settings
+from pr_agent.log import get_logger
 
 
 def filter_bad_extensions(files):
@@ -75,3 +77,27 @@ def sort_files_by_main_languages(languages: Dict, files: list):
             files_sorted.append({"language": lang, "files": tmp})
     files_sorted.append({"language": "Other", "files": list(rest_files.values())})
     return files_sorted
+
+
+def set_file_languages(diff_files) -> List[FilePatchInfo]:
+    try:
+        # if the language is already set, do not change it
+        if hasattr(diff_files[0], 'language') and diff_files[0].language:
+            return diff_files
+
+        # map file extensions to programming languages
+        language_extension_map_org = get_settings().language_extension_map_org
+        extension_to_language = {}
+        for language, extensions in language_extension_map_org.items():
+            for ext in extensions:
+                extension_to_language[ext] = language
+        for file in diff_files:
+            extension_s = '.' + file.filename.rsplit('.')[-1]
+            language_name = "txt"
+            if extension_s and (extension_s in extension_to_language):
+                language_name = extension_to_language[extension_s]
+            file.language = language_name.lower()
+    except Exception as e:
+        get_logger().exception(f"Failed to set file languages: {e}")
+
+    return diff_files
