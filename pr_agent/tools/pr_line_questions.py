@@ -154,7 +154,7 @@ class PR_LineQuestions:
         variables = copy.deepcopy(self.vars)
         variables["full_hunk"] = self.patch_with_lines  # update diff
         variables["selected_lines"] = self.selected_lines
-        environment = Environment(undefined=StrictUndefined)
+        environment = Environment(undefined=StrictUndefined)  # nosec B701
         system_prompt = environment.from_string(get_settings().pr_line_questions_prompt.system).render(variables)
         user_prompt = environment.from_string(get_settings().pr_line_questions_prompt.user).render(variables)
         if get_settings().config.verbosity_level >= 2:

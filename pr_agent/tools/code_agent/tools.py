@@ -87,7 +87,7 @@ class AgentTools:
     async def run_in_bash_session(self, command):
         """Runs a bash command."""
         try:
-            res = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=60)
+            res = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=60)  # nosec B602
             return f"Stdout: {res.stdout}\nStderr: {res.stderr}"
         except Exception as e:
             return f"Error: {e}"

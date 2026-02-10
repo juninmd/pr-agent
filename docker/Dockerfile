@@ -9,32 +9,49 @@ ADD docs docs
 RUN pip install --no-cache-dir . && rm pyproject.toml requirements.txt
 ENV PYTHONPATH=/app
 
+# Create a non-root user
+RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin appuser
+
 FROM base AS github_app
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "-m", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "pr_agent/servers/gunicorn_config.py", "--forwarded-allow-ips", "*", "pr_agent.servers.github_app:app"]
 
 FROM base AS bitbucket_app
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "pr_agent/servers/bitbucket_app.py"]
 
 FROM base AS bitbucket_server_webhook
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "pr_agent/servers/bitbucket_server_webhook.py"]
 
 FROM base AS github_polling
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "pr_agent/servers/github_polling.py"]
 
 FROM base AS gitlab_webhook
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "pr_agent/servers/gitlab_webhook.py"]
 
 FROM base AS azure_devops_webhook
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "pr_agent/servers/azuredevops_server_webhook.py"]
 
 FROM base AS gitea_app
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 CMD ["python", "-m", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "pr_agent/servers/gunicorn_config.py","pr_agent.servers.gitea_app:app"]
 
 
@@ -43,7 +60,11 @@ ADD requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements-dev.txt && rm requirements-dev.txt
 ADD pr_agent pr_agent
 ADD tests tests
+RUN chown -R appuser:appuser /app
+USER appuser
 
 FROM base AS cli
 ADD pr_agent pr_agent
+RUN chown -R appuser:appuser /app
+USER appuser
 ENTRYPOINT ["python", "pr_agent/cli.py"]
