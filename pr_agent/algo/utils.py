@@ -151,20 +151,20 @@ def convert_to_markdown_v2(output_data: dict,
         "Contribution time cost estimate": "⏳",
         "Ticket compliance check": "🎫",
     }
-    markdown_text = ""
+    markdown_text_list = []
     if not incremental_review:
-        markdown_text += f"{PRReviewHeader.REGULAR.value} 🔍\n\n"
+        markdown_text_list.append(f"{PRReviewHeader.REGULAR.value} 🔍\n\n")
     else:
-        markdown_text += f"{PRReviewHeader.INCREMENTAL.value} 🔍\n\n"
-        markdown_text += f"⏮️ Review for commits since previous PR-Agent review {incremental_review}.\n\n"
+        markdown_text_list.append(f"{PRReviewHeader.INCREMENTAL.value} 🔍\n\n")
+        markdown_text_list.append(f"⏮️ Review for commits since previous PR-Agent review {incremental_review}.\n\n")
     if not output_data or not output_data.get('review', {}):
         return ""
 
     if get_settings().get("pr_reviewer.enable_intro_text", False):
-        markdown_text += f"Here are some key observations to aid the review process:\n\n"
+        markdown_text_list.append(f"Here are some key observations to aid the review process:\n\n")
 
     if gfm_supported:
-        markdown_text += "<table>\n"
+        markdown_text_list.append("<table>\n")
 
     todo_summary = output_data['review'].pop('todo_summary', '')
     for key, value in output_data['review'].items():
@@ -187,91 +187,91 @@ def convert_to_markdown_v2(output_data: dict,
             white_bars = '⚪' * (5 - value_int)
             value = f"{value_int} {blue_bars}{white_bars}"
             if gfm_supported:
-                markdown_text += f"<tr><td>"
-                markdown_text += f"{emoji}&nbsp;<strong>{key_nice}</strong>: {value}"
-                markdown_text += f"</td></tr>\n"
+                markdown_text_list.append(f"<tr><td>")
+                markdown_text_list.append(f"{emoji}&nbsp;<strong>{key_nice}</strong>: {value}")
+                markdown_text_list.append(f"</td></tr>\n")
             else:
-                markdown_text += f"### {emoji} {key_nice}: {value}\n\n"
+                markdown_text_list.append(f"### {emoji} {key_nice}: {value}\n\n")
         elif 'relevant tests' in key_nice.lower():
             value = str(value).strip().lower()
             if gfm_supported:
-                markdown_text += f"<tr><td>"
+                markdown_text_list.append(f"<tr><td>")
                 if is_value_no(value):
-                    markdown_text += f"{emoji}&nbsp;<strong>No relevant tests</strong>"
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>No relevant tests</strong>")
                 else:
-                    markdown_text += f"{emoji}&nbsp;<strong>PR contains tests</strong>"
-                markdown_text += f"</td></tr>\n"
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>PR contains tests</strong>")
+                markdown_text_list.append(f"</td></tr>\n")
             else:
                 if is_value_no(value):
-                    markdown_text += f'### {emoji} No relevant tests\n\n'
+                    markdown_text_list.append(f'### {emoji} No relevant tests\n\n')
                 else:
-                    markdown_text += f"### {emoji} PR contains tests\n\n"
+                    markdown_text_list.append(f"### {emoji} PR contains tests\n\n")
         elif 'ticket compliance check' in key_nice.lower():
-            markdown_text = ticket_markdown_logic(emoji, markdown_text, value, gfm_supported)
+            markdown_text_list.append(ticket_markdown_logic(emoji, "", value, gfm_supported))
         elif 'contribution time cost estimate' in key_nice.lower():
             if gfm_supported:
-                markdown_text += f"<tr><td>{emoji}&nbsp;<strong>Contribution time estimate</strong> (best, average, worst case): "
-                markdown_text += f"{value['best_case'].replace('m', ' minutes')} | {value['average_case'].replace('m', ' minutes')} | {value['worst_case'].replace('m', ' minutes')}"
-                markdown_text += f"</td></tr>\n"
+                markdown_text_list.append(f"<tr><td>{emoji}&nbsp;<strong>Contribution time estimate</strong> (best, average, worst case): ")
+                markdown_text_list.append(f"{value['best_case'].replace('m', ' minutes')} | {value['average_case'].replace('m', ' minutes')} | {value['worst_case'].replace('m', ' minutes')}")
+                markdown_text_list.append(f"</td></tr>\n")
             else:
-                markdown_text += f"### {emoji} Contribution time estimate (best, average, worst case): "
-                markdown_text += f"{value['best_case'].replace('m', ' minutes')} | {value['average_case'].replace('m', ' minutes')} | {value['worst_case'].replace('m', ' minutes')}\n\n"
+                markdown_text_list.append(f"### {emoji} Contribution time estimate (best, average, worst case): ")
+                markdown_text_list.append(f"{value['best_case'].replace('m', ' minutes')} | {value['average_case'].replace('m', ' minutes')} | {value['worst_case'].replace('m', ' minutes')}\n\n")
         elif 'security concerns' in key_nice.lower():
             if gfm_supported:
-                markdown_text += f"<tr><td>"
+                markdown_text_list.append(f"<tr><td>")
                 if is_value_no(value):
-                    markdown_text += f"{emoji}&nbsp;<strong>No security concerns identified</strong>"
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>No security concerns identified</strong>")
                 else:
-                    markdown_text += f"{emoji}&nbsp;<strong>Security concerns</strong><br><br>\n\n"
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>Security concerns</strong><br><br>\n\n")
                     value = emphasize_header(value.strip())
-                    markdown_text += f"{value}"
-                markdown_text += f"</td></tr>\n"
+                    markdown_text_list.append(f"{value}")
+                markdown_text_list.append(f"</td></tr>\n")
             else:
                 if is_value_no(value):
-                    markdown_text += f'### {emoji} No security concerns identified\n\n'
+                    markdown_text_list.append(f'### {emoji} No security concerns identified\n\n')
                 else:
-                    markdown_text += f"### {emoji} Security concerns\n\n"
+                    markdown_text_list.append(f"### {emoji} Security concerns\n\n")
                     value = emphasize_header(value.strip(), only_markdown=True)
-                    markdown_text += f"{value}\n\n"
+                    markdown_text_list.append(f"{value}\n\n")
         elif 'todo sections' in key_nice.lower():
             if gfm_supported:
-                markdown_text += "<tr><td>"
+                markdown_text_list.append("<tr><td>")
                 if is_value_no(value):
-                    markdown_text += f"✅&nbsp;<strong>No TODO sections</strong>"
+                    markdown_text_list.append(f"✅&nbsp;<strong>No TODO sections</strong>")
                 else:
                     markdown_todo_items = format_todo_items(value, git_provider, gfm_supported)
-                    markdown_text += f"{emoji}&nbsp;<strong>TODO sections</strong>\n<br><br>\n"
-                    markdown_text += markdown_todo_items
-                markdown_text += "</td></tr>\n"
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>TODO sections</strong>\n<br><br>\n")
+                    markdown_text_list.append(markdown_todo_items)
+                markdown_text_list.append("</td></tr>\n")
             else:
                 if is_value_no(value):
-                    markdown_text += f"### ✅ No TODO sections\n\n"
+                    markdown_text_list.append(f"### ✅ No TODO sections\n\n")
                 else:
                     markdown_todo_items = format_todo_items(value, git_provider, gfm_supported)
-                    markdown_text += f"### {emoji} TODO sections\n\n"
-                    markdown_text += markdown_todo_items
+                    markdown_text_list.append(f"### {emoji} TODO sections\n\n")
+                    markdown_text_list.append(markdown_todo_items)
         elif 'can be split' in key_nice.lower():
             if gfm_supported:
-                markdown_text += f"<tr><td>"
-                markdown_text += process_can_be_split(emoji, value)
-                markdown_text += f"</td></tr>\n"
+                markdown_text_list.append(f"<tr><td>")
+                markdown_text_list.append(process_can_be_split(emoji, value))
+                markdown_text_list.append(f"</td></tr>\n")
         elif 'key issues to review' in key_nice.lower():
             # value is a list of issues
             if is_value_no(value):
                 if gfm_supported:
-                    markdown_text += f"<tr><td>"
-                    markdown_text += f"{emoji}&nbsp;<strong>No major issues detected</strong>"
-                    markdown_text += f"</td></tr>\n"
+                    markdown_text_list.append(f"<tr><td>")
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>No major issues detected</strong>")
+                    markdown_text_list.append(f"</td></tr>\n")
                 else:
-                    markdown_text += f"### {emoji} No major issues detected\n\n"
+                    markdown_text_list.append(f"### {emoji} No major issues detected\n\n")
             else:
                 issues = value
                 if gfm_supported:
-                    markdown_text += f"<tr><td>"
+                    markdown_text_list.append(f"<tr><td>")
                     # markdown_text += f"{emoji}&nbsp;<strong>{key_nice}</strong><br><br>\n\n"
-                    markdown_text += f"{emoji}&nbsp;<strong>Recommended focus areas for review</strong><br><br>\n\n"
+                    markdown_text_list.append(f"{emoji}&nbsp;<strong>Recommended focus areas for review</strong><br><br>\n\n")
                 else:
-                    markdown_text += f"### {emoji} Recommended focus areas for review\n\n#### \n"
+                    markdown_text_list.append(f"### {emoji} Recommended focus areas for review\n\n#### \n")
                 for i, issue in enumerate(issues):
                     try:
                         if not issue or not isinstance(issue, dict):
@@ -303,23 +303,23 @@ def convert_to_markdown_v2(output_data: dict,
                                 issue_str = f"[**{issue_header}**]({reference_link})\n\n{issue_content}\n\n"
                             else:
                                 issue_str = f"**{issue_header}**\n\n{issue_content}\n\n"
-                        markdown_text += f"{issue_str}\n\n"
+                        markdown_text_list.append(f"{issue_str}\n\n")
                     except Exception as e:
                         get_logger().exception(f"Failed to process 'Recommended focus areas for review': {e}")
                 if gfm_supported:
-                    markdown_text += f"</td></tr>\n"
+                    markdown_text_list.append(f"</td></tr>\n")
         else:
             if gfm_supported:
-                markdown_text += f"<tr><td>"
-                markdown_text += f"{emoji}&nbsp;<strong>{key_nice}</strong>: {value}"
-                markdown_text += f"</td></tr>\n"
+                markdown_text_list.append(f"<tr><td>")
+                markdown_text_list.append(f"{emoji}&nbsp;<strong>{key_nice}</strong>: {value}")
+                markdown_text_list.append(f"</td></tr>\n")
             else:
-                markdown_text += f"### {emoji} {key_nice}: {value}\n\n"
+                markdown_text_list.append(f"### {emoji} {key_nice}: {value}\n\n")
 
     if gfm_supported:
-        markdown_text += "</table>\n"
+        markdown_text_list.append("</table>\n")
 
-    return markdown_text
+    return "".join(markdown_text_list)
 
 
 def extract_relevant_lines_str(end_line, files, relevant_file, start_line, dedent=False) -> str:
