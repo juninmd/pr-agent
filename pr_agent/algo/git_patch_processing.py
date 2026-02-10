@@ -336,9 +336,9 @@ __old hunk__
         if hasattr(file, 'edit_type') and file.edit_type == EDIT_TYPE.DELETED:
             return f"\n\n## File '{file.filename.strip()}' was deleted\n"
 
-        patch_with_lines_str = f"\n\n## File: '{file.filename.strip()}'\n"
+        patch_with_lines_list = [f"\n\n## File: '{file.filename.strip()}'\n"]
     else:
-        patch_with_lines_str = ""
+        patch_with_lines_list = []
 
     patch_lines = patch.splitlines()
     RE_HUNK_HEADER = re.compile(
@@ -358,20 +358,26 @@ __old hunk__
             match = RE_HUNK_HEADER.match(line)
             if match and (new_content_lines or old_content_lines):  # found a new hunk, split the previous lines
                 if prev_header_line:
-                    patch_with_lines_str += f'\n{prev_header_line}\n'
+                    patch_with_lines_list.append(f'\n{prev_header_line}\n')
                 is_plus_lines = is_minus_lines = False
                 if new_content_lines:
                     is_plus_lines = any([line.startswith('+') for line in new_content_lines])
                 if old_content_lines:
                     is_minus_lines = any([line.startswith('-') for line in old_content_lines])
                 if is_plus_lines or is_minus_lines: # notice 'True' here - we always present __new hunk__ for section, otherwise LLM gets confused
-                    patch_with_lines_str = patch_with_lines_str.rstrip() + '\n__new hunk__\n'
+                    # remove trailing newlines from last element if it exists
+                    if patch_with_lines_list and patch_with_lines_list[-1].endswith('\n'):
+                        patch_with_lines_list[-1] = patch_with_lines_list[-1].rstrip()
+                    patch_with_lines_list.append('\n__new hunk__\n')
                     for i, line_new in enumerate(new_content_lines):
-                        patch_with_lines_str += f"{start2 + i} {line_new}\n"
+                        patch_with_lines_list.append(f"{start2 + i} {line_new}\n")
                 if is_minus_lines:
-                    patch_with_lines_str = patch_with_lines_str.rstrip() + '\n__old hunk__\n'
+                    # remove trailing newlines from last element if it exists
+                    if patch_with_lines_list and patch_with_lines_list[-1].endswith('\n'):
+                        patch_with_lines_list[-1] = patch_with_lines_list[-1].rstrip()
+                    patch_with_lines_list.append('\n__old hunk__\n')
                     for line_old in old_content_lines:
-                        patch_with_lines_str += f"{line_old}\n"
+                        patch_with_lines_list.append(f"{line_old}\n")
                 new_content_lines = []
                 old_content_lines = []
             if match:
@@ -394,28 +400,34 @@ __old hunk__
 
     # finishing last hunk
     if match and new_content_lines:
-        patch_with_lines_str += f'\n{header_line}\n'
+        patch_with_lines_list.append(f'\n{header_line}\n')
         is_plus_lines = is_minus_lines = False
         if new_content_lines:
             is_plus_lines = any([line.startswith('+') for line in new_content_lines])
         if old_content_lines:
             is_minus_lines = any([line.startswith('-') for line in old_content_lines])
         if is_plus_lines or is_minus_lines:  # notice 'True' here - we always present __new hunk__ for section, otherwise LLM gets confused
-            patch_with_lines_str = patch_with_lines_str.rstrip() + '\n__new hunk__\n'
+            # remove trailing newlines from last element if it exists
+            if patch_with_lines_list and patch_with_lines_list[-1].endswith('\n'):
+                patch_with_lines_list[-1] = patch_with_lines_list[-1].rstrip()
+            patch_with_lines_list.append('\n__new hunk__\n')
             for i, line_new in enumerate(new_content_lines):
-                patch_with_lines_str += f"{start2 + i} {line_new}\n"
+                patch_with_lines_list.append(f"{start2 + i} {line_new}\n")
         if is_minus_lines:
-            patch_with_lines_str = patch_with_lines_str.rstrip() + '\n__old hunk__\n'
+            # remove trailing newlines from last element if it exists
+            if patch_with_lines_list and patch_with_lines_list[-1].endswith('\n'):
+                patch_with_lines_list[-1] = patch_with_lines_list[-1].rstrip()
+            patch_with_lines_list.append('\n__old hunk__\n')
             for line_old in old_content_lines:
-                patch_with_lines_str += f"{line_old}\n"
+                patch_with_lines_list.append(f"{line_old}\n")
 
-    return patch_with_lines_str.rstrip()
+    return "".join(patch_with_lines_list).rstrip()
 
 
 def extract_hunk_lines_from_patch(patch: str, file_name, line_start, line_end, side, remove_trailing_chars: bool = True) -> tuple[str, str]:
     try:
-        patch_with_lines_str = f"\n\n## File: '{file_name.strip()}'\n\n"
-        selected_lines = ""
+        patch_with_lines_list = [f"\n\n## File: '{file_name.strip()}'\n\n"]
+        selected_lines_list = []
         patch_lines = patch.splitlines()
         RE_HUNK_HEADER = re.compile(
             r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
@@ -446,19 +458,22 @@ def extract_hunk_lines_from_patch(patch: str, file_name, line_start, line_end, s
                     if not (start2 <= line_start <= start2 + size2):
                         skip_hunk = True
                         continue
-                patch_with_lines_str += f'\n{header_line}\n'
+                patch_with_lines_list.append(f'\n{header_line}\n')
 
             elif not skip_hunk:
                 if side.lower() == 'right' and line_start <= start2 + selected_lines_num <= line_end:
-                    selected_lines += line + '\n'
+                    selected_lines_list.append(line + '\n')
                 if side.lower() == 'left' and start1 <= selected_lines_num + start1 <= line_end:
-                    selected_lines += line + '\n'
-                patch_with_lines_str += line + '\n'
+                    selected_lines_list.append(line + '\n')
+                patch_with_lines_list.append(line + '\n')
                 if not line.startswith('-'): # currently we don't support /ask line for deleted lines
                     selected_lines_num += 1
     except Exception as e:
         get_logger().error(f"Failed to extract hunk lines from patch: {e}", artifact={"traceback": traceback.format_exc()})
         return "", ""
+
+    patch_with_lines_str = "".join(patch_with_lines_list)
+    selected_lines = "".join(selected_lines_list)
 
     if remove_trailing_chars:
         patch_with_lines_str = patch_with_lines_str.rstrip()
