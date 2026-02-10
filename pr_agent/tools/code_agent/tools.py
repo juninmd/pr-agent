@@ -1,6 +1,7 @@
 import os
 import subprocess
 from pr_agent.config_loader import get_settings
+from pr_agent.log import get_logger
 from pr_agent.git_providers.git_provider import GitProvider
 from pr_agent.tools.code_agent.diff_utils import apply_git_merge_diff
 from pr_agent.tools.code_agent.utils import fetch_url_content
@@ -23,8 +24,8 @@ class AgentTools:
             res = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
             if res.returncode == 0 and res.stdout:
                 return res.stdout[:5000] # Limit output
-        except Exception:
-            pass
+        except Exception as e:
+            get_logger().warning(f"Error listing files locally: {e}")
         return "\n".join([f.filename for f in self.git_provider.get_files()])
 
     async def read_file(self, file_path):
@@ -41,21 +42,23 @@ class AgentTools:
         self.git_provider.create_or_update_pr_file(
             file_path, self.git_provider.get_pr_branch(), content, "Agent edit"
         )
+        local_err = ""
         if os.path.exists(file_path) or os.path.exists(".git"):
             try:
                 if os.path.dirname(file_path):
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                 with open(file_path, "w") as f:
                     f.write(content)
-            except Exception:
-                pass
+            except Exception as e:
+                get_logger().warning(f"Failed to update local file {file_path}: {e}")
+                local_err = f" (Local update failed: {e})"
 
         warning = ""
         line_count = len(content.splitlines())
         if line_count > 150:
             warning = f"\nWARNING: File has {line_count} lines, exceeding the strict 150-line limit. Please refactor."
 
-        return f"Edited {file_path}{warning}"
+        return f"Edited {file_path}{local_err}{warning}"
 
     async def delete_file(self, file_path):
         """Deletes a file from the PR branch."""
@@ -63,12 +66,14 @@ class AgentTools:
             self.git_provider.delete_file(file_path, self.git_provider.get_pr_branch(), "Agent deleted file")
         except Exception as e:
             return f"Error deleting {file_path} from remote: {e}"
+        local_err = ""
         if os.path.exists(file_path):
             try:
                 os.remove(file_path)
-            except Exception:
-                pass
-        return f"Deleted {file_path}"
+            except Exception as e:
+                get_logger().warning(f"Failed to delete local file {file_path}: {e}")
+                local_err = f" (Local delete failed: {e})"
+        return f"Deleted {file_path}{local_err}"
 
     async def rename_file(self, filepath, new_filepath):
         """Renames a file."""
