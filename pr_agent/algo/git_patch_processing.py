@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 import traceback
 
-from pr_agent.algo.types import EDIT_TYPE, FilePatchInfo
+from pr_agent.algo.types import EDIT_TYPE
 from pr_agent.config_loader import get_settings
 from pr_agent.log import get_logger
 
@@ -22,8 +22,9 @@ def extend_patch(original_file_str, patch_str, patch_extra_lines_before=0,
         return patch_str
 
     try:
-        extended_patch_str = process_patch_lines(patch_str, original_file_str,
-                                                 patch_extra_lines_before, patch_extra_lines_after, new_file_str)
+        processor = PatchProcessor(patch_str, original_file_str,
+                                   patch_extra_lines_before, patch_extra_lines_after, new_file_str)
+        extended_patch_str = processor.process()
     except Exception as e:
         get_logger().warning(f"Failed to extend patch: {e}", artifact={"traceback": traceback.format_exc()})
         return patch_str
@@ -53,136 +54,141 @@ def should_skip_patch(filename):
     return False
 
 
-def process_patch_lines(patch_str, original_file_str, patch_extra_lines_before, patch_extra_lines_after, new_file_str=""):
-    allow_dynamic_context = get_settings().config.allow_dynamic_context
-    patch_extra_lines_before_dynamic = get_settings().config.max_extra_lines_before_dynamic_context
+class PatchProcessor:
+    def __init__(self, patch_str, original_file_str, patch_extra_lines_before, patch_extra_lines_after, new_file_str=""):
+        self.patch_str = patch_str
+        self.original_file_str = original_file_str
+        self.patch_extra_lines_before = patch_extra_lines_before
+        self.patch_extra_lines_after = patch_extra_lines_after
+        self.new_file_str = new_file_str
 
-    file_original_lines = original_file_str.splitlines()
-    file_new_lines = new_file_str.splitlines() if new_file_str else []
-    len_original_lines = len(file_original_lines)
-    patch_lines = patch_str.splitlines()
-    extended_patch_lines = []
+        self.file_original_lines = original_file_str.splitlines()
+        self.file_new_lines = new_file_str.splitlines() if new_file_str else []
+        self.len_original_lines = len(self.file_original_lines)
+        self.patch_lines = patch_str.splitlines()
+        self.extended_patch_lines = []
 
-    is_valid_hunk = True
-    start1, size1, start2, size2 = -1, -1, -1, -1
-    RE_HUNK_HEADER = re.compile(
-        r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
-    try:
-        for i,line in enumerate(patch_lines):
+        self.is_valid_hunk = True
+        self.start1 = -1
+        self.size1 = -1
+        self.start2 = -1
+        self.size2 = -1
+        self.section_header = ""
+
+        self.allow_dynamic_context = get_settings().config.allow_dynamic_context
+        self.patch_extra_lines_before_dynamic = get_settings().config.max_extra_lines_before_dynamic_context
+        self.RE_HUNK_HEADER = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
+
+    def process(self) -> str:
+        for i, line in enumerate(self.patch_lines):
             if line.startswith('@@'):
-                match = RE_HUNK_HEADER.match(line)
-                # identify hunk header
+                match = self.RE_HUNK_HEADER.match(line)
                 if match:
-                    # finish processing previous hunk
-                    if is_valid_hunk and (start1 != -1 and patch_extra_lines_after > 0):
-                        delta_lines_original = [f' {line}' for line in file_original_lines[start1 + size1 - 1:start1 + size1 - 1 + patch_extra_lines_after]]
-                        extended_patch_lines.extend(delta_lines_original)
+                    self._finish_previous_hunk()
+                    self.section_header, self.size1, self.size2, self.start1, self.start2 = extract_hunk_headers(match)
+                    self.is_valid_hunk = check_if_hunk_lines_matches_to_file(i, self.file_original_lines, self.patch_lines, self.start1)
 
-                    section_header, size1, size2, start1, start2 = extract_hunk_headers(match)
-
-                    is_valid_hunk = check_if_hunk_lines_matches_to_file(i, file_original_lines, patch_lines, start1)
-
-                    if is_valid_hunk and (patch_extra_lines_before > 0 or patch_extra_lines_after > 0):
-                        def _calc_context_limits(patch_lines_before):
-                            extended_start1 = max(1, start1 - patch_lines_before)
-                            extended_size1 = size1 + (start1 - extended_start1) + patch_extra_lines_after
-                            extended_start2 = max(1, start2 - patch_lines_before)
-                            extended_size2 = size2 + (start2 - extended_start2) + patch_extra_lines_after
-                            if extended_start1 - 1 + extended_size1 > len_original_lines:
-                                # we cannot extend beyond the original file
-                                delta_cap = extended_start1 - 1 + extended_size1 - len_original_lines
-                                extended_size1 = max(extended_size1 - delta_cap, size1)
-                                extended_size2 = max(extended_size2 - delta_cap, size2)
-                            return extended_start1, extended_size1, extended_start2, extended_size2
-
-                        if allow_dynamic_context and file_new_lines:
-                            extended_start1, extended_size1, extended_start2, extended_size2 = \
-                                _calc_context_limits(patch_extra_lines_before_dynamic)
-
-                            lines_before_original = file_original_lines[extended_start1 - 1:start1 - 1]
-                            lines_before_new = file_new_lines[extended_start2 - 1:start2 - 1]
-                            found_header = False
-                            for i, line in enumerate(lines_before_original):
-                                if section_header in line:
-                                    # Update start and size in one line each
-                                    extended_start1, extended_start2 = extended_start1 + i, extended_start2 + i
-                                    extended_size1, extended_size2 = extended_size1 - i, extended_size2 - i
-                                    lines_before_original_dynamic_context = lines_before_original[i:]
-                                    lines_before_new_dynamic_context = lines_before_new[i:]
-                                    if lines_before_original_dynamic_context == lines_before_new_dynamic_context:
-                                        # get_logger().debug(f"found dynamic context match for section header: {section_header}")
-                                        found_header = True
-                                        section_header = ''
-                                    else:
-                                        pass  # its ok to be here. We cant apply dynamic context if the lines are different if 'old' and 'new' hunks
-                                    break
-
-                            if not found_header:
-                                # get_logger().debug(f"Section header not found in the extra lines before the hunk")
-                                extended_start1, extended_size1, extended_start2, extended_size2 = \
-                                    _calc_context_limits(patch_extra_lines_before)
-                        else:
-                            extended_start1, extended_size1, extended_start2, extended_size2 = \
-                                _calc_context_limits(patch_extra_lines_before)
-
-                        # check if extra lines before hunk are different in original and new file
-                        delta_lines_original = [f' {line}' for line in file_original_lines[extended_start1 - 1:start1 - 1]]
-                        if file_new_lines:
-                            delta_lines_new = [f' {line}' for line in file_new_lines[extended_start2 - 1:start2 - 1]]
-                            if delta_lines_original != delta_lines_new:
-                                found_mini_match = False
-                                for i in range(len(delta_lines_original)):
-                                    if delta_lines_original[i:] == delta_lines_new[i:]:
-                                        delta_lines_original = delta_lines_original[i:]
-                                        delta_lines_new = delta_lines_new[i:]
-                                        extended_start1 += i
-                                        extended_size1 -= i
-                                        extended_start2 += i
-                                        extended_size2 -= i
-                                        found_mini_match = True
-                                        break
-                                if not found_mini_match:
-                                    extended_start1 = start1
-                                    extended_size1 = size1
-                                    extended_start2 = start2
-                                    extended_size2 = size2
-                                    delta_lines_original = []
-                                    # get_logger().debug(f"Extra lines before hunk are different in original and new file",
-                                    #                    artifact={"delta_lines_original": delta_lines_original,
-                                    #                              "delta_lines_new": delta_lines_new})
-
-                        #  logic to remove section header if its in the extra delta lines (in dynamic context, this is also done)
-                        if section_header and not allow_dynamic_context:
-                            for line in delta_lines_original:
-                                if section_header in line:
-                                    section_header = ''  # remove section header if it is in the extra delta lines
-                                    break
+                    if self.is_valid_hunk and (self.patch_extra_lines_before > 0 or self.patch_extra_lines_after > 0):
+                        self._extend_hunk()
                     else:
-                        extended_start1 = start1
-                        extended_size1 = size1
-                        extended_start2 = start2
-                        extended_size2 = size2
-                        delta_lines_original = []
-                    extended_patch_lines.append('')
-                    extended_patch_lines.append(
-                        f'@@ -{extended_start1},{extended_size1} '
-                        f'+{extended_start2},{extended_size2} @@ {section_header}')
-                    extended_patch_lines.extend(delta_lines_original)  # one to zero based
+                        self._reset_extension_vars()
+                        self.extended_patch_lines.append(line) # append the original hunk header
                     continue
-            extended_patch_lines.append(line)
-    except Exception as e:
-        get_logger().warning(f"Failed to extend patch: {e}", artifact={"traceback": traceback.format_exc()})
-        return patch_str
+            self.extended_patch_lines.append(line)
 
-    # finish processing last hunk
-    if start1 != -1 and patch_extra_lines_after > 0 and is_valid_hunk:
-        delta_lines_original = file_original_lines[start1 + size1 - 1:start1 + size1 - 1 + patch_extra_lines_after]
-        # add space at the beginning of each extra line
-        delta_lines_original = [f' {line}' for line in delta_lines_original]
-        extended_patch_lines.extend(delta_lines_original)
+        self._finish_last_hunk()
+        return '\n'.join(self.extended_patch_lines)
 
-    extended_patch_str = '\n'.join(extended_patch_lines)
-    return extended_patch_str
+    def _finish_previous_hunk(self):
+        if self.is_valid_hunk and (self.start1 != -1 and self.patch_extra_lines_after > 0):
+            delta_lines_original = [f' {line}' for line in self.file_original_lines[self.start1 + self.size1 - 1:self.start1 + self.size1 - 1 + self.patch_extra_lines_after]]
+            self.extended_patch_lines.extend(delta_lines_original)
+
+    def _finish_last_hunk(self):
+        if self.start1 != -1 and self.patch_extra_lines_after > 0 and self.is_valid_hunk:
+            delta_lines_original = self.file_original_lines[self.start1 + self.size1 - 1:self.start1 + self.size1 - 1 + self.patch_extra_lines_after]
+            delta_lines_original = [f' {line}' for line in delta_lines_original]
+            self.extended_patch_lines.extend(delta_lines_original)
+
+    def _reset_extension_vars(self):
+        # Just setting placeholders for next calculations if needed, but mainly we just append the line in the loop
+        pass
+
+    def _calc_context_limits(self, patch_lines_before):
+        extended_start1 = max(1, self.start1 - patch_lines_before)
+        extended_size1 = self.size1 + (self.start1 - extended_start1) + self.patch_extra_lines_after
+        extended_start2 = max(1, self.start2 - patch_lines_before)
+        extended_size2 = self.size2 + (self.start2 - extended_start2) + self.patch_extra_lines_after
+        if extended_start1 - 1 + extended_size1 > self.len_original_lines:
+            # we cannot extend beyond the original file
+            delta_cap = extended_start1 - 1 + extended_size1 - self.len_original_lines
+            extended_size1 = max(extended_size1 - delta_cap, self.size1)
+            extended_size2 = max(extended_size2 - delta_cap, self.size2)
+        return extended_start1, extended_size1, extended_start2, extended_size2
+
+    def _extend_hunk(self):
+        if self.allow_dynamic_context and self.file_new_lines:
+            extended_start1, extended_size1, extended_start2, extended_size2 = \
+                self._calc_context_limits(self.patch_extra_lines_before_dynamic)
+
+            lines_before_original = self.file_original_lines[extended_start1 - 1:self.start1 - 1]
+            lines_before_new = self.file_new_lines[extended_start2 - 1:self.start2 - 1]
+            found_header = False
+            for i, line in enumerate(lines_before_original):
+                if self.section_header in line:
+                    # Update start and size in one line each
+                    extended_start1, extended_start2 = extended_start1 + i, extended_start2 + i
+                    extended_size1, extended_size2 = extended_size1 - i, extended_size2 - i
+                    lines_before_original_dynamic_context = lines_before_original[i:]
+                    lines_before_new_dynamic_context = lines_before_new[i:]
+                    if lines_before_original_dynamic_context == lines_before_new_dynamic_context:
+                        found_header = True
+                        self.section_header = ''
+                    break
+
+            if not found_header:
+                extended_start1, extended_size1, extended_start2, extended_size2 = \
+                    self._calc_context_limits(self.patch_extra_lines_before)
+        else:
+            extended_start1, extended_size1, extended_start2, extended_size2 = \
+                self._calc_context_limits(self.patch_extra_lines_before)
+
+        # check if extra lines before hunk are different in original and new file
+        delta_lines_original = [f' {line}' for line in self.file_original_lines[extended_start1 - 1:self.start1 - 1]]
+        if self.file_new_lines:
+            delta_lines_new = [f' {line}' for line in self.file_new_lines[extended_start2 - 1:self.start2 - 1]]
+            if delta_lines_original != delta_lines_new:
+                found_mini_match = False
+                for i in range(len(delta_lines_original)):
+                    if delta_lines_original[i:] == delta_lines_new[i:]:
+                        delta_lines_original = delta_lines_original[i:]
+                        # delta_lines_new = delta_lines_new[i:] # unused
+                        extended_start1 += i
+                        extended_size1 -= i
+                        extended_start2 += i
+                        extended_size2 -= i
+                        found_mini_match = True
+                        break
+                if not found_mini_match:
+                    extended_start1 = self.start1
+                    extended_size1 = self.size1
+                    extended_start2 = self.start2
+                    extended_size2 = self.size2
+                    delta_lines_original = []
+
+        #  logic to remove section header if its in the extra delta lines (in dynamic context, this is also done)
+        if self.section_header and not self.allow_dynamic_context:
+            for line in delta_lines_original:
+                if self.section_header in line:
+                    self.section_header = ''  # remove section header if it is in the extra delta lines
+                    break
+
+        self.extended_patch_lines.append('')
+        self.extended_patch_lines.append(
+            f'@@ -{extended_start1},{extended_size1} '
+            f'+{extended_start2},{extended_size2} @@ {self.section_header}')
+        self.extended_patch_lines.extend(delta_lines_original)
+
 
 def check_if_hunk_lines_matches_to_file(i, original_lines, patch_lines, start1):
     """
