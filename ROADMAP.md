@@ -5,68 +5,66 @@
 **Vision:** To be the premier open-source AI-powered code review agent, fostering developer productivity and code quality through intelligent automation, customization, and platform-agnostic support.
 
 **Goals:**
-*   Provide high-quality, actionable feedback on Pull Requests across all major Git providers.
+*   Provide high-quality, actionable feedback on Pull Requests across all major Git providers (GitHub, GitLab, Bitbucket, Azure DevOps, Gitea).
 *   Maintain a thriving open-source community that drives feature development and governance.
-*   Ensure seamless integration with existing developer workflows (GitHub Actions, GitLab CI/CD, etc.).
-*   Offer flexibility through extensive configuration options and support for multiple LLM providers.
+*   Ensure seamless integration with existing developer workflows (CI/CD, CLI, etc.).
+*   Offer flexibility through extensive configuration options and support for multiple LLM providers (OpenAI, Gemini, etc.).
 
 ## 2. Current Status
 
-The project is currently a mature, feature-rich tool offering automated PR description generation (`/describe`), code review (`/review`), suggestions (`/improve`), and interactive chat (`/ask`). It supports GitHub, GitLab, Bitbucket, Azure DevOps, and Gitea.
+The project is currently a mature, feature-rich tool offering automated PR description generation (`/describe`), code review (`/review`), suggestions (`/improve`), and interactive chat (`/ask`).
 
 **Key Highlights:**
 *   **Transition Phase:** Moving towards a community-governed model (donated to an open-source foundation).
 *   **Stable Features:** Core review and description functionalities are widely used and stable.
 *   **Token Economy:** Initial implementation of token-saving strategies for cost-effective usage.
 
-## 3. Quarterly Roadmap
+## 3. Quarterly Roadmap (2025)
 
-### Q1 2024: Community Transition & Stability
+### Q1 2025: Foundation & Stability
 **Focus:** Establishing governance, improving documentation, and addressing technical debt.
 
 *   **High Priority:**
-    *   Formalize governance model and community contribution guidelines.
-    *   Setup automated release processes for community maintainers.
+    *   **Governance:** Finalize Open Source Foundation transition and community contribution guidelines.
+    *   **Technical Debt:** Address TODO in `pr_agent/servers/github_app.py` regarding commit filtering logic (filter bot/merge commits in push triggers).
 *   **Medium Priority:**
-    *   Enhance documentation for self-hosting and advanced configuration.
-    *   Improve onboarding experience for new contributors.
-*   **Low Priority (Technical Debt):**
-    *   Address TODOs in `pr_agent/servers/github_app.py` regarding commit filtering logic.
-    *   Refactor `pr_agent/git_providers/local_git_provider.py` to improve description handling.
+    *   **Documentation:** Enhance documentation for self-hosting and advanced configuration.
+    *   **Onboarding:** Improve onboarding experience for new contributors.
+*   **Low Priority:**
+    *   **Cleanup:** Address other minor TODOs across the codebase.
 
-### Q2 2024: Enhanced Integrations
-**Focus:** Expanding platform support and refining existing integrations.
+### Q2 2025: Local Development Experience
+**Focus:** Enhancing the local development workflow and CLI capabilities.
 
 *   **High Priority:**
-    *   **Feature:** Support for multiple target branches in AWS CodeCommit PRs (from TODO in `codecommit_provider.py`).
+    *   **Enhancement:** Address TODO in `pr_agent/git_providers/local_git_provider.py` to improve PR description generation using LLM summarization.
 *   **Medium Priority:**
-    *   Improve Bitbucket and Azure DevOps integration parity with GitHub/GitLab.
-    *   Enhance `LocalGitProvider` for better local testing and development workflows.
+    *   **CLI:** Improve CLI argument handling and help messages.
+    *   **Testing:** Expand local testing scenarios for better coverage.
 *   **Low Priority:**
-    *   Optimize CI/CD pipelines for faster PR checks.
+    *   **UX:** Refine local output formatting for better readability.
 
-### Q3 2024: Advanced AI Capabilities
-**Focus:** Leveraging next-generation models and improving context awareness.
+### Q3 2025: Enterprise Integrations
+**Focus:** Expanding platform support and refining enterprise-grade features.
 
 *   **High Priority:**
-    *   **Feature:** Full integration and optimization for GPT-5 and Gemini 1.5 Pro models.
-    *   **Feature:** Enhanced RAG (Retrieval-Augmented Generation) for deeper codebase understanding.
+    *   **Feature:** Address TODO in `pr_agent/git_providers/codecommit_provider.py` to support multiple target branches in AWS CodeCommit PRs.
 *   **Medium Priority:**
-    *   Semantic code search improvements for better context retrieval.
-    *   Customizable persona definitions for different team styles.
+    *   **Parity:** Improve Bitbucket and Azure DevOps integration parity with GitHub/GitLab.
+    *   **Security:** Enhance security auditing and dependency management.
 *   **Low Priority:**
-    *   Experiment with local LLM support for privacy-focused deployments.
+    *   **Performance:** Optimize CI/CD pipelines for faster PR checks.
 
-### Q4 2024: Performance & Scale
-**Focus:** Optimizing for large repositories and enterprise-grade workloads.
+### Q4 2025: Optimization & Performance
+**Focus:** Optimizing for large repositories and reducing operational costs.
 
 *   **High Priority:**
-    *   **Optimization:** Implement smarter hunk removal logic to reduce token usage in large PRs (from TODO in `diff_processing.py`).
+    *   **Optimization:** Address TODO in `pr_agent/algo/diff_processing.py` to implement smart hunk removal logic to reduce token usage in large PRs.
 *   **Medium Priority:**
-    *   Performance tuning for high-concurrency environments.
-    *   Advanced caching strategies for repetitive analysis.
+    *   **Scaling:** Performance tuning for high-concurrency environments.
+    *   **Caching:** Advanced caching strategies for repetitive analysis.
 *   **Low Priority:**
-    *   Refine "Token Economy" mode based on usage data.
+    *   **Economy:** Refine "Token Economy" mode based on usage data.
 
 ## 4. Feature Details
 
@@ -82,9 +80,15 @@ The project is currently a mature, feature-rich tool offering automated PR descr
 *   **Success Criteria:** 20% reduction in average token usage for PRs > 1000 lines without degradation in review quality.
 *   **Estimated Effort:** Large
 
+### Enhanced Local PR Description
+*   **User Value Proposition:** Provides more meaningful context for local development changes, making it easier to review and merge local work.
+*   **Technical Approach:** Leverage LLM summarization (e.g., GPT-3.5/4o-mini) in `LocalGitProvider.get_pr_description_full` to generate a concise summary of local commits instead of just concatenating messages.
+*   **Success Criteria:** High-quality, coherent PR descriptions generated for local changes.
+*   **Estimated Effort:** Small
+
 ## 5. Dependencies & Risks
 
 *   **LLM API Costs:** Fluctuations in pricing or rate limits from providers (OpenAI, Google, Anthropic) could impact usage costs and availability.
-*   **Model Availability:** Dependence on specific model versions (e.g., GPT-4) requires adaptability to model deprecations or behavior changes.
+*   **Model Availability:** Dependence on specific model versions requires adaptability to model deprecations or behavior changes.
 *   **Community Engagement:** The success of the transition to community governance relies on active and sustained contribution from maintainers.
 *   **Platform API Changes:** Breaking changes in GitHub/GitLab/Bitbucket APIs could temporarily disrupt service.
