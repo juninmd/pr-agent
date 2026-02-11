@@ -34,7 +34,7 @@ The project is currently a mature, feature-rich tool offering automated PR descr
     *   **Onboarding:** Improve onboarding experience for new contributors.
 *   **Low Priority:**
     *   **Cleanup:** Address technical debt in `pr_agent/custom_merge_loader.py` regarding Dynaconf `settings_files` attribute check.
-    *   **Refactoring:** Ensure core Agent components adhere to strict coding standards (Clean Code, <150 lines/file).
+    *   **Refactoring:** Ensure core Agent components adhere to strict coding standards (Clean Code, max 150 lines/file).
 
 ### Q2 2025: Local Development Experience
 **Focus:** Enhancing the local development workflow and CLI capabilities.
