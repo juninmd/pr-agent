@@ -137,6 +137,12 @@ def generate_full_patch(convert_hunks_to_line_numbers, file_dict, max_tokens_mod
     patches = []
     remaining_files_list_new = []
     files_in_patch_list = []
+
+    # Pre-calculated header tokens
+    new_line_tokens = token_handler.count_tokens("\n\n")
+
+    verbosity_level = get_settings().config.verbosity_level
+
     for filename, data in file_dict.items():
         if filename not in remaining_files_list_prev:
             continue
@@ -155,20 +161,31 @@ def generate_full_patch(convert_hunks_to_line_numbers, file_dict, max_tokens_mod
             # Current logic is to skip the patch if it's too large
             # TODO: Option for alternative logic to remove hunks from the patch to reduce the number of tokens
             #  until we meet the requirements
-            if get_settings().config.verbosity_level >= 2:
+            if verbosity_level >= 2:
                 get_logger().warning(f"Patch too large, skipping it: '{filename}'")
             remaining_files_list_new.append(filename)
             continue
 
         if patch:
             if not convert_hunks_to_line_numbers:
-                patch_final = f"\n\n## File: '{filename.strip()}'\n\n{patch.strip()}\n"
+                header = f"\n\n## File: '{filename.strip()}'\n\n"
+                patch_final = f"{header}{patch.strip()}\n"
+
+                # Use approximate token counting for performance (avoid re-tokenizing the whole patch)
+                # The token count of the header + patch is close enough to the sum of token counts
+                header_tokens = token_handler.count_tokens(header)
+                current_tokens = header_tokens + new_patch_tokens
+                total_tokens += current_tokens
             else:
                 patch_final = "\n\n" + patch.strip()
+
+                # Use approximate token counting for performance
+                current_tokens = new_line_tokens + new_patch_tokens
+                total_tokens += current_tokens
+
             patches.append(patch_final)
-            total_tokens += token_handler.count_tokens(patch_final)
             files_in_patch_list.append(filename)
-            if get_settings().config.verbosity_level >= 2:
+            if verbosity_level >= 2:
                 get_logger().info(f"Tokens: {total_tokens}, last filename: {filename}")
     return total_tokens, patches, remaining_files_list_new, files_in_patch_list
 
