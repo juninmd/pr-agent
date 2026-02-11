@@ -1,6 +1,6 @@
 import pytest
 
-import pr_agent.algo.utils as utils
+import pr_agent.algo.utils_token as utils_token
 from pr_agent.algo.utils import MAX_TOKENS, get_max_tokens
 
 
@@ -15,7 +15,7 @@ class TestGetMaxTokens:
             })()
         })()
 
-        monkeypatch.setattr(utils, "get_settings", lambda: fake_settings)
+        monkeypatch.setattr(utils_token, "get_settings", lambda: fake_settings)
 
         model = "gpt-3.5-turbo"
         expected = MAX_TOKENS[model]
@@ -31,7 +31,7 @@ class TestGetMaxTokens:
             })()
         })()
 
-        monkeypatch.setattr(utils, "get_settings", lambda: fake_settings)
+        monkeypatch.setattr(utils_token, "get_settings", lambda: fake_settings)
 
         model = "custom-model"
         expected = 5000
@@ -46,7 +46,7 @@ class TestGetMaxTokens:
             })()
         })()
 
-        monkeypatch.setattr(utils, "get_settings", lambda: fake_settings)
+        monkeypatch.setattr(utils_token, "get_settings", lambda: fake_settings)
 
         model = "custom-model"
 
@@ -61,7 +61,7 @@ class TestGetMaxTokens:
             })()
         })()
 
-        monkeypatch.setattr(utils, "get_settings", lambda: fake_settings)
+        monkeypatch.setattr(utils_token, "get_settings", lambda: fake_settings)
 
         model = "gpt-3.5-turbo"  # this model setting is 160000
         expected = 10000

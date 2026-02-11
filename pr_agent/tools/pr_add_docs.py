@@ -12,7 +12,7 @@ from pr_agent.algo.token_handler import TokenHandler
 from pr_agent.algo.utils import load_yaml
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import get_git_provider
-from pr_agent.git_providers.git_provider import get_main_pr_language
+from pr_agent.algo.language_handler import get_main_pr_language
 from pr_agent.log import get_logger
 
 
