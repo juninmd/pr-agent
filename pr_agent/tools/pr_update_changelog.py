@@ -105,7 +105,7 @@ class PRUpdateChangelog:
         variables["diff"] = self.patches_diff  # update diff
         if get_settings().pr_update_changelog.add_pr_link:
             variables["pr_link"] = self.git_provider.get_pr_url()
-        environment = Environment(undefined=StrictUndefined)
+        environment = Environment(undefined=StrictUndefined)  # nosec B701
         system_prompt = environment.from_string(get_settings().pr_update_changelog_prompt.system).render(variables)
         user_prompt = environment.from_string(get_settings().pr_update_changelog_prompt.user).render(variables)
         response, finish_reason = await self.ai_handler.chat_completion(

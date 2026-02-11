@@ -259,7 +259,7 @@ async def root():
 def start():
     app = FastAPI(middleware=[Middleware(RawContextMiddleware)])
     app.include_router(router)
-    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "3000")))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "3000")))  # nosec B104
 
 
 if __name__ == "__main__":

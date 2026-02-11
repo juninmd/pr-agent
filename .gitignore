@@ -13,3 +13,12 @@ build/
 docs/.cache/
 .qodo
 poetry.lock
+
+# Security and Secrets
+secrets/
+config/secrets.yml
+*.key
+*.pem
+*.p12
+.env.local
+.env.*.local

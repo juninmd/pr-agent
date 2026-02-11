@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 
 from github import AppAuthentication, Auth, Github, GithubException
 from github.Issue import Issue
-from retry import retry
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 from starlette_context import context
 
 from ..algo.file_filter import filter_ignored
@@ -217,8 +217,9 @@ class GithubProvider(GitProvider):
             except Exception as e:
                 return -1
 
-    @retry(exceptions=RateLimitExceeded,
-           tries=get_settings().github.ratelimit_retries, delay=2, backoff=2, jitter=(1, 3))
+    @retry(retry=retry_if_exception_type(RateLimitExceeded),
+           stop=stop_after_attempt(get_settings().github.ratelimit_retries),
+           wait=wait_exponential(multiplier=2, min=2, max=60))
     def get_diff_files(self) -> list[FilePatchInfo]:
         """
         Retrieves the list of files that have been modified, added, deleted, or renamed in a pull request in GitHub,

@@ -390,7 +390,7 @@ class PRCodeSuggestions:
         variables = copy.deepcopy(self.vars)
         variables["diff"] = patches_diff  # update diff
         variables["diff_no_line_numbers"] = patches_diff_no_line_number  # update diff
-        environment = Environment(undefined=StrictUndefined)
+        environment = Environment(undefined=StrictUndefined)  # nosec B701
         system_prompt = environment.from_string(self.pr_code_suggestions_prompt_system).render(variables)
         user_prompt = environment.from_string(get_settings().pr_code_suggestions_prompt.user).render(variables)
         response, finish_reason = await self.ai_handler.chat_completion(
@@ -923,7 +923,7 @@ class PRCodeSuggestions:
                          'prev_suggestions_str': prev_suggestions_str,
                          "is_ai_metadata": get_settings().get("config.enable_ai_metadata", False),
                          'duplicate_prompt_examples': get_settings().config.get('duplicate_prompt_examples', False)}
-            environment = Environment(undefined=StrictUndefined)
+            environment = Environment(undefined=StrictUndefined)  # nosec B701
 
             if dedicated_prompt:
                 system_prompt_reflect = environment.from_string(

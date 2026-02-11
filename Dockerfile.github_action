@@ -11,4 +11,11 @@ ADD docs docs
 ADD pr_agent pr_agent
 ADD github_action/entrypoint.sh /
 RUN chmod +x /entrypoint.sh
+
+# Create a non-root user and switch to it
+RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /sbin/nologin appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
 ENTRYPOINT ["/entrypoint.sh"]

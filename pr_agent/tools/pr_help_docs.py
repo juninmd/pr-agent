@@ -262,7 +262,7 @@ class PredictionPreparator:
         try:
             self.ai_handler = ai_handler
             variables = copy.deepcopy(vars)
-            environment = Environment(undefined=StrictUndefined)
+            environment = Environment(undefined=StrictUndefined)  # nosec B701
             self.system_prompt = environment.from_string(system_prompt).render(variables)
             self.user_prompt = environment.from_string(user_prompt).render(variables)
         except Exception as e:

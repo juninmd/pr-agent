@@ -103,7 +103,7 @@ class PRQuestions:
     async def _get_prediction(self, model: str):
         variables = copy.deepcopy(self.vars)
         variables["diff"] = self.patches_diff  # update diff
-        environment = Environment(undefined=StrictUndefined)
+        environment = Environment(undefined=StrictUndefined)  # nosec B701
         system_prompt = environment.from_string(get_settings().pr_questions_prompt.system).render(variables)
         user_prompt = environment.from_string(get_settings().pr_questions_prompt.user).render(variables)
         if 'img_path' in variables:

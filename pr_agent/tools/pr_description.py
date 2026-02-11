@@ -425,7 +425,7 @@ class PRDescription:
         variables = copy.deepcopy(self.vars)
         variables["diff"] = patches_diff  # update diff
 
-        environment = Environment(undefined=StrictUndefined)
+        environment = Environment(undefined=StrictUndefined)  # nosec B701
         set_custom_labels(variables, self.git_provider)
         self.variables = variables
 

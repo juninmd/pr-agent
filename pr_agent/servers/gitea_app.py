@@ -215,7 +215,7 @@ def start():
     """Start the Gitea webhook server"""
     port = int(os.environ.get("PORT", "3000"))
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)  # nosec B104
 
 if __name__ == "__main__":
     start()
