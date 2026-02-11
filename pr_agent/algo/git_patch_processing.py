@@ -356,7 +356,8 @@ __old hunk__
     prev_header_line = []
     header_line = []
     for line_i, line in enumerate(patch_lines):
-        if 'no newline at end of file' in line.lower():
+        # Optimization: only check lower() if line starts with backslash (standard for 'No newline...')
+        if line.startswith('\\') and 'no newline at end of file' in line.lower():
             continue
 
         if line.startswith('@@'):
@@ -441,8 +442,11 @@ def extract_hunk_lines_from_patch(patch: str, file_name, line_start, line_end, s
         start1, size1, start2, size2 = -1, -1, -1, -1
         skip_hunk = False
         selected_lines_num = 0
+        side_lower = side.lower()
+
         for line in patch_lines:
-            if 'no newline at end of file' in line.lower():
+            # Optimization: only check lower() if line starts with backslash (standard for 'No newline...')
+            if line.startswith('\\') and 'no newline at end of file' in line.lower():
                 continue
 
             if line.startswith('@@'):
@@ -455,23 +459,24 @@ def extract_hunk_lines_from_patch(patch: str, file_name, line_start, line_end, s
                 section_header, size1, size2, start1, start2 = extract_hunk_headers(match)
 
                 # check if line range is in this hunk
-                if side.lower() == 'left':
+                if side_lower == 'left':
                     # check if line range is in this hunk
                     if not (start1 <= line_start <= start1 + size1):
                         skip_hunk = True
                         continue
-                elif side.lower() == 'right':
+                elif side_lower == 'right':
                     if not (start2 <= line_start <= start2 + size2):
                         skip_hunk = True
                         continue
                 patch_with_lines_list.append(f'\n{header_line}\n')
 
             elif not skip_hunk:
-                if side.lower() == 'right' and line_start <= start2 + selected_lines_num <= line_end:
-                    selected_lines_list.append(line + '\n')
-                if side.lower() == 'left' and start1 <= selected_lines_num + start1 <= line_end:
-                    selected_lines_list.append(line + '\n')
-                patch_with_lines_list.append(line + '\n')
+                line_nl = line + '\n'
+                if side_lower == 'right' and line_start <= start2 + selected_lines_num <= line_end:
+                    selected_lines_list.append(line_nl)
+                if side_lower == 'left' and start1 <= selected_lines_num + start1 <= line_end:
+                    selected_lines_list.append(line_nl)
+                patch_with_lines_list.append(line_nl)
                 if not line.startswith('-'): # currently we don't support /ask line for deleted lines
                     selected_lines_num += 1
     except Exception as e:
