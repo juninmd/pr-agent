@@ -1,6 +1,6 @@
 # Security Audit Report
 
-**Date**: 2025-05-23
+**Date**: YYYY-MM-DD
 **Auditor**: Senior Software Engineer (Jules)
 
 ## Executive Summary
