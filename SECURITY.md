@@ -55,6 +55,15 @@ steps:
     uses: docker://codiumai/pr-agent@sha256:14165e525678ace7d9b51cda8652c2d74abb4e1d76b57c4a6ccaeba84663cc64
 ```
 
+## Security Hardening & Best Practices
+
+We follow industry standard security practices:
+
+- **Secrets Management**: Sensitive configuration and secrets are excluded via `.gitignore`. Users should store API keys in environment variables or secret managers.
+- **Dependency Management**: We use automated tools (Dependabot) to keep dependencies up-to-date and scan for vulnerabilities (pip-audit).
+- **Least Privilege**: Our Docker images run as a non-root user (`appuser`) to minimize potential impact of container vulnerabilities.
+- **Code Security**: We perform Static Application Security Testing (SAST) using `bandit` to identify potential security issues in the codebase.
+
 ## Reporting a Vulnerability
 
 We take the security of PR-Agent seriously. If you discover a security vulnerability, please report it immediately to:
