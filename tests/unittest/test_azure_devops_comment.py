@@ -6,6 +6,9 @@ from pr_agent.git_providers import AzureDevopsProvider
 
 
 class TestAzureDevopsProviderPublishComment(unittest.TestCase):
+    @patch("pr_agent.git_providers.azuredevops_provider.AZURE_DEVOPS_AVAILABLE", True)
+    @patch("pr_agent.git_providers.azuredevops_provider.Comment", MagicMock())
+    @patch("pr_agent.git_providers.azuredevops_provider.CommentThread", MagicMock())
     @patch("pr_agent.git_providers.azuredevops_provider.get_settings")
     def test_publish_comment_default_closed(self, mock_get_settings):
         # Simulate config with no default_comment_status
@@ -30,6 +33,9 @@ class TestAzureDevopsProviderPublishComment(unittest.TestCase):
                 args, kwargs = MockThread.call_args
                 assert kwargs.get("status") == "closed"
 
+    @patch("pr_agent.git_providers.azuredevops_provider.AZURE_DEVOPS_AVAILABLE", True)
+    @patch("pr_agent.git_providers.azuredevops_provider.Comment", MagicMock())
+    @patch("pr_agent.git_providers.azuredevops_provider.CommentThread", MagicMock())
     @patch("pr_agent.git_providers.azuredevops_provider.get_settings")
     def test_publish_comment_active(self, mock_get_settings):
         # Simulate config with default_comment_status = "active"
