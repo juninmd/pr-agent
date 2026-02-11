@@ -260,7 +260,7 @@ class TestClipTokens:
         max_tokens = 10
 
         # Patch the logger at the module level where it's imported
-        with patch('pr_agent.algo.utils.get_logger') as mock_logger:
+        with patch('pr_agent.algo.utils_token.get_logger') as mock_logger:
             mock_log_instance = MagicMock()
             mock_logger.return_value = mock_log_instance
 

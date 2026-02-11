@@ -101,3 +101,49 @@ def set_file_languages(diff_files) -> List[FilePatchInfo]:
         get_logger().exception(f"Failed to set file languages: {e}")
 
     return diff_files
+
+
+def get_main_pr_language(languages, files) -> str:
+    """
+    Get the main language of the commit. Return an empty string if cannot determine.
+    """
+    main_language_str = ""
+    if not languages:
+        get_logger().info("No languages detected")
+        return main_language_str
+    if not files:
+        get_logger().info("No files in diff")
+        return main_language_str
+
+    try:
+        top_language = max(languages, key=languages.get).lower()
+
+        # validate that the specific commit uses the main language
+        extension_list = []
+        for file in files:
+            if not file:
+                continue
+            if isinstance(file, str):
+                file = FilePatchInfo(base_file=None, head_file=None, patch=None, filename=file)
+            extension_list.append(file.filename.rsplit('.')[-1])
+
+        # get the most common extension
+        most_common_extension = '.' + max(set(extension_list), key=extension_list.count)
+        try:
+            language_extension_map_org = get_settings().language_extension_map_org
+            language_extension_map = {k.lower(): v for k, v in language_extension_map_org.items()}
+
+            if top_language in language_extension_map and most_common_extension in language_extension_map[top_language]:
+                main_language_str = top_language
+            else:
+                for language, extensions in language_extension_map.items():
+                    if most_common_extension in extensions:
+                        main_language_str = language
+                        break
+        except Exception as e:
+            get_logger().exception(f"Failed to get main language: {e}")
+
+    except Exception as e:
+        get_logger().exception(e)
+
+    return main_language_str

@@ -22,7 +22,7 @@ from pr_agent.algo.utils import (ModelType, PRDescriptionHeader, clip_tokens,
 from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import (GithubProvider, get_git_provider,
                                     get_git_provider_with_context)
-from pr_agent.git_providers.git_provider import get_main_pr_language
+from pr_agent.algo.language_handler import get_main_pr_language
 from pr_agent.log import get_logger
 from pr_agent.servers.help import HelpMessage
 from pr_agent.tools.ticket_pr_compliance_check import (

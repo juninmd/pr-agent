@@ -26,8 +26,8 @@ from pr_agent.config_loader import get_settings
 from pr_agent.git_providers import (AzureDevopsProvider, GithubProvider,
                                     GitLabProvider, get_git_provider,
                                     get_git_provider_with_context)
-from pr_agent.git_providers.git_provider import (GitProvider,
-                                                 get_main_pr_language)
+from pr_agent.algo.language_handler import get_main_pr_language
+from pr_agent.git_providers.git_provider import GitProvider
 from pr_agent.log import get_logger
 from pr_agent.servers.help import HelpMessage
 from pr_agent.tools.pr_description import insert_br_after_x_chars
