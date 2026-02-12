@@ -6,7 +6,7 @@ import traceback
 from pr_agent.algo.types import EDIT_TYPE
 from pr_agent.config_loader import get_settings
 from pr_agent.log import get_logger
-from pr_agent.algo.patch_processor import PatchProcessor, extract_hunk_headers
+from pr_agent.algo.patch_processor import PatchProcessor, extract_hunk_headers, RE_HUNK_HEADER
 
 
 def extend_patch(original_file_str, patch_str, patch_extra_lines_before=0,
@@ -68,8 +68,6 @@ def omit_deletion_hunks(patch_lines) -> str:
     added_patched = []
     add_hunk = False
     inside_hunk = False
-    RE_HUNK_HEADER = re.compile(
-        r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))?\ @@[ ]?(.*)")
 
     for line in patch_lines:
         if line.startswith('@@'):
@@ -196,8 +194,6 @@ __old hunk__
         patch_with_lines_list = []
 
     patch_lines = patch.splitlines()
-    RE_HUNK_HEADER = re.compile(
-        r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
     new_content_lines = []
     old_content_lines = []
     match = None
@@ -252,8 +248,6 @@ def extract_hunk_lines_from_patch(patch: str, file_name, line_start, line_end, s
         patch_with_lines_list = [f"\n\n## File: '{file_name.strip()}'\n\n"]
         selected_lines_list = []
         patch_lines = patch.splitlines()
-        RE_HUNK_HEADER = re.compile(
-            r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
         match = None
         start1, size1, start2, size2 = -1, -1, -1, -1
         skip_hunk = False

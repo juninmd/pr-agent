@@ -5,6 +5,8 @@ import re
 from pr_agent.config_loader import get_settings
 from pr_agent.log import get_logger
 
+RE_HUNK_HEADER = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
+
 
 class PatchProcessor:
     def __init__(self, patch_str, original_file_str, patch_extra_lines_before, patch_extra_lines_after, new_file_str=""):
@@ -29,7 +31,8 @@ class PatchProcessor:
 
         self.allow_dynamic_context = get_settings().config.allow_dynamic_context
         self.patch_extra_lines_before_dynamic = get_settings().config.max_extra_lines_before_dynamic_context
-        self.RE_HUNK_HEADER = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[ ]?(.*)")
+        self.RE_HUNK_HEADER = RE_HUNK_HEADER
+        self.detected_encoding = None
 
     def process(self) -> str:
         for i, line in enumerate(self.patch_lines):
@@ -38,7 +41,7 @@ class PatchProcessor:
                 if match:
                     self._finish_previous_hunk()
                     self.section_header, self.size1, self.size2, self.start1, self.start2 = extract_hunk_headers(match)
-                    self.is_valid_hunk = check_if_hunk_lines_matches_to_file(i, self.file_original_lines, self.patch_lines, self.start1)
+                    self.is_valid_hunk = self._check_if_hunk_lines_matches_to_file(i, self.start1)
 
                     if self.is_valid_hunk and (self.patch_extra_lines_before > 0 or self.patch_extra_lines_after > 0):
                         self._extend_hunk()
@@ -141,6 +144,48 @@ class PatchProcessor:
             f'+{extended_start2},{extended_size2} @@ {self.section_header}')
         self.extended_patch_lines.extend(delta_lines_original)
 
+    def _check_if_hunk_lines_matches_to_file(self, i, start1):
+        """
+        Check if the hunk lines match the original file content.
+        """
+        is_valid_hunk = True
+        try:
+            if i + 1 < len(self.patch_lines) and self.patch_lines[i + 1][0] == ' ': # an existing line in the file
+                patch_line_stripped = self.patch_lines[i + 1].strip()
+                original_line_stripped = self.file_original_lines[start1 - 1].strip()
+
+                if patch_line_stripped != original_line_stripped:
+                    # check if different encoding is needed
+                    original_line = self.file_original_lines[start1 - 1].strip()
+
+                    # Try cached encoding first
+                    if self.detected_encoding:
+                        try:
+                            if original_line.encode(self.detected_encoding).decode().strip() == patch_line_stripped:
+                                return False # Avoid extending, treat as invalid for extension but suppress error
+                        except:
+                            pass
+
+                    # Try other encodings
+                    encodings_to_try = ['iso-8859-1', 'latin-1', 'ascii', 'utf-16']
+                    for encoding in encodings_to_try:
+                        if encoding == self.detected_encoding:
+                            continue
+                        try:
+                            if original_line.encode(encoding).decode().strip() == patch_line_stripped:
+                                get_logger().info(f"Detected different encoding in hunk header line {start1}, needed encoding: {encoding}")
+                                self.detected_encoding = encoding
+                                return False
+                        except:
+                            pass
+
+                    is_valid_hunk = False
+                    get_logger().info(
+                        f"Invalid hunk in PR, line {start1} in hunk header doesn't match the original file content")
+        except:
+            is_valid_hunk = False
+        return is_valid_hunk
+
 
 def check_if_hunk_lines_matches_to_file(i, original_lines, patch_lines, start1):
     """
@@ -165,7 +210,7 @@ def check_if_hunk_lines_matches_to_file(i, original_lines, patch_lines, start1):
                 get_logger().info(
                     f"Invalid hunk in PR, line {start1} in hunk header doesn't match the original file content")
     except:
-        pass
+        is_valid_hunk = False
     return is_valid_hunk
 
 
