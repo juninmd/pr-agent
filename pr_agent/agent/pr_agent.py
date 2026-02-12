@@ -44,6 +44,7 @@ command2class = {
     "help_docs": PRHelpDocs,
     "code": PRCodeAgent,
     "edit": PRCodeAgent,
+    "jules": PRCodeAgent,
 }
 
 commands = list(command2class.keys())
