@@ -28,6 +28,8 @@ def pr_generate_extended_diff(pr_languages: list,
     total_tokens = token_handler.prompt_tokens  # initial tokens
     patches_extended = []
     patches_extended_tokens = []
+    enable_ai_metadata = get_settings().get("config.enable_ai_metadata", False)
+
     for lang in pr_languages:
         for file in lang['files']:
             original_file_content_str = file.base_file
@@ -51,7 +53,7 @@ def pr_generate_extended_diff(pr_languages: list,
                 full_extended_patch = f"\n\n## File: '{file.filename.strip()}'\n\n{extended_patch.strip()}\n"
 
             # add AI-summary metadata to the patch
-            if file.ai_file_summary and get_settings().get("config.enable_ai_metadata", False):
+            if file.ai_file_summary and enable_ai_metadata:
                 full_extended_patch = add_ai_summary_top_patch(file, full_extended_patch)
 
             patch_tokens = token_handler.count_tokens(full_extended_patch)
@@ -193,13 +195,27 @@ def generate_full_patch(convert_hunks_to_line_numbers, file_dict, max_tokens_mod
 def add_ai_summary_top_patch(file, full_extended_patch):
     try:
         # below every instance of '## File: ...' in the patch, add the ai-summary metadata
-        full_extended_patch_lines = full_extended_patch.split("\n")
-        for i, line in enumerate(full_extended_patch_lines):
+        # Optimized to avoid splitting the whole file
+        current_pos = 0
+        while True:
+            next_newline = full_extended_patch.find('\n', current_pos)
+            if next_newline == -1:
+                line = full_extended_patch[current_pos:]
+                if line.startswith("## File:") or line.startswith("## file:"):
+                    # Insert after this line (which is end of string)
+                    to_insert = f"\n### AI-generated changes summary:\n{file.ai_file_summary['long_summary']}"
+                    return full_extended_patch + to_insert
+                break
+
+            line = full_extended_patch[current_pos:next_newline]
             if line.startswith("## File:") or line.startswith("## file:"):
-                full_extended_patch_lines.insert(i + 1,
-                                                 f"### AI-generated changes summary:\n{file.ai_file_summary['long_summary']}")
-                full_extended_patch = "\n".join(full_extended_patch_lines)
-                return full_extended_patch
+                # Insert after next_newline
+                to_insert = f"\n### AI-generated changes summary:\n{file.ai_file_summary['long_summary']}"
+                return full_extended_patch[:next_newline] + to_insert + full_extended_patch[next_newline:]
+
+            current_pos = next_newline + 1
+            if current_pos >= len(full_extended_patch):
+                break
 
         # if no '## File: ...' was found
         return full_extended_patch
