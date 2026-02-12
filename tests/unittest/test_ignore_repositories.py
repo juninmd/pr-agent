@@ -3,7 +3,7 @@ import pytest
 from pr_agent.config_loader import get_settings
 from pr_agent.servers.bitbucket_app import \
     should_process_pr_logic as bitbucket_should_process_pr_logic
-from pr_agent.servers.github_app import \
+from pr_agent.servers.github_webhook_handler import \
     should_process_pr_logic as github_should_process_pr_logic
 from pr_agent.servers.gitlab_webhook import \
     should_process_pr_logic as gitlab_should_process_pr_logic

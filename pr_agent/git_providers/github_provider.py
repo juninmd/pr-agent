@@ -27,7 +27,8 @@ from ..log import get_logger
 from ..servers.utils import RateLimitExceeded
 from .git_provider import (MAX_FILES_ALLOWED_FULL, FilePatchInfo, GitProvider,
                            IncrementalPR)
-
+from pr_agent.git_providers.github_utils.url_parser import GithubURLParser
+from pr_agent.git_providers.github_utils.comment_handler import create_inline_comment, try_fix_invalid_inline_comments
 
 class GithubProvider(GitProvider):
     def __init__(self, pr_url: Optional[str] = None):
@@ -59,7 +60,7 @@ class GithubProvider(GitProvider):
             self.pr_commits = None
 
     def _get_issue_handle(self, issue_url) -> Optional[Issue]:
-        repo_name, issue_number = self._parse_issue_url(issue_url)
+        repo_name, issue_number = GithubURLParser.parse_issue_url(issue_url)
         if not repo_name or not issue_number:
             get_logger().error(f"Given url: {issue_url} is not a valid issue.")
             return None
@@ -89,9 +90,9 @@ class GithubProvider(GitProvider):
         try:
             repo_path = None
             if 'issues' in given_url:
-                repo_path, _ = self._parse_issue_url(given_url)
+                repo_path, _ = GithubURLParser.parse_issue_url(given_url)
             elif 'pull' in given_url:
-                repo_path, _ = self._parse_pr_url(given_url)
+                repo_path, _ = GithubURLParser.parse_pr_url(given_url)
             elif given_url.endswith('.git'):
                 parsed_url = urlparse(given_url)
                 repo_path = (parsed_url.path.split('.git')[0])[1:] # /<owner>/<repo>.git -> <owner>/<repo>
@@ -146,7 +147,7 @@ class GithubProvider(GitProvider):
         return self.pr.html_url
 
     def set_pr(self, pr_url: str):
-        self.repo, self.pr_num = self._parse_pr_url(pr_url)
+        self.repo, self.pr_num = GithubURLParser.parse_pr_url(pr_url)
         self.pr = self._get_pr()
 
     def _get_incremental_commits(self):
@@ -399,18 +400,7 @@ class GithubProvider(GitProvider):
 
     def create_inline_comment(self, body: str, relevant_file: str, relevant_line_in_file: str,
                               absolute_position: int = None):
-        body = self.limit_output_characters(body, self.max_comment_chars)
-        position, absolute_position = find_line_number_of_relevant_line_in_file(self.diff_files,
-                                                                                relevant_file.strip('`'),
-                                                                                relevant_line_in_file,
-                                                                                absolute_position)
-        if position == -1:
-            get_logger().info(f"Could not find position for {relevant_file} {relevant_line_in_file}")
-            subject_type = "FILE"
-        else:
-            subject_type = "LINE"
-        path = relevant_file.strip()
-        return dict(body=body, path=path, position=position) if subject_type == "LINE" else {}
+        return create_inline_comment(body, relevant_file, relevant_line_in_file, self.diff_files, absolute_position, self.max_comment_chars)
 
     def publish_inline_comments(self, comments: list[dict], disable_fallback: bool = False):
         try:
@@ -481,7 +471,7 @@ class GithubProvider(GitProvider):
 
         # try to publish one by one the invalid comments as a one-line code comment
         if invalid_comments and get_settings().github.try_fix_invalid_inline_comments:
-            fixed_comments_as_one_liner = self._try_fix_invalid_inline_comments(
+            fixed_comments_as_one_liner = try_fix_invalid_inline_comments(
                 [comment for comment, _ in invalid_comments])
             for comment in fixed_comments_as_one_liner:
                 try:
@@ -523,31 +513,6 @@ class GithubProvider(GitProvider):
             else:
                 invalid_comments.append((comment, e))
         return verified_comments, invalid_comments
-
-    def _try_fix_invalid_inline_comments(self, invalid_comments: list[dict]) -> list[dict]:
-        """
-        Try fixing invalid comments by removing the suggestion part and setting the comment just on the first line.
-        Return only comments that have been modified in some way.
-        This is a best-effort attempt to fix invalid comments, and should be verified accordingly.
-        """
-        import copy
-        fixed_comments = []
-        for comment in invalid_comments:
-            try:
-                fixed_comment = copy.deepcopy(comment)  # avoid modifying the original comment dict for later logging
-                if "```suggestion" in comment["body"]:
-                    fixed_comment["body"] = comment["body"].split("```suggestion")[0]
-                if "start_line" in comment:
-                    fixed_comment["line"] = comment["start_line"]
-                    del fixed_comment["start_line"]
-                if "start_side" in comment:
-                    fixed_comment["side"] = comment["start_side"]
-                    del fixed_comment["start_side"]
-                if fixed_comment != comment:
-                    fixed_comments.append(fixed_comment)
-            except Exception as e:
-                get_logger().error(f"Failed to fix inline comment, error: {e}")
-        return fixed_comments
 
     def publish_code_suggestions(self, code_suggestions: list) -> bool:
         """
@@ -768,62 +733,6 @@ class GithubProvider(GitProvider):
         except Exception as e:
             get_logger().exception(f"Failed to remove eyes reaction, error: {e}")
             return False
-
-    def _parse_pr_url(self, pr_url: str) -> Tuple[str, int]:
-        parsed_url = urlparse(pr_url)
-
-        if parsed_url.path.startswith('/api/v3'):
-            parsed_url = urlparse(pr_url.replace("/api/v3", ""))
-
-        path_parts = parsed_url.path.strip('/').split('/')
-        if 'api.github.com' in parsed_url.netloc or '/api/v3' in pr_url:
-            if len(path_parts) < 5 or path_parts[3] != 'pulls':
-                raise ValueError("The provided URL does not appear to be a GitHub PR URL")
-            repo_name = '/'.join(path_parts[1:3])
-            try:
-                pr_number = int(path_parts[4])
-            except ValueError as e:
-                raise ValueError("Unable to convert PR number to integer") from e
-            return repo_name, pr_number
-
-        if len(path_parts) < 4 or path_parts[2] != 'pull':
-            raise ValueError("The provided URL does not appear to be a GitHub PR URL")
-
-        repo_name = '/'.join(path_parts[:2])
-        try:
-            pr_number = int(path_parts[3])
-        except ValueError as e:
-            raise ValueError("Unable to convert PR number to integer") from e
-
-        return repo_name, pr_number
-
-    def _parse_issue_url(self, issue_url: str) -> Tuple[str, int]:
-        parsed_url = urlparse(issue_url)
-
-        if parsed_url.path.startswith('/api/v3'): #Check if came from github app
-            parsed_url = urlparse(issue_url.replace("/api/v3", ""))
-
-        path_parts = parsed_url.path.strip('/').split('/')
-        if 'api.github.com' in parsed_url.netloc or '/api/v3' in issue_url: #Check if came from github app
-            if len(path_parts) < 5 or path_parts[3] != 'issues':
-                raise ValueError("The provided URL does not appear to be a GitHub ISSUE URL")
-            repo_name = '/'.join(path_parts[1:3])
-            try:
-                issue_number = int(path_parts[4])
-            except ValueError as e:
-                raise ValueError("Unable to convert issue number to integer") from e
-            return repo_name, issue_number
-
-        if len(path_parts) < 4 or path_parts[2] != 'issues':
-            raise ValueError("The provided URL does not appear to be a GitHub PR issue")
-
-        repo_name = '/'.join(path_parts[:2])
-        try:
-            issue_number = int(path_parts[3])
-        except ValueError as e:
-            raise ValueError("Unable to convert issue number to integer") from e
-
-        return repo_name, issue_number
 
     def _get_github_client(self):
         self.deployment_type = get_settings().get("GITHUB.DEPLOYMENT_TYPE", "user")
