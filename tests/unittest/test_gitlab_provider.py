@@ -185,7 +185,9 @@ class TestGitLabProvider:
     def test_compare_submodule_cached(self, gitlab_provider):
         proj = MagicMock()
         proj.repository_compare.return_value = {"diffs": [{"diff": "d"}]}
-        with patch.object(gitlab_provider, "_project_by_path", return_value=proj) as m_pbp:
+
+        # Patch on the handler, not the provider
+        with patch.object(gitlab_provider.submodule_handler, "_project_by_path", return_value=proj) as m_pbp:
             first = gitlab_provider._compare_submodule("grp/repo", "old", "new")
             second = gitlab_provider._compare_submodule("grp/repo", "old", "new")
 
