@@ -145,8 +145,9 @@ def generate_full_patch(convert_hunks_to_line_numbers, file_dict, max_tokens_mod
 
     verbosity_level = get_settings().config.verbosity_level
 
-    for filename, data in file_dict.items():
-        if filename not in remaining_files_list_prev:
+    for filename in remaining_files_list_prev:
+        data = file_dict.get(filename)
+        if not data:
             continue
 
         patch = data['patch']
@@ -200,15 +201,15 @@ def add_ai_summary_top_patch(file, full_extended_patch):
         while True:
             next_newline = full_extended_patch.find('\n', current_pos)
             if next_newline == -1:
-                line = full_extended_patch[current_pos:]
-                if line.startswith("## File:") or line.startswith("## file:"):
+                if full_extended_patch.startswith("## File:", current_pos) or \
+                        full_extended_patch.startswith("## file:", current_pos):
                     # Insert after this line (which is end of string)
                     to_insert = f"\n### AI-generated changes summary:\n{file.ai_file_summary['long_summary']}"
                     return full_extended_patch + to_insert
                 break
 
-            line = full_extended_patch[current_pos:next_newline]
-            if line.startswith("## File:") or line.startswith("## file:"):
+            if full_extended_patch.startswith("## File:", current_pos) or \
+                    full_extended_patch.startswith("## file:", current_pos):
                 # Insert after next_newline
                 to_insert = f"\n### AI-generated changes summary:\n{file.ai_file_summary['long_summary']}"
                 return full_extended_patch[:next_newline] + to_insert + full_extended_patch[next_newline:]
