@@ -1,44 +1,23 @@
-import asyncio
-import copy
-import difflib
-import re
-import textwrap
 import traceback
-from datetime import datetime
 from functools import partial
-from typing import Dict, List
+from typing import Dict
 
-from jinja2 import Environment, StrictUndefined
-
-from pr_agent.algo import MAX_TOKENS
 from pr_agent.algo.ai_handlers.base_ai_handler import BaseAiHandler
 from pr_agent.algo.ai_handlers.litellm_ai_handler import LiteLLMAIHandler
-from pr_agent.algo.git_patch_processing import \
-    decouple_and_convert_to_hunks_with_lines_numbers
-from pr_agent.algo.pr_processing import (add_ai_metadata_to_diff_files,
-                                         get_pr_diff, get_pr_multi_diffs,
-                                         retry_with_fallback_models)
+from pr_agent.algo.pr_processing import (add_ai_metadata_to_diff_files)
 from pr_agent.algo.token_handler import TokenHandler
-from pr_agent.algo.utils import (ModelType, clip_tokens, get_max_tokens,
-                                 get_model, load_yaml, replace_code_tags,
-                                 show_relevant_configurations)
+from pr_agent.algo.utils import load_yaml
 from pr_agent.config_loader import get_settings
-from pr_agent.git_providers import (AzureDevopsProvider, GithubProvider,
-                                    GitLabProvider, get_git_provider,
-                                    get_git_provider_with_context)
+from pr_agent.git_providers import get_git_provider_with_context
 from pr_agent.algo.language_handler import get_main_pr_language
-from pr_agent.git_providers.git_provider import GitProvider
 from pr_agent.log import get_logger
-from pr_agent.servers.help import HelpMessage
-from pr_agent.tools.pr_description import insert_br_after_x_chars
 from pr_agent.tools.pr_code_suggestions_utils.helpers import (
-    dedent_code, remove_line_numbers, validate_one_liner_suggestion_not_repeating_code,
-    truncate_if_needed, extract_link, get_score_str, generate_summarized_suggestions,
-    add_self_review_text, publish_persistent_comment_with_history
+    dedent_code, truncate_if_needed
 )
 from pr_agent.tools.pr_code_suggestions_utils.prediction_handler import PredictionHandler
 from pr_agent.tools.pr_code_suggestions_utils.reflection_handler import ReflectionHandler
-
+from pr_agent.tools.pr_code_suggestions_utils.runner import SuggestionRunner
+from datetime import datetime
 
 class PRCodeSuggestions:
     def __init__(self, pr_url: str, cli_mode=False, args: list = None,
@@ -101,110 +80,10 @@ class PRCodeSuggestions:
         self.progress_response = None
         self.prediction_handler = PredictionHandler(self)
         self.reflection_handler = ReflectionHandler(self)
+        self.runner = SuggestionRunner(self)
 
     async def run(self):
-        try:
-            if not self.git_provider.get_files():
-                get_logger().info(f"PR has no files: {self.pr_url}, skipping code suggestions")
-                return None
-
-            get_logger().info('Generating code suggestions for PR...')
-            relevant_configs = {'pr_code_suggestions': dict(get_settings().pr_code_suggestions),
-                                'config': dict(get_settings().config)}
-            get_logger().debug("Relevant configs", artifacts=relevant_configs)
-
-            # publish "Preparing suggestions..." comments
-            if (get_settings().config.publish_output and get_settings().config.publish_output_progress and
-                    not get_settings().config.get('is_auto_command', False)):
-                if self.git_provider.is_supported("gfm_markdown"):
-                    self.progress_response = self.git_provider.publish_comment(self.progress)
-                else:
-                    self.git_provider.publish_comment("Preparing suggestions...", is_temporary=True)
-
-            # # call the model to get the suggestions, and self-reflect on them
-            # if not self.is_extended:
-            #     data = await retry_with_fallback_models(self._prepare_prediction, model_type=ModelType.REGULAR)
-            # else:
-            data = await retry_with_fallback_models(self.prediction_handler.prepare_prediction_main, model_type=ModelType.REGULAR)
-            if not data:
-                data = {"code_suggestions": []}
-            self.data = data
-
-            # Handle the case where the PR has no suggestions
-            if (data is None or 'code_suggestions' not in data or not data['code_suggestions']):
-                await self.publish_no_suggestions()
-                return
-
-            # publish the suggestions
-            if get_settings().config.publish_output:
-                # If a temporary comment was published, remove it
-                self.git_provider.remove_initial_comment()
-
-                # Publish table summarized suggestions
-                if ((not get_settings().pr_code_suggestions.commitable_code_suggestions) and
-                        self.git_provider.is_supported("gfm_markdown")):
-
-                    # generate summarized suggestions
-                    pr_body = generate_summarized_suggestions(data, self.git_provider)
-                    get_logger().debug(f"PR output", artifact=pr_body)
-
-                    # require self-review
-                    if get_settings().pr_code_suggestions.demand_code_suggestions_self_review:
-                        pr_body = add_self_review_text(pr_body)
-
-                    # add usage guide
-                    if (get_settings().pr_code_suggestions.enable_chat_text and get_settings().config.is_auto_command
-                            and isinstance(self.git_provider, GithubProvider)):
-                        pr_body += "\n\n>💡 Need additional feedback ? start a [PR chat](https://chromewebstore.google.com/detail/ephlnjeghhogofkifjloamocljapahnl) \n\n"
-                    if get_settings().pr_code_suggestions.enable_help_text:
-                        pr_body += "<hr>\n\n<details> <summary><strong>💡 Tool usage guide:</strong></summary><hr> \n\n"
-                        pr_body += HelpMessage.get_improve_usage_guide()
-                        pr_body += "\n</details>\n"
-
-                    # Output the relevant configurations if enabled
-                    if get_settings().get('config', {}).get('output_relevant_configurations', False):
-                        pr_body += show_relevant_configurations(relevant_section='pr_code_suggestions')
-
-                    # publish the PR comment
-                    if get_settings().pr_code_suggestions.persistent_comment: # true by default
-                        publish_persistent_comment_with_history(self.git_provider,
-                                                                     pr_body,
-                                                                     initial_header="## PR Code Suggestions ✨",
-                                                                     update_header=True,
-                                                                     name="suggestions",
-                                                                     final_update_message=False,
-                                                                     max_previous_comments=get_settings().pr_code_suggestions.max_history_len,
-                                                                     progress_response=self.progress_response)
-                    else:
-                        if self.progress_response:
-                            self.git_provider.edit_comment(self.progress_response, body=pr_body)
-                        else:
-                            self.git_provider.publish_comment(pr_body)
-
-                    # dual publishing mode
-                    if int(get_settings().pr_code_suggestions.dual_publishing_score_threshold) > 0:
-                        await self.dual_publishing(data)
-                else:
-                    await self.push_inline_code_suggestions(data)
-                    if self.progress_response:
-                        self.git_provider.remove_comment(self.progress_response)
-            else:
-                get_logger().info('Code suggestions generated for PR, but not published since publish_output is False.')
-                pr_body = generate_summarized_suggestions(data, self.git_provider)
-                get_settings().data = {"artifact": pr_body}
-                return
-        except Exception as e:
-            get_logger().error(f"Failed to generate code suggestions for PR, error: {e}",
-                               artifact={"traceback": traceback.format_exc()})
-            if get_settings().config.publish_output:
-                if self.progress_response:
-                    self.progress_response.delete()
-                else:
-                    try:
-                        self.git_provider.remove_initial_comment()
-                        self.git_provider.publish_comment(f"Failed to generate code suggestions for PR")
-                    except Exception as e:
-                        get_logger().exception(f"Failed to update persistent review, error: {e}")
+        await self.runner.run()
 
     async def publish_no_suggestions(self):
         pr_body = "## PR Code Suggestions ✨\n\nNo code suggestions found for the PR."
@@ -330,4 +209,3 @@ class PRCodeSuggestions:
             get_logger().info("Failed to publish code suggestions, trying to publish each suggestion separately")
             for code_suggestion in code_suggestions:
                 self.git_provider.publish_code_suggestions([code_suggestion])
-
