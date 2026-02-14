@@ -71,3 +71,41 @@ async def test_view_text_website_invalid_url():
     tools = AgentTools(mock_provider)
     result = await tools.view_text_website("ftp://example.com")
     assert "Error: URL must start with" in result
+
+@pytest.mark.asyncio
+async def test_list_files_gitlab_string_fix():
+    """Test that list_files handles GitProvider returning strings (GitLab behavior)."""
+    # Mock GitProvider to simulate GitLab behavior (get_files returns strings)
+    mock_provider = MagicMock()
+    mock_provider.get_files.return_value = ["file1.py", "file2.py"]
+
+    tools = AgentTools(mock_provider)
+
+    # Force fallback to git_provider by mocking subprocess.run to fail
+    with patch("subprocess.run") as mock_run:
+        mock_run.return_value.returncode = 1 # Simulate failure
+
+        result = await tools.list_files()
+        assert "file1.py" in result
+        assert "file2.py" in result
+
+@pytest.mark.asyncio
+async def test_list_files_github_object_fix():
+    """Test that list_files handles GitProvider returning objects (GitHub behavior)."""
+    # Mock GitProvider to simulate GitHub behavior (get_files returns objects)
+    mock_provider = MagicMock()
+    mock_file1 = MagicMock()
+    mock_file1.filename = "file1.py"
+    mock_file2 = MagicMock()
+    mock_file2.filename = "file2.py"
+    mock_provider.get_files.return_value = [mock_file1, mock_file2]
+
+    tools = AgentTools(mock_provider)
+
+    # Force fallback to git_provider by mocking subprocess.run to fail
+    with patch("subprocess.run") as mock_run:
+        mock_run.return_value.returncode = 1 # Simulate failure
+
+        result = await tools.list_files()
+        assert "file1.py" in result
+        assert "file2.py" in result

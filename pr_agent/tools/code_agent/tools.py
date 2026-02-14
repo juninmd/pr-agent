@@ -17,6 +17,10 @@ class AgentTools:
         self.git_provider = git_provider
         self.plan = []
 
+    def _get_filenames(self):
+        files = self.git_provider.get_files()
+        return [f if isinstance(f, str) else f.filename for f in files]
+
     async def list_files(self, path="."):
         """Lists files in the repository."""
         try:
@@ -26,7 +30,7 @@ class AgentTools:
                 return res.stdout[:5000] # Limit output
         except Exception as e:
             get_logger().warning(f"Error listing files locally: {e}")
-        return "\n".join([f.filename for f in self.git_provider.get_files()])
+        return "\n".join(self._get_filenames())
 
     async def read_file(self, file_path):
         """Reads file content from the PR branch."""
