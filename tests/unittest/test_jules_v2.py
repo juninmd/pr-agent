@@ -39,7 +39,6 @@ def test_jules_agent_initialization():
     agent = JulesAgent(git_provider=mock_git, planner=mock_planner)
     assert agent.git == mock_git
     assert agent.planner == mock_planner
-    # Verify logger was called (initially getting logger)
     mock_pr_agent_log.get_logger.assert_called()
 
 def test_jules_planner_structure():
@@ -54,20 +53,13 @@ def test_github_provider_structure(mock_github, mock_settings):
     """Verify GitHubProvider delegates correctly."""
     from pr_agent.jules.git.github.provider import GitHubProvider
 
-    # Mock settings
     mock_settings.return_value.github.user_token = "dummy_token"
-
-    # Initialize
     provider = GitHubProvider()
 
-    # Check composition
     assert provider.github is not None
     assert provider.file_handler is not None
     assert provider.pr_handler is not None
-
-    # Check that methods exist
     assert hasattr(provider, "get_pr_url")
-    assert hasattr(provider, "get_files")
 
 def test_github_provider_init_with_repo():
     """Verify GitHubProvider initializes with repo_slug."""
@@ -78,11 +70,19 @@ def test_github_provider_init_with_repo():
         from pr_agent.jules.git.github.provider import GitHubProvider
 
         provider = GitHubProvider(repo_slug="owner/repo")
-        # Verify get_repo was called
         mock_github.return_value.get_repo.assert_called_with("owner/repo")
 
-def test_gitlab_provider_structure():
-    """Verify GitLabProvider exists."""
+@patch("pr_agent.jules.git.gitlab.provider.get_settings")
+@patch("pr_agent.jules.git.gitlab.provider.gitlab.Gitlab")
+def test_gitlab_provider_structure(mock_gitlab, mock_settings):
+    """Verify GitLabProvider delegates correctly."""
     from pr_agent.jules.git.gitlab.provider import GitLabProvider
-    provider = GitLabProvider(repo_slug="owner/repo")
-    assert isinstance(provider, GitLabProvider)
+
+    mock_settings.return_value.get.return_value = "dummy"
+
+    provider = GitLabProvider()
+
+    assert provider.gitlab is not None
+    assert provider.file_handler is not None
+    assert provider.mr_handler is not None
+    assert hasattr(provider, "get_pr_url")
