@@ -25,6 +25,9 @@ class GitHubProvider(GitProvider):
     def get_pr_url(self) -> str:
         return self.pr_handler.get_pr_url()
 
+    def get_current_branch(self) -> str:
+        return self.pr_handler.pr.head.ref if self.pr_handler.pr else "main"
+
     def get_files(self) -> List[str]:
         return self.file_handler.get_files(self.pr_handler.pr)
 
@@ -35,6 +38,10 @@ class GitHubProvider(GitProvider):
     def create_or_update_file(self, file_path: str, content: str, message: str, branch: str) -> None:
         repo = self.pr_handler.get_repo()
         self.file_handler.create_or_update(repo, file_path, content, message, branch)
+
+    def delete_file(self, file_path: str, message: str, branch: str) -> None:
+        repo = self.pr_handler.get_repo()
+        self.file_handler.delete_file(repo, file_path, message, branch)
 
     def create_pr(self, title: str, body: str, source_branch: str, target_branch: str) -> str:
         repo = self.pr_handler.get_repo()

@@ -14,6 +14,11 @@ class GitProvider(ABC):
         pass
 
     @abstractmethod
+    def get_current_branch(self) -> str:
+        """Returns the current branch name."""
+        pass
+
+    @abstractmethod
     def get_files(self) -> List[str]:
         """Returns a list of files modified in the PR."""
         pass
@@ -26,6 +31,11 @@ class GitProvider(ABC):
     @abstractmethod
     def create_or_update_file(self, file_path: str, content: str, message: str, branch: str) -> None:
         """Creates or updates a file in the repository."""
+        pass
+
+    @abstractmethod
+    def delete_file(self, file_path: str, message: str, branch: str) -> None:
+        """Deletes a file from the repository."""
         pass
 
     @abstractmethod

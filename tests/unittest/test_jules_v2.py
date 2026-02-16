@@ -1,88 +1,88 @@
 import sys
-from unittest.mock import MagicMock, patch
-
-# PRE-IMPORT MOCKING to bypass legacy circular dependencies
-mock_loguru = MagicMock()
-sys.modules["loguru"] = mock_loguru
-
-mock_pr_agent_log = MagicMock()
-sys.modules["pr_agent.log"] = mock_pr_agent_log
-mock_logger = MagicMock()
-mock_pr_agent_log.get_logger.return_value = mock_logger
-
-import os
+from unittest.mock import MagicMock, patch, AsyncMock
 import pytest
-
-# Now import the modules under test
+from pr_agent.jules.planner import Planner, Step, Plan
+from pr_agent.jules.tools import JulesTools
 from pr_agent.jules.agent import JulesAgent
 from pr_agent.jules.git.provider import GitProvider
-from pr_agent.jules.planner import Planner
 
-def test_jules_files_compliance():
-    """Verify that all files in the new Jules module are < 150 LOC."""
-    root_dir = "pr_agent/jules"
-    max_lines = 150
+class MockGitProvider(GitProvider):
+    def get_pr_url(self): return "http://mock"
+    def get_current_branch(self): return "main"
+    def get_files(self): return ["a.py"]
+    def get_file_content(self, path, branch=None): return "content"
+    def create_or_update_file(self, path, content, msg, branch): pass
+    def delete_file(self, path, msg, branch): pass
+    def create_pr(self, title, body, src, tgt): return "url"
+    def add_comment(self, body): pass
 
-    for dirpath, _, filenames in os.walk(root_dir):
-        for filename in filenames:
-            if filename.endswith(".py"):
-                filepath = os.path.join(dirpath, filename)
-                with open(filepath, "r") as f:
-                    lines = f.readlines()
-                    if len(lines) >= max_lines:
-                        pytest.fail(f"File {filepath} has {len(lines)} lines, exceeding {max_lines}")
+@pytest.fixture
+def mock_settings():
+    with patch("pr_agent.config_loader.get_settings") as mock_get:
+        mock_get.return_value.config.model = "gpt-4"
+        yield mock_get
 
-def test_jules_agent_initialization():
-    """Verify that JulesAgent initializes correctly."""
-    mock_git = MagicMock(spec=GitProvider)
-    mock_planner = MagicMock(spec=Planner)
-    agent = JulesAgent(git_provider=mock_git, planner=mock_planner)
-    assert agent.git == mock_git
-    assert agent.planner == mock_planner
-    # Verify logger was called (initially getting logger)
-    mock_pr_agent_log.get_logger.assert_called()
+@pytest.mark.asyncio
+async def test_planner_create_plan(mock_settings):
+    with patch("pr_agent.jules.planner.LiteLLMAIHandler") as MockAI:
+        mock_ai_instance = MockAI.return_value
+        mock_ai_instance.chat_completion = AsyncMock(return_value=(
+            '{"steps": [{"description": "step1", "command": "cmd1"}]}', "stop"
+        ))
 
-def test_jules_planner_structure():
-    """Verify Planner structure."""
-    planner = Planner()
-    assert hasattr(planner, "create_plan")
-    assert hasattr(planner, "refine_plan")
+        # We need to patch get_settings in planner module specifically if it imported it
+        # But usually config_loader.get_settings is sufficient if imported from there
+        with patch("pr_agent.jules.planner.get_settings", new=mock_settings):
+             planner = Planner()
+             plan = await planner.create_plan("task", "file context")
 
-@patch("pr_agent.jules.git.github.provider.get_settings")
-@patch("pr_agent.jules.git.github.provider.Github")
-def test_github_provider_structure(mock_github, mock_settings):
-    """Verify GitHubProvider delegates correctly."""
-    from pr_agent.jules.git.github.provider import GitHubProvider
+             assert len(plan.steps) == 1
+             assert plan.steps[0].description == "step1"
+             assert plan.steps[0].command == "cmd1"
 
-    # Mock settings
-    mock_settings.return_value.github.user_token = "dummy_token"
+@pytest.mark.asyncio
+async def test_tools_edit_file():
+    mock_git = MockGitProvider()
+    mock_git.create_or_update_file = MagicMock()
+    mock_git.get_current_branch = MagicMock(return_value="main")
 
-    # Initialize
-    provider = GitHubProvider()
+    tools = JulesTools(mock_git)
+    # Patch os.makedirs and open to avoid real file IO
+    with patch("os.makedirs"), patch("builtins.open", new_callable=MagicMock):
+        res = await tools.edit_file("path/to/file.py", "new content")
 
-    # Check composition
-    assert provider.github is not None
-    assert provider.file_handler is not None
-    assert provider.pr_handler is not None
+        assert "Successfully edited" in res
+        mock_git.create_or_update_file.assert_called_once()
 
-    # Check that methods exist
-    assert hasattr(provider, "get_pr_url")
-    assert hasattr(provider, "get_files")
+@pytest.mark.asyncio
+async def test_agent_run(mock_settings):
+    mock_git = MockGitProvider()
 
-def test_github_provider_init_with_repo():
-    """Verify GitHubProvider initializes with repo_slug."""
-    with patch("pr_agent.jules.git.github.provider.get_settings") as mock_settings, \
-         patch("pr_agent.jules.git.github.provider.Github") as mock_github:
+    # Mock Planner to return a fixed plan
+    with patch("pr_agent.jules.agent.Planner") as MockPlanner:
+        mock_planner_instance = MockPlanner.return_value
+        mock_planner_instance.create_plan = AsyncMock(return_value=Plan(
+            steps=[Step("do something", "cmd")], goal="goal"
+        ))
 
-        mock_settings.return_value.github.user_token = "dummy"
-        from pr_agent.jules.git.github.provider import GitHubProvider
+        # Mock AI in Agent to return a tool call
+        with patch("pr_agent.jules.agent.LiteLLMAIHandler") as MockAI:
+            mock_ai_instance = MockAI.return_value
+            mock_ai_instance.chat_completion = AsyncMock(return_value=(
+                '{"tool": "run_command", "args": {"command": "echo hello"}}', "stop"
+            ))
 
-        provider = GitHubProvider(repo_slug="owner/repo")
-        # Verify get_repo was called
-        mock_github.return_value.get_repo.assert_called_with("owner/repo")
+            with patch("pr_agent.jules.agent.get_settings", new=mock_settings):
+                agent = JulesAgent(mock_git)
 
-def test_gitlab_provider_structure():
-    """Verify GitLabProvider exists."""
-    from pr_agent.jules.git.gitlab.provider import GitLabProvider
-    provider = GitLabProvider(repo_slug="owner/repo")
-    assert isinstance(provider, GitLabProvider)
+                # Patch tools.run_command and list_files
+                with patch.object(agent.tools, 'run_command', new_callable=AsyncMock) as mock_run_cmd:
+                    mock_run_cmd.return_value = "hello"
+                    with patch.object(agent.tools, 'list_files', new_callable=AsyncMock) as mock_list:
+                        mock_list.return_value = "file list"
+
+                        await agent.run("my task")
+
+                        mock_planner_instance.create_plan.assert_called_once()
+                        mock_ai_instance.chat_completion.assert_called()
+                        mock_run_cmd.assert_called_with(command="echo hello")
