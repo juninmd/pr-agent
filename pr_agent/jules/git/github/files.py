@@ -56,3 +56,17 @@ class GitHubFileHandler:
         except Exception as e:
             self.logger.error(f"Failed to write file {file_path}: {e}")
             raise e
+
+    def delete_file(self, repo_obj, file_path, message, branch):
+        """Deletes a file."""
+        if not repo_obj: raise ValueError("Repo object required")
+        try:
+            current_file = repo_obj.get_contents(file_path, ref=branch)
+            repo_obj.delete_file(file_path, message, current_file.sha, branch=branch)
+            self.logger.info(f"Deleted file {file_path} on branch {branch}")
+        except GithubException as e:
+            if e.status == 404:
+                self.logger.warning(f"Cannot delete file {file_path}: not found.")
+            else:
+                self.logger.error(f"Failed to delete file {file_path}: {e}")
+                raise e
