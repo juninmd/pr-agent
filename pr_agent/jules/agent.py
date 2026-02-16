@@ -1,10 +1,9 @@
-from typing import Optional, List
+import json
+from pr_agent.jules.planner import Planner
+from pr_agent.jules.tools import JulesTools
+from pr_agent.algo.ai_handlers.litellm_ai_handler import LiteLLMAIHandler
+from pr_agent.config_loader import get_settings
 from pr_agent.log import get_logger
-
-# Forward references for type hinting to avoid circular imports during creation
-# In a real scenario, these would be imported from their respective modules
-# from pr_agent.jules.planner import Planner
-# from pr_agent.jules.git.provider import GitProvider
 
 class JulesAgent:
     """
@@ -12,47 +11,53 @@ class JulesAgent:
     Follows Plan -> Act -> Verify -> Reflect loop.
     Strictly optimized for Clean Code and < 150 LOC.
     """
-    def __init__(self, git_provider, planner=None):
+    def __init__(self, git_provider):
         self.git = git_provider
-        self.planner = planner
+        self.tools = JulesTools(git_provider)
+        self.planner = Planner()
+        self.ai = LiteLLMAIHandler()
         self.logger = get_logger()
+        self.model = get_settings().config.model
 
     async def run(self, task: str):
-        """Executes the given task autonomously."""
         self.logger.info(f"Jules starting task: {task}")
+        files = await self.tools.list_files()
+        plan = await self.planner.create_plan(task, files)
 
-        # Phase 1: Planning
-        if self.planner:
-            plan = await self.planner.create_plan(task, self.git)
-            self.logger.info(f"Plan created: {plan}")
-            steps = plan.steps
-        else:
-            steps = [] # Fallback or direct execution
+        for step in plan.steps:
+            self.logger.info(f"Step: {step.description}")
+            result = await self._execute_step(step, files)
+            self.logger.info(f"Result: {result}")
 
-        # Phase 2: Execution (Act)
-        for step in steps:
-            self.logger.info(f"Executing step: {step.description}")
-            result = await self._execute_step(step)
+            if "Error" in result:
+                # Simple reflection: Retry once
+                self.logger.warning("Step failed. Retrying with reflection...")
+                result = await self._execute_step(step, files, feedback=result)
 
-            # Phase 3: Verification
-            verified = await self._verify_step(step, result)
-            if not verified:
-                # Phase 4: Reflection (Self-Correction)
-                await self._reflect_and_fix(step, result)
+        return "Task Completed"
 
-        self.logger.info("Task completed successfully.")
+    async def _execute_step(self, step, context, feedback="") -> str:
+        prompt = (
+            f"Context: {context}\nStep: {step.description}\nHint: {step.command}\n"
+            f"Feedback: {feedback}\n"
+            "You have tools: read_file(path), edit_file(path, content), delete_file(path), run_command(cmd), list_files(path).\n"
+            "Output ONLY a JSON object: {'tool': 'name', 'args': {'arg1': 'val1'}}\n"
+            "Example: {'tool': 'edit_file', 'args': {'file_path': 'a.py', 'content': 'print(1)'}}"
+        )
+        try:
+            resp, _ = await self.ai.chat_completion(self.model, "You are a tool caller.", prompt)
 
-    async def _execute_step(self, step):
-        """Executes a single step of the plan."""
-        # TODO: Integrate with ToolRegistry
-        return True
+            # Clean markdown
+            if "```json" in resp: resp = resp.split("```json")[1].split("```")[0]
+            elif "```" in resp: resp = resp.split("```")[1].split("```")[0]
 
-    async def _verify_step(self, step, result):
-        """Verifies the result of a step."""
-        # TODO: Integrate with TestRunner
-        return True
+            call = json.loads(resp.strip())
+            tool_name = call.get('tool')
+            args = call.get('args', {})
 
-    async def _reflect_and_fix(self, step, result):
-        """Reflects on failure and attempts to fix."""
-        self.logger.warning(f"Step {step} failed verification. Reflecting...")
-        # TODO: Implement self-correction loop
+            if hasattr(self.tools, tool_name):
+                func = getattr(self.tools, tool_name)
+                return await func(**args)
+            return f"Error: Tool {tool_name} not found."
+        except Exception as e:
+            return f"Error executing step: {e}"
