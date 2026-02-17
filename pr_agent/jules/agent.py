@@ -1,8 +1,7 @@
 import json
 from pr_agent.jules.planner import Planner
 from pr_agent.jules.tools import JulesTools
-from pr_agent.algo.ai_handlers.litellm_ai_handler import LiteLLMAIHandler
-from pr_agent.config_loader import get_settings
+from pr_agent.jules.state import State
 from pr_agent.log import get_logger
 
 class JulesAgent:
@@ -12,52 +11,69 @@ class JulesAgent:
     Strictly optimized for Clean Code and < 150 LOC.
     """
     def __init__(self, git_provider):
-        self.git = git_provider
         self.tools = JulesTools(git_provider)
         self.planner = Planner()
-        self.ai = LiteLLMAIHandler()
         self.logger = get_logger()
-        self.model = get_settings().config.model
 
     async def run(self, task: str):
         self.logger.info(f"Jules starting task: {task}")
-        files = await self.tools.list_files()
-        plan = await self.planner.create_plan(task, files)
+        state = State(task=task)
+        files_str = await self.tools.list_files()
+        state.files = files_str.split('\n') if files_str else []
 
-        for step in plan.steps:
-            self.logger.info(f"Step: {step.description}")
-            result = await self._execute_step(step, files)
-            self.logger.info(f"Result: {result}")
+        plan = await self.planner.create_plan(task, state.get_context())
 
+        i = 0
+        while i < len(plan.steps):
+            step = plan.steps[i]
+            self.logger.info(f"Step {i+1}/{len(plan.steps)}: {step.description}")
+
+            result = await self._execute_step(step, state)
+            state.add_history(step.description, step.command, result)
+
+            # Simple Reflection: Check for errors
             if "Error" in result:
-                # Simple reflection: Retry once
-                self.logger.warning("Step failed. Retrying with reflection...")
-                result = await self._execute_step(step, files, feedback=result)
+                self.logger.warning(f"Step failed: {result}. Refining plan...")
+                plan = await self.planner.refine_plan(plan, result)
+                # Retry current step index (ensure within bounds)
+                i = min(i, len(plan.steps) - 1)
+                if i < 0: i = 0
+                continue
+
+            i += 1
 
         return "Task Completed"
 
-    async def _execute_step(self, step, context, feedback="") -> str:
+    async def _execute_step(self, step, state) -> str:
         prompt = (
-            f"Context: {context}\nStep: {step.description}\nHint: {step.command}\n"
-            f"Feedback: {feedback}\n"
-            "You have tools: read_file(path), edit_file(path, content), delete_file(path), run_command(cmd), list_files(path).\n"
-            "Output ONLY a JSON object: {'tool': 'name', 'args': {'arg1': 'val1'}}\n"
-            "Example: {'tool': 'edit_file', 'args': {'file_path': 'a.py', 'content': 'print(1)'}}"
+            f"Context:\n{state.get_context()}\n"
+            f"Current Step: {step.description}\nHint: {step.command}\n"
+            "Tools: read_file, edit_file, delete_file, list_files, search_files, run_command.\n"
+            "Return ONLY a JSON object: {'tool': 'name', 'args': {...}}"
         )
         try:
-            resp, _ = await self.ai.chat_completion(self.model, "You are a tool caller.", prompt)
+            resp, _ = await self.planner.ai.chat_completion(
+                model=self.planner.model, system="You are a tool caller.", user=prompt
+            )
+            return await self._parse_tool_call(resp)
+        except Exception as e:
+            return f"Error executing step: {e}"
 
-            # Clean markdown
-            if "```json" in resp: resp = resp.split("```json")[1].split("```")[0]
-            elif "```" in resp: resp = resp.split("```")[1].split("```")[0]
+    async def _parse_tool_call(self, response: str) -> str:
+        try:
+            if "```json" in response: response = response.split("```json")[1].split("```")[0]
+            elif "```" in response: response = response.split("```")[1].split("```")[0]
 
-            call = json.loads(resp.strip())
+            call = json.loads(response.strip())
             tool_name = call.get('tool')
             args = call.get('args', {})
 
             if hasattr(self.tools, tool_name):
                 func = getattr(self.tools, tool_name)
+                # Ensure args is a dict
+                if not isinstance(args, dict):
+                     return f"Error: Tool arguments must be a dictionary."
                 return await func(**args)
             return f"Error: Tool {tool_name} not found."
         except Exception as e:
-            return f"Error executing step: {e}"
+            return f"Tool parsing error: {e}"

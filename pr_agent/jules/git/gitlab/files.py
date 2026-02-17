@@ -22,12 +22,16 @@ class GitLabFileHandler:
         try:
             kwargs = {"ref": branch} if branch else {}
             f = project_obj.files.get(file_path=file_path, **kwargs)
+            # f.decode() returns bytes, decode again for string
             return f.decode().decode("utf-8")
         except GitlabError as e:
             if e.response_code == 404:
                 self.logger.warning(f"File {file_path} not found in branch {branch}")
                 return None
             self.logger.error(f"Error fetching file {file_path}: {e}")
+            raise e
+        except Exception as e:
+            self.logger.error(f"Error decoding file {file_path}: {e}")
             raise e
 
     def create_or_update(self, project_obj, file_path, content, message, branch):
