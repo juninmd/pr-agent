@@ -1,24 +1,13 @@
-[[allowlist]]
-description = "False positive: gitlab-pat in docs/docs/installation/gitlab.md"
-rules = ["gitlab-pat"]
-paths = ["docs/docs/installation/gitlab.md"]
-
-[[allowlist]]
-description = "False positive: gitlab-pat in docs/docs/installation/gitlab.md"
-rules = ["gitlab-pat"]
-paths = ["docs/docs/installation/gitlab.md"]
-
-[[allowlist]]
-description = "False positive: private-key in docs/docs/installation/github.md"
-rules = ["private-key"]
-paths = ["docs/docs/installation/github.md"]
-
-[[allowlist]]
-description = "False positive: jwt in README.md"
-rules = ["jwt"]
-paths = ["README.md"]
-
-[[allowlist]]
-description = "False positive: private-key in pr_agent/settings/.secrets_template.toml"
-rules = ["private-key"]
-paths = ["pr_agent/settings/.secrets_template.toml"]
+[allowlist]
+description = "Merged allowlist"
+rules = [
+  "gitlab-pat",
+  "private-key",
+  "jwt"
+]
+paths = [
+  "docs/docs/installation/gitlab.md",
+  "docs/docs/installation/github.md",
+  "README.md",
+  "pr_agent/settings/.secrets_template.toml"
+]
