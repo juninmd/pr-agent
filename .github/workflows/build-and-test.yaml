@@ -14,15 +14,15 @@ jobs:
 
     steps:
       - id: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - id: dockerx
         name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - id: build
         name: Build dev docker
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./docker/Dockerfile
